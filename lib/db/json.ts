@@ -134,7 +134,8 @@ export const featureSchema = z.object({
 export const featuresSchema = z.array(featureSchema).max(60);
 export type Feature = z.infer<typeof featureSchema>;
 
-// ── 3D viewer settings (car_model_versions.view_settings, base_models.camera_json)
+// ── 3D (unused — dropped by the owner; kept to match the existing DB columns) ──
+// 3D viewer settings (car_model_versions.view_settings, base_models.camera_json)
 const vec3 = z.tuple([z.number(), z.number(), z.number()]);
 export const viewSettingsSchema = z.object({
   scale: z.number().positive().max(100).default(1),

@@ -3,7 +3,7 @@ import type { BodyType } from "@/lib/supabase/types";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Stylized side silhouette shown until a car has photos / a 3D model.
+ * Stylized side silhouette shown until a car has photos.
  * Three shapes cover every body type; drawn as lines in the brand gradient.
  */
 type Shape = "liftback" | "sedan" | "suv";

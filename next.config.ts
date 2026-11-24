@@ -19,10 +19,9 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  // Gyroscope is used by the hero scene on mobile (with user permission).
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), gyroscope=(self), accelerometer=(self)",
+    value: "camera=(), microphone=(), geolocation=(), gyroscope=(), accelerometer=()",
   },
 ];
 

@@ -3,7 +3,7 @@ import type Lenis from "lenis";
 /**
  * Module-level handle to the root Lenis instance (created by <SmoothScroll />).
  * `null` when smooth scrolling is disabled (reduced motion / not mounted yet).
- * GSAP ScrollTrigger and overlays (mobile menu) use this to sync / pause scroll.
+ * Overlays (mobile menu) and ScrollToTop use this to pause / reset scrolling.
  */
 let instance: Lenis | null = null;
 const listeners = new Set<(lenis: Lenis | null) => void>();

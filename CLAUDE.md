@@ -9,23 +9,27 @@ filter and UI must support all classes.
 permits, earnings, platform questions in forms. The taxi offering will be revisited as a separate
 project after launch (`bookings.platform_driver` is kept, nullable, for that).
 
+**No 3D (owner's decision):** phase 4 (3D hero / scroll scenes / car viewer) and phase 6b (3D
+generation from photos) are dropped. Cars are shown with photos (gallery) or the SVG silhouette.
+The 3D-related DB objects from phase 2 (`base_models`, `car_model_versions`, `model_jobs`,
+`cars.model_source`…, buckets `models` / `model-inputs`, setting `three_d`) stay unused — don't
+build on them unless the owner brings 3D back.
+
 The original product brief (phases, requirements) is the source of truth for scope, except where
 the owner changed it (positioning above, static buttons). Owner-supplied items are in `TODO.md`.
 
 ## Stack
 
-| Concern       | Choice                                                                                                                       |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Framework     | Next.js 15 (App Router, RSC) + TypeScript strict, deployed on Vercel                                                         |
-| Styling       | Tailwind CSS v4 (CSS-first config in `app/globals.css` → `@theme` tokens)                                                    |
-| i18n          | `next-intl` v4 — `lt` default (no prefix), `en` under `/en` with localized paths                                             |
-| Motion        | `framer-motion` (UI, via `LazyMotion` + `m.*`), `lenis` (smooth scroll), `gsap` + ScrollTrigger (3D scroll scenes — phase 4) |
-| 3D            | `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing` (phase 4)                                  |
-| Backend       | Supabase: Postgres + RLS, Auth, Storage, Realtime (phase 2)                                                                  |
-| Email         | Resend + `react-email` (phase 5)                                                                                             |
-| Forms         | `react-hook-form` + `zod` (phase 5)                                                                                          |
-| 3D generation | Meshy (default) / Tripo via fal.ai behind a `ThreeDProvider` adapter, `mock` for dev (phase 6b)                              |
-| Tests         | Playwright smoke tests (phase 8)                                                                                             |
+| Concern   | Choice                                                                           |
+| --------- | -------------------------------------------------------------------------------- |
+| Framework | Next.js 15 (App Router, RSC) + TypeScript strict, deployed on Vercel             |
+| Styling   | Tailwind CSS v4 (CSS-first config in `app/globals.css` → `@theme` tokens)        |
+| i18n      | `next-intl` v4 — `lt` default (no prefix), `en` under `/en` with localized paths |
+| Motion    | `framer-motion` (UI, via `LazyMotion` + `m.*`), `lenis` (smooth scroll)          |
+| Backend   | Supabase: Postgres + RLS, Auth, Storage, Realtime (phase 2)                      |
+| Email     | Resend + `react-email` (phase 5)                                                 |
+| Forms     | `react-hook-form` + `zod` (phase 5)                                              |
+| Tests     | Playwright smoke tests (phase 8)                                                 |
 
 ## Commands
 
@@ -64,7 +68,7 @@ app/
     not-found.tsx, error.tsx
   admin/                ADMIN (phase 6) — LT only, own <html>, excluded from i18n middleware
   api/                  route handlers: health (deployment self-check), availability (catalog
-                        date filter), later cron / 3D polling
+                        date filter), later booking endpoints
 components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
@@ -76,7 +80,7 @@ components/
   cars/                 CarCard, CarPlaceholder (SVG silhouettes), CarGallery, CarSpecs, CarFeatures,
                         TariffList, RulesList, Catalog (client filters)
   contact/              ContactList, MapEmbed (lazy Google Maps iframe)
-  three/ booking/ admin/  (later phases)
+  booking/ admin/       (later phases)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
 lib/
@@ -93,7 +97,7 @@ lib/
   pricing/display.ts    "from" price, per-day equivalent, savings % (booking math: phase 5)
   dates.ts              Europe/Vilnius day helpers (vilniusDayStart, vilniusToday, addDaysIso)
   format/hours.ts       opening hours → "I–V 9:00–18:00" / "Mon–Fri 9:00–18:00"
-  3d/providers/ email/  (later phases)
+  email/                (later phases)
 supabase/
   config.toml           local stack config (sign-up disabled)
   migrations/           ordered SQL migrations (foundation, core, bookings, rls, storage)
@@ -101,8 +105,7 @@ supabase/
   production-setup.sql  GENERATED: migrations + seed in one transaction for the SQL Editor
   tests/database/       pgTAP tests
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
-public/models/          GLB files (hero-car.glb — owner must supply, see TODO.md)
-scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs, optimize-models (phase 4)
+scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs
 docs/                   owner-facing guides (SUPABASE_SETUP.md)
 middleware.ts           next-intl middleware (skips /api, /admin, static files)
 ```
@@ -136,7 +139,7 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
   `private` schema). Staff = profile role `admin` or `manager`; manager cannot delete cars /
   catalog entries, change settings or roles. Roles come from `app_metadata.role` (service role only).
 - Visitors (anon) read only: categories, makes/models, base models, **published** cars, their
-  photos and active 3D version, `car_busy_periods`, settings with `is_public = true`.
+  photos, `car_busy_periods`, settings with `is_public = true`.
 - **Bookings are never inserted with the anon key.** Public booking requests go through server
   code using `createAdminClient()` after zod validation, rate limit and honeypot.
 - **Double-booking protection:** bookings (`pending`/`confirmed`) and `blocks` are mirrored by
@@ -149,8 +152,7 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
 - JSONB columns are validated with the zod schemas in `lib/db/json.ts` on every read/write.
 - Public pages use `createPublicClient()` (no cookies → static/ISR). Guard with
   `isSupabaseConfigured` so the site still builds without Supabase env vars.
-- Storage buckets: `car-images` (public), `models` (public: GLB, posters, liveries),
-  `model-inputs` (private: photos for 3D providers via signed URLs). Writes are staff-only.
+- Storage buckets: `car-images` (public; writes staff-only). `models` / `model-inputs` are unused (3D dropped).
 - Realtime publication: `model_jobs`, `bookings` (RLS applies — staff only).
 
 ## Public data & caching
@@ -189,7 +191,7 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - Custom utilities: `container-site`, `glass` (pair with `border border-line`),
   `text-gradient`, `hairline-accent`, `eyebrow`, `bg-aurora`.
 - **No Bolt green and no Bolt logos anywhere.** Brand accents are amber → silver only.
-- Glassmorphism only on the navbar, floating contacts and cards over 3D.
+- Glassmorphism only on the navbar, floating contacts and small overlays (badges on photos).
 - Buttons are static (owner's request): no magnetic pull, sweep, glow or moving icons —
   only a short color transition on hover.
 - Dark theme only for now; to add a light theme, override the same tokens under a
@@ -199,17 +201,14 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 
 - Use `m.*` components (LazyMotion strict) — importing `motion.*` throws at runtime.
 - Respect `prefers-reduced-motion`: MotionConfig handles framer-motion, Lenis is not
-  started, CSS animations are neutralized globally. GSAP/3D code must check it too.
+  started, CSS animations are neutralized globally.
 - **Every navigation starts at the top of the new page** (owner's requirement): `ScrollToTop`
   resets Lenis + window on each pathname change (incl. back/forward, language switch); don't
   pass `scroll={false}` to links.
 - Pause scrolling for overlays with `lockScroll(true|false)` from `lib/motion/lenis.ts`;
   add `data-lenis-prevent` to scrollable overlays.
-- 3D: load with `next/dynamic` (`ssr: false`) only when in viewport, show a webp poster
-  first, `dpr={[1, 1.75]}`, `frameloop="demand"` unless continuously animating, static
-  fallback for weak devices (`hardwareConcurrency <= 4` or no WebGL2).
-- Budgets: Lighthouse mobile Performance ≥ 90, LCP < 2.5 s, home JS ≤ 250 KB gzip
-  excluding the 3D chunk, GLB ≤ 3 MB (Draco/meshopt + KTX2).
+- Budgets: Lighthouse mobile Performance ≥ 90, LCP < 2.5 s, home JS ≤ 250 KB gzip; all
+  images via `next/image` (webp/avif).
 
 ## Code conventions
 
@@ -228,9 +227,9 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
       generated types, clients, seed-admin script
 - [x] 3 — Public pages: home sections, catalog with filters, car page, contacts; data
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
-- [ ] 4 — 3D & motion: hero scene, scroll scenario, car viewer, optimization
+- [—] 4 — 3D & motion — **dropped by the owner** (no 3D on the site)
 - [ ] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
 - [ ] 6 — Admin panel
-- [ ] 6b — 3D generation from photos (provider adapter, jobs, cron, GLB optimization)
+- [—] 6b — 3D generation from photos — **dropped by the owner**
 - [ ] 7 — SEO, legal pages, cookie banner
 - [ ] 8 — Polish: Lighthouse, a11y, Playwright, README, final TODO

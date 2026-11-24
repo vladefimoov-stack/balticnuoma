@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ButtonLink } from "@/components/ui/Button";
 
 /**
- * Home hero. Phase 4 replaces the SVG backdrop with the pinned 3D scroll scene.
+ * Home hero with a lightweight SVG backdrop (amber light trails).
  * The H1 is plain server HTML (no reveal animation) — it is the LCP element.
  */
 export async function Hero() {
