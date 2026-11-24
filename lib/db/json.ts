@@ -85,7 +85,7 @@ export const carSpecsSchema = z.object({
   consumption_kwh_100km: z.number().nonnegative().max(60).optional(),
   range_km: z.number().int().positive().max(2000).optional(),
   trunk_l: z.number().int().nonnegative().max(5000).optional(),
-  /** Livery / branding key, e.g. "ride_hailing"; free text allowed. */
+  /** Livery / branding description (free text), e.g. "Matinė juoda plėvelė". */
   livery: z.string().max(60).optional(),
 });
 export type CarSpecs = z.infer<typeof carSpecsSchema>;

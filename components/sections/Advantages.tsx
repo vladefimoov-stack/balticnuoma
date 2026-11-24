@@ -1,15 +1,15 @@
-import { Infinity as InfinityIcon, Leaf, ShieldCheck, Wrench, Zap, type LucideIcon } from "lucide-react";
+import { BadgeCheck, CalendarRange, Layers, ShieldCheck, Zap, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { cn } from "@/lib/utils/cn";
 
-const ITEMS: Array<{ key: "hybrid" | "insurance" | "maintenance" | "mileage" | "fast"; icon: LucideIcon }> = [
-  { key: "hybrid", icon: Leaf },
+const ITEMS: Array<{ key: "classes" | "insurance" | "maintained" | "flexible" | "fast"; icon: LucideIcon }> = [
+  { key: "classes", icon: Layers },
   { key: "insurance", icon: ShieldCheck },
-  { key: "maintenance", icon: Wrench },
-  { key: "mileage", icon: InfinityIcon },
+  { key: "maintained", icon: BadgeCheck },
+  { key: "flexible", icon: CalendarRange },
   { key: "fast", icon: Zap },
 ];
 

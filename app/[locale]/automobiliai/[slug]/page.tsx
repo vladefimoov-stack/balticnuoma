@@ -17,7 +17,7 @@ import { Link } from "@/i18n/navigation";
 import { getCarBySlug, getPublishedCars, pick } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 type Params = { params: Promise<{ locale: Locale; slug: string }> };

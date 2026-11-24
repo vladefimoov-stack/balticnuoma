@@ -47,11 +47,11 @@ insert into public.settings (key, value, is_public, description) values
 on conflict (key) do nothing;
 
 -- ── Categories ──────────────────────────────────────────────────────────────
--- Taxi inherits the global tariffs ({}); premium & luxury override them.
+-- Economy inherits the global tariffs ({}); premium & luxury override them.
 insert into public.categories (slug, name_lt, name_en, description_lt, description_en, icon, default_pricing, default_rental_rules, sort) values
-  ('ekonomine-taksi', 'Ekonominė / Taksi', 'Economy / Taxi',
-   'Taupūs hibridai darbui pavežėjimo platformose.',
-   'Fuel-efficient hybrids for ride-hailing work.',
+  ('ekonomine', 'Ekonominė', 'Economy',
+   'Taupūs ir patogūs automobiliai kasdienai ir kelionėms.',
+   'Fuel-efficient, comfortable cars for everyday driving and trips.',
    'leaf', '{}', '{}', 10),
   ('premium', 'Premium', 'Premium',
    'Komfortiški verslo klasės automobiliai.',
@@ -124,7 +124,7 @@ from (values
 join public.makes mk on mk.name = v.make
 on conflict do nothing;
 
--- ── Fleet: 5 × Toyota Prius 2009 (taxi) ─────────────────────────────────────
+-- ── Fleet: 5 × Toyota Prius 2009 (economy) ──────────────────────────────────
 -- 3D: model_source = none — the owner generates models from real photos in /admin.
 insert into public.cars (
   slug, category_id, make_id, vehicle_model_id, year, body_type,
@@ -133,15 +133,15 @@ insert into public.cars (
 )
 select
   'toyota-prius-' || n,
-  (select id from public.categories where slug = 'ekonomine-taksi'),
+  (select id from public.categories where slug = 'ekonomine'),
   mk.id,
   vm.id,
   2009,
   'hatchback',
   'Toyota Prius #' || n,
   'Toyota Prius #' || n,
-  '<p>Patikimas Toyota Prius hibridas, paruoštas darbui pavežėjimo platformose. Mažos degalų sąnaudos mieste, automatinė pavarų dėžė ir erdvus salonas keleiviams.</p><p>Keleivių vežimo draudimas ir planinė techninė priežiūra jau įskaičiuoti į kainą, rida neribojama.</p>',
-  '<p>A reliable Toyota Prius hybrid, ready for ride-hailing work. Low fuel consumption in the city, an automatic gearbox and a roomy cabin for passengers.</p><p>Passenger-transport insurance and scheduled maintenance are included in the price, with unlimited mileage.</p>',
+  '<p>Patikimas ir taupus Toyota Prius hibridas kasdienėms kelionėms mieste ir už jo ribų. Automatinė pavarų dėžė, erdvus salonas ir mažos degalų sąnaudos — patogu ir ekonomiška.</p><p>Privalomasis draudimas ir techninė priežiūra jau įskaičiuoti į kainą, rida neribojama.</p>',
+  '<p>A reliable, fuel-efficient Toyota Prius hybrid for everyday trips in and out of town. Automatic gearbox, a roomy cabin and low fuel consumption — comfortable and economical.</p><p>Mandatory insurance and maintenance are included in the price, with unlimited mileage.</p>',
   '{
      "fuel": "hybrid",
      "transmission": "automatic",
@@ -152,8 +152,7 @@ select
      "seats": 5,
      "doors": 5,
      "consumption_l_100km": 4.3,
-     "trunk_l": 408,
-     "livery": "ride_hailing"
+     "trunk_l": 408
    }'::jsonb,
   '[{"key": "climate_control"}, {"key": "automatic_transmission"}, {"key": "hybrid"}]'::jsonb,
   'published',

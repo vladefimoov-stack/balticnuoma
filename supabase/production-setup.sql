@@ -794,6 +794,52 @@ end;
 $$;
 
 -- ─────────────────────────────────────────────────────────────────────────────
+-- Migration: 20261124140000_personal_use_focus.sql
+-- ─────────────────────────────────────────────────────────────────────────────
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Baltic Nuoma · 06 · Personal-use focus
+--
+-- The site now targets rentals of all classes for personal use. The ride-hailing
+-- (taxi) offering is postponed, so seed data that talked about taxi work is
+-- rewritten. Safe to run more than once; only seed texts are touched (anything
+-- the owner has already edited is left alone).
+-- ─────────────────────────────────────────────────────────────────────────────
+
+-- Economy category: no more "Taksi" in the name / slug.
+update public.categories
+set slug           = 'ekonomine',
+    name_lt        = 'Ekonominė',
+    name_en        = 'Economy',
+    description_lt = 'Taupūs ir patogūs automobiliai kasdienai ir kelionėms.',
+    description_en = 'Fuel-efficient, comfortable cars for everyday driving and trips.'
+where slug = 'ekonomine-taksi';
+
+-- Prius descriptions written for taxi drivers → personal use.
+update public.cars
+set description_lt = '<p>Patikimas ir taupus Toyota Prius hibridas kasdienėms kelionėms mieste ir už jo ribų. Automatinė pavarų dėžė, erdvus salonas ir mažos degalų sąnaudos — patogu ir ekonomiška.</p><p>Privalomasis draudimas ir techninė priežiūra jau įskaičiuoti į kainą, rida neribojama.</p>',
+    description_en = '<p>A reliable, fuel-efficient Toyota Prius hybrid for everyday trips in and out of town. Automatic gearbox, a roomy cabin and low fuel consumption — comfortable and economical.</p><p>Mandatory insurance and maintenance are included in the price, with unlimited mileage.</p>'
+where slug like 'toyota-prius-%'
+  and description_lt like '%pavežėjimo platformose%';
+
+-- The "ride-hailing livery" spec is no longer shown.
+update public.cars
+set specs = specs - 'livery'
+where specs ->> 'livery' = 'ride_hailing';
+
+-- Booking form no longer asks about ride-hailing work; the column stays for later.
+alter table public.bookings alter column platform_driver drop not null;
+comment on column public.bookings.platform_driver is
+  'Ride-hailing question — not asked while the site focuses on personal use; kept for a future taxi offering.';
+
+-- Result shown in the Supabase SQL Editor after running this file.
+select
+  (select string_agg(name_lt, ', ' order by sort) from public.categories)                           as categories,
+  (select count(*) from public.cars where description_lt like '%pavežėjimo%')                       as cars_with_taxi_text,
+  (select count(*) from public.cars where specs ? 'livery')                                          as cars_with_livery,
+  (select is_nullable from information_schema.columns
+    where table_schema = 'public' and table_name = 'bookings' and column_name = 'platform_driver') as platform_driver_nullable;
+
+-- ─────────────────────────────────────────────────────────────────────────────
 -- Seed: supabase/seed.sql
 -- ─────────────────────────────────────────────────────────────────────────────
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -845,11 +891,11 @@ insert into public.settings (key, value, is_public, description) values
 on conflict (key) do nothing;
 
 -- ── Categories ──────────────────────────────────────────────────────────────
--- Taxi inherits the global tariffs ({}); premium & luxury override them.
+-- Economy inherits the global tariffs ({}); premium & luxury override them.
 insert into public.categories (slug, name_lt, name_en, description_lt, description_en, icon, default_pricing, default_rental_rules, sort) values
-  ('ekonomine-taksi', 'Ekonominė / Taksi', 'Economy / Taxi',
-   'Taupūs hibridai darbui pavežėjimo platformose.',
-   'Fuel-efficient hybrids for ride-hailing work.',
+  ('ekonomine', 'Ekonominė', 'Economy',
+   'Taupūs ir patogūs automobiliai kasdienai ir kelionėms.',
+   'Fuel-efficient, comfortable cars for everyday driving and trips.',
    'leaf', '{}', '{}', 10),
   ('premium', 'Premium', 'Premium',
    'Komfortiški verslo klasės automobiliai.',
@@ -922,7 +968,7 @@ from (values
 join public.makes mk on mk.name = v.make
 on conflict do nothing;
 
--- ── Fleet: 5 × Toyota Prius 2009 (taxi) ─────────────────────────────────────
+-- ── Fleet: 5 × Toyota Prius 2009 (economy) ──────────────────────────────────
 -- 3D: model_source = none — the owner generates models from real photos in /admin.
 insert into public.cars (
   slug, category_id, make_id, vehicle_model_id, year, body_type,
@@ -931,15 +977,15 @@ insert into public.cars (
 )
 select
   'toyota-prius-' || n,
-  (select id from public.categories where slug = 'ekonomine-taksi'),
+  (select id from public.categories where slug = 'ekonomine'),
   mk.id,
   vm.id,
   2009,
   'hatchback',
   'Toyota Prius #' || n,
   'Toyota Prius #' || n,
-  '<p>Patikimas Toyota Prius hibridas, paruoštas darbui pavežėjimo platformose. Mažos degalų sąnaudos mieste, automatinė pavarų dėžė ir erdvus salonas keleiviams.</p><p>Keleivių vežimo draudimas ir planinė techninė priežiūra jau įskaičiuoti į kainą, rida neribojama.</p>',
-  '<p>A reliable Toyota Prius hybrid, ready for ride-hailing work. Low fuel consumption in the city, an automatic gearbox and a roomy cabin for passengers.</p><p>Passenger-transport insurance and scheduled maintenance are included in the price, with unlimited mileage.</p>',
+  '<p>Patikimas ir taupus Toyota Prius hibridas kasdienėms kelionėms mieste ir už jo ribų. Automatinė pavarų dėžė, erdvus salonas ir mažos degalų sąnaudos — patogu ir ekonomiška.</p><p>Privalomasis draudimas ir techninė priežiūra jau įskaičiuoti į kainą, rida neribojama.</p>',
+  '<p>A reliable, fuel-efficient Toyota Prius hybrid for everyday trips in and out of town. Automatic gearbox, a roomy cabin and low fuel consumption — comfortable and economical.</p><p>Mandatory insurance and maintenance are included in the price, with unlimited mileage.</p>',
   '{
      "fuel": "hybrid",
      "transmission": "automatic",
@@ -950,8 +996,7 @@ select
      "seats": 5,
      "doors": 5,
      "consumption_l_100km": 4.3,
-     "trunk_l": 408,
-     "livery": "ride_hailing"
+     "trunk_l": 408
    }'::jsonb,
   '[{"key": "climate_control"}, {"key": "automatic_transmission"}, {"key": "hybrid"}]'::jsonb,
   'published',
@@ -1043,7 +1088,8 @@ insert into supabase_migrations.schema_migrations (version, name) values
   ('20261124120100', 'core_schema'),
   ('20261124120200', 'bookings'),
   ('20261124120300', 'rls'),
-  ('20261124120400', 'storage_realtime')
+  ('20261124120400', 'storage_realtime'),
+  ('20261124140000', 'personal_use_focus')
 on conflict (version) do nothing;
 
 commit;

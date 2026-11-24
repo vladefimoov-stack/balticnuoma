@@ -11,14 +11,14 @@ import { Requirements } from "@/components/sections/Requirements";
 import { getCategories, getPublishedCars } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
   const [settings, cars, categories] = await Promise.all([getPublicSettings(), getPublishedCars(), getCategories()]);
-  // Main tariffs = the first category that has cars (today: Ekonominė / Taksi), else the global ones.
+  // Main tariffs = the first category that has cars (today: Ekonominė), else the global ones.
   const mainCategory = categories.find((c) => c.carCount > 0);
   const pricing = mainCategory?.pricing ?? settings.pricing;
   const rules = mainCategory?.rules ?? settings.rentalRules;

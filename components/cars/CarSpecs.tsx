@@ -55,7 +55,7 @@ export async function CarSpecs({ car, locale }: { car: CarDetail; locale: string
   add("seats", Users, s.seats && String(s.seats));
   add("doors", DoorOpen, s.doors && String(s.doors));
   add("trunk", Package, s.trunk_l && t("units.liters", { value: s.trunk_l }));
-  add("livery", Sparkles, s.livery && (s.livery === "ride_hailing" ? t("values.livery.ride_hailing") : s.livery));
+  add("livery", Sparkles, s.livery);
 
   const custom = car.customSpecs.map((c, i) => ({
     key: `custom-${i}`,

@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Baltic Nuoma — car rental in Klaipėda",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Comfortable, economical car rental in Klaipėda — for ride-hailing work and everyday trips. From €18 per day, insurance and maintenance included, unlimited mileage."
+    "description": "Car rental of every class in Klaipėda — for everyday driving, trips and special occasions. Clear prices from €18 per day, insurance and maintenance included. Book online."
   },
   "common": {
     "skipToContent": "Skip to content",
@@ -36,13 +36,13 @@
   },
   "home": {
     "eyebrow": "Car rental in Klaipėda",
-    "title": "Your road. Your income.",
-    "subtitle": "Comfortable, economical cars for ride-hailing work and everyday trips. Insurance, maintenance and unlimited mileage are already included.",
+    "title": "Your road. Your class.",
+    "subtitle": "From economical to luxury class — cars for everyday driving, trips and special occasions. Insurance and maintenance are already included.",
     "cta": "Book a car",
     "ctaSecondary": "See prices"
   },
   "footer": {
-    "tagline": "Car rental for ride-hailing drivers — and beyond. Klaipėda.",
+    "tagline": "Car rental of every class in Klaipėda.",
     "navigation": "Navigation",
     "legal": "Legal",
     "contacts": "Contacts",
@@ -57,7 +57,7 @@
   "pages": {
     "cars": {
       "title": "Cars",
-      "description": "Our fleet: comfortable, economical cars for ride-hailing drivers, with premium and luxury classes coming soon.",
+      "description": "Choose a car for your needs: everyday driving, a trip or a special occasion.",
       "eyebrow": "Our fleet"
     },
     "prices": {
@@ -148,9 +148,6 @@
         "cabrio": "Convertible",
         "minivan": "MPV",
         "van": "Van"
-      },
-      "livery": {
-        "ride_hailing": "Ride-hailing branding"
       }
     },
     "units": {
@@ -216,25 +213,25 @@
   },
   "advantages": {
     "eyebrow": "Why us",
-    "title": "Everything for work is already included",
-    "highlight": "included",
-    "description": "You drive and earn — we take care of insurance, maintenance and paperwork.",
+    "title": "Everything you need for the road",
+    "highlight": "road",
+    "description": "Choose the car you need — we take care of insurance, maintenance and paperwork.",
     "items": {
-      "hybrid": {
-        "title": "Fuel-efficient hybrid",
-        "text": "Hybrids use only about 4–5 l/100 km in the city, so more of your earnings stay with you."
+      "classes": {
+        "title": "Every class",
+        "text": "From economical cars to premium and luxury — for everyday driving, trips or special occasions."
       },
       "insurance": {
-        "title": "Passenger-transport insurance",
-        "text": "Mandatory insurance that covers carrying passengers is already included in the rental price."
+        "title": "Insurance included",
+        "text": "Mandatory third-party liability insurance is already included in the rental price."
       },
-      "maintenance": {
-        "title": "Maintenance on us",
-        "text": "Scheduled servicing and replacement of worn parts are our responsibility."
+      "maintained": {
+        "title": "Well-maintained cars",
+        "text": "Regular servicing, and every car is checked and cleaned before each rental."
       },
-      "mileage": {
-        "title": "Unlimited mileage",
-        "text": "Drive as much as your work needs — no extra charges per kilometre."
+      "flexible": {
+        "title": "Flexible rental length",
+        "text": "From a few hours to several months — the longer you rent, the lower the daily price."
       },
       "fast": {
         "title": "Quick paperwork",
@@ -263,7 +260,7 @@
   },
   "fleet": {
     "eyebrow": "Our fleet",
-    "title": "Ready for work today",
+    "title": "Ready for the road today",
     "highlight": "today",
     "all": "All cars",
     "empty": "The fleet list will be updated soon. Get in touch — we'll help you choose."
@@ -275,9 +272,9 @@
     "description": "The longer you rent, the less you pay per day.",
     "includedTitle": "Included in the price",
     "included": {
-      "insurance": "Passenger-transport insurance",
-      "maintenance": "Scheduled maintenance",
-      "mileage": "Unlimited mileage"
+      "insurance": "Mandatory insurance",
+      "maintenance": "Maintenance",
+      "checked": "A checked, clean car"
     },
     "depositNote": "The €{deposit} deposit is refunded when you return the car.",
     "more": "All prices and terms"
@@ -302,13 +299,9 @@
       "title": "€{deposit} deposit",
       "text": "Refunded when the car is returned without new damage."
     },
-    "license": {
-      "title": "Passenger transport permit",
-      "text": "Required for ride-hailing work. Don't have one yet? We'll explain how to get it."
-    },
     "help": {
-      "title": "No permit yet?",
-      "text": "We'll tell you which documents you need for ride-hailing work and how to get them quickly.",
+      "title": "Have questions?",
+      "text": "We'll help you choose a car and answer any questions about terms, documents or the deposit.",
       "cta": "Ask on WhatsApp"
     }
   },
@@ -319,7 +312,7 @@
     "items": {
       "included": {
         "q": "What is included in the rental price?",
-        "a": "Mandatory insurance that covers carrying passengers, scheduled maintenance and unlimited mileage. Fuel and car washes are paid by the driver."
+        "a": "Mandatory third-party liability insurance and maintenance. Economy cars have unlimited mileage; other classes may have a daily mileage limit, shown on the car page. Fuel is paid by the renter."
       },
       "deposit": {
         "q": "How is the deposit returned?",
@@ -341,13 +334,9 @@
         "q": "Can I rent by the hour?",
         "a": "Yes, economy cars can be rented for a few hours. The minimum duration and price are listed under “Prices”."
       },
-      "platform": {
-        "q": "How do I start working on a ride-hailing platform?",
-        "a": "You'll need a driving licence, a passenger transport permit and registration on the platform (e.g. Bolt). We'll explain every step and help you prepare the documents."
-      },
       "payment": {
         "q": "How can I pay? Do you issue VAT invoices?",
-        "a": "You can pay by bank transfer or card. We issue invoices to companies and self-employed drivers."
+        "a": "You can pay by bank transfer or card. We issue invoices to companies."
       },
       "requirements": {
         "q": "What are the driver requirements?",

@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Baltic Nuoma — automobilių nuoma Klaipėdoje",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Komfortiškų ir taupių automobilių nuoma Klaipėdoje — darbui pavežėjimo platformose ir kasdienėms kelionėms. Nuo 18 € per parą, draudimas ir priežiūra įskaičiuoti, neribota rida."
+    "description": "Įvairių klasių automobilių nuoma Klaipėdoje — kasdienai, kelionėms ir ypatingoms progoms. Aiškios kainos nuo 18 € per parą, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu."
   },
   "common": {
     "skipToContent": "Pereiti prie turinio",
@@ -36,13 +36,13 @@
   },
   "home": {
     "eyebrow": "Automobilių nuoma Klaipėdoje",
-    "title": "Jūsų kelias. Jūsų uždarbis.",
-    "subtitle": "Komfortiški ir taupūs automobiliai darbui pavežėjimo platformose ir kasdienėms kelionėms. Draudimas, techninė priežiūra ir neribota rida jau įskaičiuoti.",
+    "title": "Jūsų kelias. Jūsų klasė.",
+    "subtitle": "Nuo taupios ekonominės iki prabangos klasės — automobiliai kasdienai, kelionėms ir ypatingoms progoms. Draudimas ir techninė priežiūra jau įskaičiuoti.",
     "cta": "Rezervuoti automobilį",
     "ctaSecondary": "Žiūrėti kainas"
   },
   "footer": {
-    "tagline": "Automobilių nuoma pavežėjams — ir ne tik. Klaipėda.",
+    "tagline": "Įvairių klasių automobilių nuoma Klaipėdoje.",
     "navigation": "Navigacija",
     "legal": "Teisinė informacija",
     "contacts": "Kontaktai",
@@ -57,7 +57,7 @@
   "pages": {
     "cars": {
       "title": "Automobiliai",
-      "description": "Mūsų automobilių parkas: komfortiški ir taupūs automobiliai pavežėjams, o netrukus — premium ir prabangos klasė.",
+      "description": "Pasirinkite automobilį pagal poreikį: kasdienai, kelionei ar ypatingai progai.",
       "eyebrow": "Automobilių parkas"
     },
     "prices": {
@@ -148,9 +148,6 @@
         "cabrio": "Kabrioletas",
         "minivan": "Vienatūris",
         "van": "Mikroautobusas"
-      },
-      "livery": {
-        "ride_hailing": "Pavežėjimo platformos ženklinimas"
       }
     },
     "units": {
@@ -216,25 +213,25 @@
   },
   "advantages": {
     "eyebrow": "Kodėl mes",
-    "title": "Viskas darbui jau įskaičiuota",
-    "highlight": "įskaičiuota",
-    "description": "Jūs vairuojate ir uždirbate — draudimu, priežiūra ir dokumentais rūpinamės mes.",
+    "title": "Viskas, ko reikia kelionei",
+    "highlight": "kelionei",
+    "description": "Pasirinkite automobilį pagal poreikį, o draudimu, priežiūra ir dokumentais pasirūpinsime mes.",
     "items": {
-      "hybrid": {
-        "title": "Taupus hibridas",
-        "text": "Hibridiniai automobiliai mieste sunaudoja vos apie 4–5 l/100 km, todėl daugiau uždarbio lieka jums."
+      "classes": {
+        "title": "Įvairios klasės",
+        "text": "Nuo taupių ekonominės klasės automobilių iki premium ir prabangos — kasdienai, kelionėms ar ypatingoms progoms."
       },
       "insurance": {
-        "title": "Draudimas keleivių vežimui",
-        "text": "Privalomasis draudimas, tinkantis keleivių vežimui, jau įskaičiuotas į nuomos kainą."
+        "title": "Draudimas įskaičiuotas",
+        "text": "Privalomasis civilinės atsakomybės draudimas jau įskaičiuotas į nuomos kainą."
       },
-      "maintenance": {
-        "title": "Priežiūra mūsų sąskaita",
-        "text": "Planinė techninė priežiūra ir natūraliai susidėvėjusių dalių keitimas — mūsų rūpestis."
+      "maintained": {
+        "title": "Prižiūrėti automobiliai",
+        "text": "Reguliari techninė priežiūra, o prieš kiekvieną nuomą automobilis patikrinamas ir išvalomas."
       },
-      "mileage": {
-        "title": "Neribota rida",
-        "text": "Važiuokite tiek, kiek reikia darbui, be papildomų mokesčių už kilometrus."
+      "flexible": {
+        "title": "Lanksti nuomos trukmė",
+        "text": "Nuo kelių valandų iki kelių mėnesių — kuo ilgiau nuomojatės, tuo mažesnė paros kaina."
       },
       "fast": {
         "title": "Greitas įforminimas",
@@ -263,7 +260,7 @@
   },
   "fleet": {
     "eyebrow": "Automobilių parkas",
-    "title": "Pasiruošę darbui jau šiandien",
+    "title": "Pasiruošę kelionei jau šiandien",
     "highlight": "šiandien",
     "all": "Visi automobiliai",
     "empty": "Automobilių sąrašas netrukus bus papildytas. Susisiekite su mumis — padėsime išsirinkti."
@@ -275,9 +272,9 @@
     "description": "Kuo ilgiau nuomojatės, tuo mažiau mokate už parą.",
     "includedTitle": "Į kainą įskaičiuota",
     "included": {
-      "insurance": "Keleivių vežimo draudimas",
-      "maintenance": "Planinė techninė priežiūra",
-      "mileage": "Neribota rida"
+      "insurance": "Privalomasis draudimas",
+      "maintenance": "Techninė priežiūra",
+      "checked": "Patikrintas ir švarus automobilis"
     },
     "depositNote": "Užstatas {deposit} € grąžinamas grąžinus automobilį.",
     "more": "Visos kainos ir sąlygos"
@@ -302,13 +299,9 @@
       "title": "Užstatas {deposit} €",
       "text": "Grąžinamas grąžinus automobilį be naujų pažeidimų."
     },
-    "license": {
-      "title": "Leidimas vežti keleivius",
-      "text": "Reikalingas dirbant pavežėjimo platformose. Jei jo dar neturite — paaiškinsime, kaip jį gauti."
-    },
     "help": {
-      "title": "Dar neturite leidimo?",
-      "text": "Papasakosime, kokių dokumentų reikia darbui pavežėjimo platformose ir kaip greitai juos susitvarkyti.",
+      "title": "Turite klausimų?",
+      "text": "Padėsime išsirinkti automobilį ir atsakysime į klausimus apie sąlygas, dokumentus ar užstatą.",
       "cta": "Klausti per WhatsApp"
     }
   },
@@ -319,7 +312,7 @@
     "items": {
       "included": {
         "q": "Kas įskaičiuota į nuomos kainą?",
-        "a": "Privalomasis draudimas, tinkantis keleivių vežimui, planinė techninė priežiūra ir neribota rida. Degalus ir plovimą apmoka vairuotojas."
+        "a": "Privalomasis civilinės atsakomybės draudimas ir techninė priežiūra. Ekonominės klasės automobiliams rida neribojama, kitoms klasėms gali būti taikomas paros ridos limitas — jis nurodytas prie automobilio. Degalus apmoka nuomininkas."
       },
       "deposit": {
         "q": "Kaip grąžinamas užstatas?",
@@ -341,13 +334,9 @@
         "q": "Ar galima nuomotis valandomis?",
         "a": "Taip, ekonominės klasės automobilius galima nuomotis ir kelioms valandoms. Mažiausia trukmė ir kaina nurodytos skiltyje „Kainos“."
       },
-      "platform": {
-        "q": "Kaip pradėti dirbti pavežėjimo platformoje?",
-        "a": "Reikės vairuotojo pažymėjimo, leidimo vežti keleivius ir registracijos platformoje (pvz., Bolt). Paaiškinsime visus žingsnius ir padėsime pasiruošti dokumentus."
-      },
       "payment": {
         "q": "Kaip atsiskaityti? Ar išrašote sąskaitas faktūras?",
-        "a": "Atsiskaityti galima banko pavedimu arba kortele. Įmonėms ir individualią veiklą vykdantiems vairuotojams išrašome sąskaitas faktūras."
+        "a": "Atsiskaityti galima banko pavedimu arba kortele. Įmonėms išrašome sąskaitas faktūras."
       },
       "requirements": {
         "q": "Kokie reikalavimai vairuotojui?",

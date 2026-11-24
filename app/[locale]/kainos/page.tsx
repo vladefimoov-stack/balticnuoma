@@ -12,7 +12,7 @@ import { getCategories, pick, type CategoryView } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
 import { perDayEquivalent, weeklySavingPercent } from "@/lib/pricing/display";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 type Params = { params: Promise<{ locale: Locale }> };
 

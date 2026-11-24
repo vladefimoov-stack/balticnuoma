@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/lib/config/site";
 import { getPublicSettings } from "@/lib/data/settings";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 type Params = { params: Promise<{ locale: Locale }> };
 

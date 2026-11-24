@@ -1,4 +1,4 @@
-import { CalendarCheck, FileCheck2, IdCard, UserCheck, Wallet, type LucideIcon } from "lucide-react";
+import { CalendarCheck, IdCard, UserCheck, Wallet, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { ButtonAnchor } from "@/components/ui/Button";
@@ -21,7 +21,6 @@ export async function Requirements({ rules, deposit, contacts }: Props) {
     { icon: UserCheck, title: t("age.title", { age: rules.min_age }), text: t("age.text") },
     { icon: IdCard, title: t("documents.title"), text: t("documents.text") },
     { icon: Wallet, title: t("deposit.title", { deposit }), text: t("deposit.text") },
-    { icon: FileCheck2, title: t("license.title"), text: t("license.text") },
   ];
 
   return (

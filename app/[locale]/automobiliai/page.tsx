@@ -7,7 +7,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { getCategories, getPublishedCars, pick } from "@/lib/data/cars";
 import { vilniusToday } from "@/lib/dates";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 type Params = { params: Promise<{ locale: Locale }> };
 

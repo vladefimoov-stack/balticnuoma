@@ -1,11 +1,16 @@
 # Baltic Nuoma — architecture & conventions
 
 Car rental website for **Baltic Nuoma** (Birutės g. 21, Klaipėda, Lithuania).
-Today: Toyota Prius hybrids for ride-hailing (Bolt) drivers. Tomorrow: premium & luxury
-cars for private clients — every data model, filter and UI must already support that.
+**Positioning (owner's decision, overrides the original brief): rentals of cars of every class
+for personal use** — economy today (5 × Toyota Prius), premium & luxury next. Every data model,
+filter and UI must support all classes.
 
-The original product brief (phases, requirements) is the source of truth for scope.
-Owner-supplied items that are still missing are tracked in `TODO.md`.
+**No ride-hailing / taxi content anywhere for now** — no Bolt, "pavežėjimas", passenger-transport
+permits, earnings, platform questions in forms. The taxi offering will be revisited as a separate
+project after launch (`bookings.platform_driver` is kept, nullable, for that).
+
+The original product brief (phases, requirements) is the source of truth for scope, except where
+the owner changed it (positioning above, static buttons). Owner-supplied items are in `TODO.md`.
 
 ## Stack
 
@@ -149,7 +154,7 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
 
 ## Public data & caching
 
-- Public pages are **static with ISR** (`export const revalidate = 3600`) and read data only through
+- Public pages are **static with ISR** (`export const revalidate = 300` — a literal, Next requires it) and read data only through
   `lib/data/*` (wrapped in `unstable_cache` with tags `settings`, `categories`, `cars`).
   **Admin mutations must call `revalidateTag(...)`** for the affected tags so the site updates at once.
 - Every reader falls back to `lib/data/defaults.ts` / empty lists when Supabase is not configured
@@ -220,7 +225,7 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - [x] 3 — Public pages: home sections, catalog with filters, car page, prices, contacts; data
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [ ] 4 — 3D & motion: hero scene, scroll scenario, car viewer, optimization
-- [ ] 5 — Booking: calendar, pricing, form, server action, emails
+- [ ] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
 - [ ] 6 — Admin panel
 - [ ] 6b — 3D generation from photos (provider adapter, jobs, cron, GLB optimization)
 - [ ] 7 — SEO, legal pages, cookie banner

@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Pricing } from "@/lib/db/json";
 
-export const INCLUDED_KEYS = ["insurance", "maintenance", "mileage"] as const;
+export const INCLUDED_KEYS = ["insurance", "maintenance", "checked"] as const;
 
 export async function PricingSection({ pricing, locale }: { pricing: Pricing; locale: string }) {
   const t = await getTranslations("pricing");

@@ -11,7 +11,6 @@ export const FAQ_KEYS = [
   "abroad",
   "extend",
   "hourly",
-  "platform",
   "payment",
   "requirements",
   "documents",

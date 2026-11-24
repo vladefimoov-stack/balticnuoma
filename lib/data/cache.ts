@@ -8,5 +8,5 @@ export const CACHE_TAGS = {
   cars: "cars",
 } as const;
 
-/** Time-based safety net (seconds) on top of on-demand revalidation. */
-export const PUBLIC_REVALIDATE_SECONDS = 3600;
+/** Time-based refresh (seconds): DB edits show up within ~5 min; admin actions also revalidate by tag. */
+export const PUBLIC_REVALIDATE_SECONDS = 300;

@@ -124,7 +124,7 @@ export type Database = {
           manager_note: string | null;
           number: number;
           period: unknown;
-          platform_driver: Database["public"]["Enums"]["platform_driver"];
+          platform_driver: Database["public"]["Enums"]["platform_driver"] | null;
           price_breakdown: NonNullable<Json>;
           rejection_reason: string | null;
           rental_type: Database["public"]["Enums"]["rental_type"];
@@ -153,7 +153,7 @@ export type Database = {
           manager_note?: string | null;
           number?: never;
           period: unknown;
-          platform_driver: Database["public"]["Enums"]["platform_driver"];
+          platform_driver?: Database["public"]["Enums"]["platform_driver"] | null;
           price_breakdown?: NonNullable<Json>;
           rejection_reason?: string | null;
           rental_type: Database["public"]["Enums"]["rental_type"];
@@ -181,7 +181,7 @@ export type Database = {
           manager_note?: string | null;
           number?: never;
           period?: unknown;
-          platform_driver?: Database["public"]["Enums"]["platform_driver"];
+          platform_driver?: Database["public"]["Enums"]["platform_driver"] | null;
           price_breakdown?: NonNullable<Json>;
           rejection_reason?: string | null;
           rental_type?: Database["public"]["Enums"]["rental_type"];
