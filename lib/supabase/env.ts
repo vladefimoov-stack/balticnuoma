@@ -3,8 +3,20 @@
  * `isSupabaseConfigured` lets pages render a graceful fallback (e.g. on a fresh
  * Vercel deploy before env vars are added) instead of failing the build.
  */
-export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-export const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+/**
+ * Tolerate common copy-paste mistakes: whitespace, trailing slashes and the
+ * REST endpoint suffix ("https://<ref>.supabase.co/rest/v1/" → "https://<ref>.supabase.co").
+ */
+export function normalizeSupabaseUrl(raw: string | undefined) {
+  return (raw ?? "")
+    .trim()
+    .replace(/\/+$/, "")
+    .replace(/\/(rest|auth|storage)\/v1$/, "");
+}
+
+export const supabaseUrl = normalizeSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
+export const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim();
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 

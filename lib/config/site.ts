@@ -5,7 +5,7 @@
  */
 export const site = {
   name: "Baltic Nuoma",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").trim().replace(/\/+$/, ""),
   phone: {
     display: "+370 654 37549",
     e164: "+37065437549",

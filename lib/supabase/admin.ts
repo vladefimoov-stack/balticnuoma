@@ -11,7 +11,7 @@ import { assertSupabaseEnv, supabaseUrl } from "./env";
  */
 export function createAdminClient() {
   assertSupabaseEnv();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!serviceRoleKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set.");
 
   return createSupabaseClient<Database>(supabaseUrl, serviceRoleKey, {
