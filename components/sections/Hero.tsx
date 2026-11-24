@@ -30,7 +30,7 @@ export async function Hero() {
             {t("cta")}
             <ArrowRight className="size-4" aria-hidden />
           </ButtonLink>
-          <ButtonLink href="/kainos" size="lg" variant="secondary">
+          <ButtonLink href="/kontaktai" size="lg" variant="secondary">
             {t("ctaSecondary")}
           </ButtonLink>
         </div>

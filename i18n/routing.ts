@@ -17,7 +17,6 @@ export const routing = defineRouting({
     "/": "/",
     "/automobiliai": { lt: "/automobiliai", en: "/cars" },
     "/automobiliai/[slug]": { lt: "/automobiliai/[slug]", en: "/cars/[slug]" },
-    "/kainos": { lt: "/kainos", en: "/prices" },
     "/salygos": { lt: "/salygos", en: "/terms" },
     "/kontaktai": { lt: "/kontaktai", en: "/contacts" },
     "/privatumo-politika": { lt: "/privatumo-politika", en: "/privacy-policy" },

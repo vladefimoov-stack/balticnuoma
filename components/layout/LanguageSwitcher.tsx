@@ -36,7 +36,6 @@ export function LanguageSwitcher({ className, onNavigate }: { className?: string
             href={href}
             locale={l}
             hrefLang={l}
-            scroll={false}
             onClick={onNavigate}
             aria-current={active ? "true" : undefined}
             aria-label={t("switchTo", { language: languageNames[l] })}

@@ -3,7 +3,7 @@ import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageHero } from "@/components/layout/PageHero";
 
-type PageKey = "cars" | "prices" | "terms" | "contacts" | "privacy" | "cookies";
+type PageKey = "cars" | "terms" | "contacts" | "privacy" | "cookies";
 type Params = { params: Promise<{ locale: Locale }> };
 
 /**

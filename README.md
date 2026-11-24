@@ -39,7 +39,6 @@ npm run dev                  # http://localhost:3000, Supabase Studio — http:/
 | --------------------------------------- | ----------------------------- |
 | `/`                                     | `/en`                         |
 | `/automobiliai`, `/automobiliai/[slug]` | `/en/cars`, `/en/cars/[slug]` |
-| `/kainos`                               | `/en/prices`                  |
 | `/salygos`                              | `/en/terms`                   |
 | `/kontaktai`                            | `/en/contacts`                |
 | `/privatumo-politika`                   | `/en/privacy-policy`          |

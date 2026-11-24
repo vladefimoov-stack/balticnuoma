@@ -17,7 +17,6 @@
     "label": "Pagrindinė navigacija",
     "home": "Pradžia",
     "cars": "Automobiliai",
-    "prices": "Kainos",
     "terms": "Sąlygos",
     "contacts": "Kontaktai",
     "book": "Rezervuoti",
@@ -39,7 +38,7 @@
     "title": "Jūsų kelias. Jūsų klasė.",
     "subtitle": "Nuo taupios ekonominės iki prabangos klasės — automobiliai kasdienai, kelionėms ir ypatingoms progoms. Draudimas ir techninė priežiūra jau įskaičiuoti.",
     "cta": "Rezervuoti automobilį",
-    "ctaSecondary": "Žiūrėti kainas"
+    "ctaSecondary": "Susisiekti"
   },
   "footer": {
     "tagline": "Įvairių klasių automobilių nuoma Klaipėdoje.",
@@ -59,11 +58,6 @@
       "title": "Automobiliai",
       "description": "Pasirinkite automobilį pagal poreikį: kasdienai, kelionei ar ypatingai progai.",
       "eyebrow": "Automobilių parkas"
-    },
-    "prices": {
-      "title": "Kainos",
-      "description": "Valandinė, paros, savaitės ir ilgalaikė automobilių nuoma Klaipėdoje. Aiškūs tarifai, užstatas 500 €.",
-      "eyebrow": "Kainos"
     },
     "terms": {
       "title": "Nuomos sąlygos",
@@ -192,7 +186,6 @@
     "minHours": "Mažiausiai {count} val.",
     "dailyNote": "Patogu trumpam laikotarpiui",
     "perDayEquivalent": "≈ {price, number} € per parą",
-    "save": "−{percent} %",
     "fromWeeks": "Nuo {count} savaičių",
     "deposit": "Užstatas",
     "depositNote": "Grąžinamas grąžinus automobilį"
@@ -265,20 +258,6 @@
     "all": "Visi automobiliai",
     "empty": "Automobilių sąrašas netrukus bus papildytas. Susisiekite su mumis — padėsime išsirinkti."
   },
-  "pricing": {
-    "eyebrow": "Kainos",
-    "title": "Aiškios kainos be smulkaus šrifto",
-    "highlight": "smulkaus šrifto",
-    "description": "Kuo ilgiau nuomojatės, tuo mažiau mokate už parą.",
-    "includedTitle": "Į kainą įskaičiuota",
-    "included": {
-      "insurance": "Privalomasis draudimas",
-      "maintenance": "Techninė priežiūra",
-      "checked": "Patikrintas ir švarus automobilis"
-    },
-    "depositNote": "Užstatas {deposit} € grąžinamas grąžinus automobilį.",
-    "more": "Visos kainos ir sąlygos"
-  },
   "requirements": {
     "eyebrow": "Reikalavimai",
     "title": "Ko reikia norint išsinuomoti",
@@ -332,7 +311,7 @@
       },
       "hourly": {
         "q": "Ar galima nuomotis valandomis?",
-        "a": "Taip, ekonominės klasės automobilius galima nuomotis ir kelioms valandoms. Mažiausia trukmė ir kaina nurodytos skiltyje „Kainos“."
+        "a": "Taip, ekonominės klasės automobilius galima nuomotis ir kelioms valandoms. Mažiausia trukmė ir kaina nurodytos prie kiekvieno automobilio."
       },
       "payment": {
         "q": "Kaip atsiskaityti? Ar išrašote sąskaitas faktūras?",
@@ -396,17 +375,5 @@
     "others": "Kiti automobiliai",
     "metaTitle": "{title} nuoma Klaipėdoje",
     "metaDescription": "{title} nuoma Klaipėdoje: aiškios kainos, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu."
-  },
-  "pricesPage": {
-    "defaultCategory": "Ekonominė klasė",
-    "requirements": "Reikalavimai vairuotojui",
-    "depositTitle": "Užstatas {deposit} €",
-    "depositText": "Sumokamas atsiimant automobilį ir grąžinamas jį grąžinus, jei nėra naujų pažeidimų, baudų ar skolų.",
-    "longTermTitle": "Kuo ilgiau — tuo pigiau",
-    "longTermText": "Nuomojantis nuo {weeks} savaičių para kainuoja tik apie {perDay, number} € vietoje {daily} € — sutaupote {percent} %.",
-    "longTermFallback": "Ilgalaikei nuomai taikome palankesnius tarifus — susisiekite dėl pasiūlymo.",
-    "ctaTitle": "Išsirinkite automobilį",
-    "ctaText": "Peržiūrėkite automobilių parką ir laisvas datas.",
-    "cta": "Peržiūrėti automobilius"
   }
 }

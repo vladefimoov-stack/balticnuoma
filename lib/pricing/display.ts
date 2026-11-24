@@ -16,9 +16,3 @@ export function fromPricePerDay(pricing: Pricing): number | null {
 export function perDayEquivalent(weeklyPrice: number) {
   return Math.round((weeklyPrice / 7) * 2) / 2;
 }
-
-/** Saving of a weekly price vs. paying the daily tariff for 7 days, in whole percent. */
-export function weeklySavingPercent(dailyPrice: number, weeklyPrice: number) {
-  if (dailyPrice <= 0) return 0;
-  return Math.max(0, Math.round((1 - weeklyPrice / (dailyPrice * 7)) * 100));
-}

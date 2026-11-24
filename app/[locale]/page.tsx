@@ -6,7 +6,6 @@ import { Faq } from "@/components/sections/Faq";
 import { FleetPreview } from "@/components/sections/FleetPreview";
 import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { PricingSection } from "@/components/sections/PricingSection";
 import { Requirements } from "@/components/sections/Requirements";
 import { getCategories, getPublishedCars } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
@@ -29,7 +28,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Advantages />
       <HowItWorks />
       <FleetPreview cars={cars} locale={locale} />
-      <PricingSection pricing={pricing} locale={locale} />
       <Requirements rules={rules} deposit={pricing.deposit} contacts={settings.contacts} />
       <Faq deposit={pricing.deposit} rules={rules} />
       <ContactSection contacts={settings.contacts} hours={settings.openingHours} locale={locale} />

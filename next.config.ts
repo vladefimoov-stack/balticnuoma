@@ -36,6 +36,13 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
+  // The separate prices page was removed (owner's request); old links go to the catalog.
+  async redirects() {
+    return [
+      { source: "/kainos", destination: "/automobiliai", permanent: true },
+      { source: "/en/prices", destination: "/en/cars", permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

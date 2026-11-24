@@ -58,7 +58,8 @@ app/
   [locale]/             PUBLIC SITE — <html> lives in [locale]/layout.tsx
     layout.tsx          fonts, NextIntlClientProvider (client namespaces only), Navbar, Footer, FloatingContacts
     page.tsx            home
-    automobiliai/ kainos/ salygos/ kontaktai/ privatumo-politika/ slapukai/
+    automobiliai/ salygos/ kontaktai/ privatumo-politika/ slapukai/   (no separate prices page —
+                        removed by the owner; /kainos redirects to /automobiliai)
     [...rest]/page.tsx  → notFound() so unknown URLs get the localized 404
     not-found.tsx, error.tsx
   admin/                ADMIN (phase 6) — LT only, own <html>, excluded from i18n middleware
@@ -67,11 +68,11 @@ app/
 components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
-  providers/            Providers (LazyMotion, MotionConfig), SmoothScroll (Lenis)
-  ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons, Reveal/RevealText, CountUp,
-                        Spotlight, SectionHeading
-  sections/             home sections: Hero, Advantages, HowItWorks, FleetPreview, PricingSection,
-                        Requirements, Faq, ContactSection
+  providers/            Providers (LazyMotion, MotionConfig), SmoothScroll (Lenis), ScrollToTop
+  ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons, Reveal/RevealText, Spotlight,
+                        SectionHeading
+  sections/             home sections: Hero, Advantages, HowItWorks, FleetPreview, Requirements, Faq,
+                        ContactSection (no pricing block on the home page — owner's request)
   cars/                 CarCard, CarPlaceholder (SVG silhouettes), CarGallery, CarSpecs, CarFeatures,
                         TariffList, RulesList, Catalog (client filters)
   contact/              ContactList, MapEmbed (lazy Google Maps iframe)
@@ -199,6 +200,9 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - Use `m.*` components (LazyMotion strict) — importing `motion.*` throws at runtime.
 - Respect `prefers-reduced-motion`: MotionConfig handles framer-motion, Lenis is not
   started, CSS animations are neutralized globally. GSAP/3D code must check it too.
+- **Every navigation starts at the top of the new page** (owner's requirement): `ScrollToTop`
+  resets Lenis + window on each pathname change (incl. back/forward, language switch); don't
+  pass `scroll={false}` to links.
 - Pause scrolling for overlays with `lockScroll(true|false)` from `lib/motion/lenis.ts`;
   add `data-lenis-prevent` to scrollable overlays.
 - 3D: load with `next/dynamic` (`ssr: false`) only when in viewport, show a webp poster
@@ -222,7 +226,7 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
       floating contacts, logo, 404/500, docs
 - [x] 2 — Supabase: migrations, RLS, occupancy exclusion, storage, seed, pgTAP tests,
       generated types, clients, seed-admin script
-- [x] 3 — Public pages: home sections, catalog with filters, car page, prices, contacts; data
+- [x] 3 — Public pages: home sections, catalog with filters, car page, contacts; data
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [ ] 4 — 3D & motion: hero scene, scroll scenario, car viewer, optimization
 - [ ] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails

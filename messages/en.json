@@ -17,7 +17,6 @@
     "label": "Main navigation",
     "home": "Home",
     "cars": "Cars",
-    "prices": "Prices",
     "terms": "Terms",
     "contacts": "Contacts",
     "book": "Book",
@@ -39,7 +38,7 @@
     "title": "Your road. Your class.",
     "subtitle": "From economical to luxury class — cars for everyday driving, trips and special occasions. Insurance and maintenance are already included.",
     "cta": "Book a car",
-    "ctaSecondary": "See prices"
+    "ctaSecondary": "Contact us"
   },
   "footer": {
     "tagline": "Car rental of every class in Klaipėda.",
@@ -59,11 +58,6 @@
       "title": "Cars",
       "description": "Choose a car for your needs: everyday driving, a trip or a special occasion.",
       "eyebrow": "Our fleet"
-    },
-    "prices": {
-      "title": "Prices",
-      "description": "Hourly, daily, weekly and long-term car rental in Klaipėda. Clear rates, €500 deposit.",
-      "eyebrow": "Prices"
     },
     "terms": {
       "title": "Rental terms",
@@ -192,7 +186,6 @@
     "minHours": "Minimum {count} h",
     "dailyNote": "Handy for short periods",
     "perDayEquivalent": "≈ €{price, number} per day",
-    "save": "−{percent}%",
     "fromWeeks": "From {count} weeks",
     "deposit": "Deposit",
     "depositNote": "Refunded when you return the car"
@@ -265,20 +258,6 @@
     "all": "All cars",
     "empty": "The fleet list will be updated soon. Get in touch — we'll help you choose."
   },
-  "pricing": {
-    "eyebrow": "Prices",
-    "title": "Clear prices, no fine print",
-    "highlight": "fine print",
-    "description": "The longer you rent, the less you pay per day.",
-    "includedTitle": "Included in the price",
-    "included": {
-      "insurance": "Mandatory insurance",
-      "maintenance": "Maintenance",
-      "checked": "A checked, clean car"
-    },
-    "depositNote": "The €{deposit} deposit is refunded when you return the car.",
-    "more": "All prices and terms"
-  },
   "requirements": {
     "eyebrow": "Requirements",
     "title": "What you need to rent",
@@ -332,7 +311,7 @@
       },
       "hourly": {
         "q": "Can I rent by the hour?",
-        "a": "Yes, economy cars can be rented for a few hours. The minimum duration and price are listed under “Prices”."
+        "a": "Yes, economy cars can be rented for a few hours. The minimum duration and price are shown on each car's page."
       },
       "payment": {
         "q": "How can I pay? Do you issue VAT invoices?",
@@ -396,17 +375,5 @@
     "others": "Other cars",
     "metaTitle": "{title} rental in Klaipėda",
     "metaDescription": "{title} rental in Klaipėda: clear prices, insurance and maintenance included. Book online."
-  },
-  "pricesPage": {
-    "defaultCategory": "Economy",
-    "requirements": "Driver requirements",
-    "depositTitle": "€{deposit} deposit",
-    "depositText": "Paid when you pick up the car and refunded on return if there is no new damage, fines or debts.",
-    "longTermTitle": "The longer, the cheaper",
-    "longTermText": "Rent for {weeks}+ weeks and a day costs only about €{perDay, number} instead of €{daily} — you save {percent}%.",
-    "longTermFallback": "We offer better rates for long-term rentals — contact us for a quote.",
-    "ctaTitle": "Choose your car",
-    "ctaText": "Browse the fleet and available dates.",
-    "cta": "Browse cars"
   }
 }

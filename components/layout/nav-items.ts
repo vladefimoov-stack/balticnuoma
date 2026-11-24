@@ -1,10 +1,9 @@
 import type { StaticPathname } from "@/i18n/routing";
 
-export type NavKey = "cars" | "prices" | "terms" | "contacts";
+export type NavKey = "cars" | "terms" | "contacts";
 
 export const navItems: ReadonlyArray<{ href: StaticPathname; key: NavKey }> = [
   { href: "/automobiliai", key: "cars" },
-  { href: "/kainos", key: "prices" },
   { href: "/salygos", key: "terms" },
   { href: "/kontaktai", key: "contacts" },
 ];

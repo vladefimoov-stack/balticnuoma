@@ -130,7 +130,7 @@ export default async function CarPage({ params }: Params) {
                 <span className="text-muted"> / {tc("day")}</span>
               </p>
             )}
-            <TariffList pricing={car.pricing} deposit={car.deposit} locale={locale} variant="rows" />
+            <TariffList pricing={car.pricing} deposit={car.deposit} />
             <div className="flex flex-col gap-3">
               <h2 className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">{t("requirements")}</h2>
               <RulesList rules={car.rules} />
