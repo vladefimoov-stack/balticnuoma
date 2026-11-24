@@ -52,10 +52,14 @@
 4. Нажмите **+ New query** (или **New SQL snippet**). Откроется пустое поле.
 5. Вставьте скопированное: щёлкните в поле, затем `Ctrl + V` (на Mac — `Cmd + V`).
 6. Нажмите зелёную кнопку **Run** справа внизу (или `Ctrl + Enter`).
-7. Supabase может показать предупреждение **«Potential issue detected… destructive operation»** —
-   это нормально (в скрипте есть команды, ограничивающие права посетителей). Нажмите
-   **Run this query**.
+7. Supabase может показать окно **«Potential issue detected»** — это нормально:
+   - текст про _destructive operation_ → нажмите **Run this query**;
+   - текст _«This query creates a table without enabling Row Level Security…
+     supabase_migrations.schema_migrations»_ → нажмите **Run and enable RLS**. Это служебная
+     таблица с историей изменений базы, сайту она не видна; подходят обе кнопки.
 8. Через несколько секунд внизу появится **«Success. No rows returned»** — готово.
+   **Запускать скрипт нужно один раз.** Не нажимайте **Run** повторно — второй запуск только
+   покажет ошибку «already installed» (база при этом не пострадает).
 
 **Если появилась ошибка:**
 
