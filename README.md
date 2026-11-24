@@ -40,7 +40,10 @@ npm run dev                  # http://localhost:3000
 
 ## Деплой на Vercel (кратко)
 
-1. Импортируйте репозиторий в Vercel (Framework preset: **Next.js**).
+1. Импортируйте репозиторий в Vercel. Фреймворк (`nextjs`) и регион функций (`fra1`, Франкфурт —
+   ближе всего к Литве и к Supabase EU) зафиксированы в `vercel.json`, поэтому настройка
+   _Framework Preset_ в панели не важна. В _Build and Deployment_ не включайте ручные
+   переопределения Build Command / Output Directory.
 2. В _Settings → Environment Variables_ добавьте переменные из `.env.example`
    (как минимум `NEXT_PUBLIC_SITE_URL`).
 3. Подключите домен и обновите `NEXT_PUBLIC_SITE_URL`.
