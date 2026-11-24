@@ -3,9 +3,13 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
-const supabaseHost = (() => {
+/** Supabase Storage origin for next/image (https in production, http for the local CLI stack). */
+const supabaseOrigin = (() => {
   try {
-    return process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : null;
+    const raw = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+    if (!raw) return null;
+    const url = new URL(raw);
+    return { protocol: url.protocol.replace(":", "") as "http" | "https", hostname: url.hostname, port: url.port };
   } catch {
     return null;
   }
@@ -27,9 +31,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: supabaseHost
-      ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/**" }]
-      : [],
+    remotePatterns: supabaseOrigin ? [{ ...supabaseOrigin, pathname: "/storage/v1/object/public/**" }] : [],
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],

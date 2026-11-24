@@ -57,12 +57,19 @@ app/
     [...rest]/page.tsx  → notFound() so unknown URLs get the localized 404
     not-found.tsx, error.tsx
   admin/                ADMIN (phase 6) — LT only, own <html>, excluded from i18n middleware
-  api/                  route handlers (cron, 3D polling, …)
+  api/                  route handlers: health (deployment self-check), availability (catalog
+                        date filter), later cron / 3D polling
 components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
   providers/            Providers (LazyMotion, MotionConfig), SmoothScroll (Lenis)
-  ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons
+  ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons, Reveal/RevealText, CountUp,
+                        Spotlight, SectionHeading
+  sections/             home sections: Hero, Advantages, HowItWorks, FleetPreview, PricingSection,
+                        Requirements, Faq, ContactSection
+  cars/                 CarCard, CarPlaceholder (SVG silhouettes), CarGallery, CarSpecs, CarFeatures,
+                        TariffList, RulesList, Catalog (client filters)
+  contact/              ContactList, MapEmbed (lazy Google Maps iframe)
   three/ booking/ admin/  (later phases)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
@@ -75,7 +82,12 @@ lib/
                         admin), client.ts (browser), admin.ts (service role, server-only),
                         database.types.ts (generated — never edit), types.ts (aliases)
   db/json.ts            zod contracts for JSONB columns + resolvePricing / resolveRentalRules
-  pricing/ 3d/providers/ email/   (later phases)
+  data/                 server-only cached reads: settings.ts (getPublicSettings), cars.ts
+                        (getPublishedCars, getCarBySlug, getCategories, pick()), defaults.ts, cache.ts
+  pricing/display.ts    "from" price, per-day equivalent, savings % (booking math: phase 5)
+  dates.ts              Europe/Vilnius day helpers (vilniusDayStart, vilniusToday, addDaysIso)
+  format/hours.ts       opening hours → "I–V 9:00–18:00" / "Mon–Fri 9:00–18:00"
+  3d/providers/ email/  (later phases)
 supabase/
   config.toml           local stack config (sign-up disabled)
   migrations/           ordered SQL migrations (foundation, core, bookings, rls, storage)
@@ -135,6 +147,21 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
   `model-inputs` (private: photos for 3D providers via signed URLs). Writes are staff-only.
 - Realtime publication: `model_jobs`, `bookings` (RLS applies — staff only).
 
+## Public data & caching
+
+- Public pages are **static with ISR** (`export const revalidate = 3600`) and read data only through
+  `lib/data/*` (wrapped in `unstable_cache` with tags `settings`, `categories`, `cars`).
+  **Admin mutations must call `revalidateTag(...)`** for the affected tags so the site updates at once.
+- Every reader falls back to `lib/data/defaults.ts` / empty lists when Supabase is not configured
+  or fails — the site must always build and render.
+- Localized DB text is `{ lt, en | null }` (`L10n`); render with `pick(text, locale)` (EN → LT fallback).
+- Contacts, opening hours, tariffs and rules come from `settings` (editable in admin), not from
+  `lib/config/site.ts` (that file holds only fallbacks and legal requisites).
+- The catalog stays static: cards render on the server, `Catalog` (client) only filters them;
+  date availability comes from `GET /api/availability?from&to` (Vilnius days, `to` inclusive).
+- Scroll reveals: `Reveal` / `RevealText` keep server HTML visible and only animate elements that
+  start below the fold. Never wrap the hero H1 (LCP) in them.
+
 ## Design system
 
 Tokens are defined once in `app/globals.css` (`@theme`) and exposed both as Tailwind
@@ -190,7 +217,8 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
       floating contacts, logo, 404/500, docs
 - [x] 2 — Supabase: migrations, RLS, occupancy exclusion, storage, seed, pgTAP tests,
       generated types, clients, seed-admin script
-- [ ] 3 — Public pages with static content + cars from DB
+- [x] 3 — Public pages: home sections, catalog with filters, car page, prices, contacts; data
+      layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [ ] 4 — 3D & motion: hero scene, scroll scenario, car viewer, optimization
 - [ ] 5 — Booking: calendar, pricing, form, server action, emails
 - [ ] 6 — Admin panel

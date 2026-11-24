@@ -163,6 +163,62 @@
     radial-gradient(50% 40% at 10% 20%, rgb(201 209 220 / 0.06), transparent 70%), var(--color-bg);
 }
 
+/* ── Scroll reveal (components/ui/Reveal.tsx) ─────────────────────────── */
+/* Server HTML is visible; JS marks below-the-fold elements "pending", then "in". */
+.reveal-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.reveal-word {
+  display: inline-block;
+}
+[data-reveal="pending"].reveal-item,
+[data-reveal="pending"] .reveal-word {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+[data-reveal="pending"] .reveal-word {
+  opacity: 1;
+  transform: translateY(110%);
+}
+[data-reveal="in"].reveal-item,
+[data-reveal="in"] .reveal-word {
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+}
+[data-reveal="in"].reveal-item {
+  transition-delay: calc(var(--reveal-i, 0) * 80ms);
+}
+[data-reveal="in"] .reveal-word {
+  transition-delay: calc(var(--reveal-i, 0) * 35ms);
+}
+
+/* Cursor highlight for cards (components/ui/Spotlight.tsx). */
+@utility spotlight {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      rgb(255 181 71 / 0.09),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
 /* ── Reduced motion ───────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,

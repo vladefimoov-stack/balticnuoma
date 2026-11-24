@@ -47,7 +47,6 @@
     "legal": "Teisinė informacija",
     "contacts": "Kontaktai",
     "hours": "Darbo laikas",
-    "hoursValue": "I–V 9:00–18:00",
     "terms": "Nuomos sąlygos",
     "privacy": "Privatumo politika",
     "cookies": "Slapukų politika",
@@ -58,11 +57,13 @@
   "pages": {
     "cars": {
       "title": "Automobiliai",
-      "description": "Mūsų automobilių parkas: komfortiški ir taupūs automobiliai pavežėjams, o netrukus — premium ir prabangos klasė."
+      "description": "Mūsų automobilių parkas: komfortiški ir taupūs automobiliai pavežėjams, o netrukus — premium ir prabangos klasė.",
+      "eyebrow": "Automobilių parkas"
     },
     "prices": {
       "title": "Kainos",
-      "description": "Valandinė, paros, savaitės ir ilgalaikė automobilių nuoma Klaipėdoje. Aiškūs tarifai, užstatas 500 €."
+      "description": "Valandinė, paros, savaitės ir ilgalaikė automobilių nuoma Klaipėdoje. Aiškūs tarifai, užstatas 500 €.",
+      "eyebrow": "Kainos"
     },
     "terms": {
       "title": "Nuomos sąlygos",
@@ -70,7 +71,10 @@
     },
     "contacts": {
       "title": "Kontaktai",
-      "description": "Baltic Nuoma biuras Klaipėdoje, Birutės g. 21. Skambinkite, rašykite WhatsApp ar užsukite."
+      "description": "Baltic Nuoma biuras Klaipėdoje, Birutės g. 21. Skambinkite, rašykite WhatsApp ar užsukite.",
+      "eyebrow": "Kontaktai",
+      "company": "Įmonė",
+      "registeredAddress": "Juridinis adresas"
     },
     "privacy": {
       "title": "Privatumo politika",
@@ -91,5 +95,329 @@
     "title": "Kažkas nutiko",
     "text": "Įvyko netikėta klaida. Bandykite dar kartą arba susisiekite su mumis.",
     "retry": "Bandyti dar kartą"
+  },
+  "cars": {
+    "seats": "{count, plural, one {# vieta} few {# vietos} many {# vietos} other {# vietų}}",
+    "from": "nuo",
+    "day": "parą",
+    "priceOnRequest": "Kaina pagal užklausą",
+    "details": "Plačiau"
+  },
+  "specs": {
+    "labels": {
+      "body": "Kėbulas",
+      "year": "Pagaminimo metai",
+      "fuel": "Kuras",
+      "transmission": "Pavarų dėžė",
+      "drive": "Varantieji ratai",
+      "engine": "Variklio tūris",
+      "power": "Galia",
+      "acceleration": "0–100 km/h",
+      "consumption": "Vid. sąnaudos",
+      "consumptionElectric": "Elektros sąnaudos",
+      "range": "Nuvažiuojama elektra",
+      "seats": "Vietų skaičius",
+      "doors": "Durų skaičius",
+      "trunk": "Bagažinė",
+      "livery": "Apipavidalinimas"
+    },
+    "values": {
+      "fuel": {
+        "petrol": "Benzinas",
+        "diesel": "Dyzelinas",
+        "hybrid": "Hibridas",
+        "plug_in_hybrid": "Įkraunamas hibridas",
+        "electric": "Elektra",
+        "lpg": "Dujos (LPG)"
+      },
+      "transmission": {
+        "automatic": "Automatinė",
+        "manual": "Mechaninė"
+      },
+      "drive": {
+        "fwd": "Priekiniai",
+        "rwd": "Galiniai",
+        "awd": "Visi (4×4)"
+      },
+      "body": {
+        "sedan": "Sedanas",
+        "hatchback": "Hečbekas",
+        "wagon": "Universalas",
+        "suv": "Visureigis",
+        "coupe": "Kupė",
+        "cabrio": "Kabrioletas",
+        "minivan": "Vienatūris",
+        "van": "Mikroautobusas"
+      },
+      "livery": {
+        "ride_hailing": "Pavežėjimo platformos ženklinimas"
+      }
+    },
+    "units": {
+      "liters": "{value} l",
+      "hp": "{value} AG",
+      "seconds": "{value} s",
+      "l100": "{value} l/100 km",
+      "kwh100": "{value} kWh/100 km",
+      "km": "{value} km"
+    }
+  },
+  "features": {
+    "items": {
+      "climate_control": "Klimato kontrolė",
+      "navigation": "Navigacija",
+      "heated_seats": "Šildomos sėdynės",
+      "ventilated_seats": "Vėdinamos sėdynės",
+      "apple_carplay": "Apple CarPlay",
+      "android_auto": "Android Auto",
+      "bluetooth": "Bluetooth",
+      "usb_charging": "USB įkrovimas",
+      "panoramic_roof": "Panoraminis stogas",
+      "adaptive_cruise": "Adaptyvusis kruizo valdymas",
+      "parking_camera": "Galinio vaizdo kamera",
+      "parking_sensors": "Parkavimo jutikliai",
+      "keyless": "Beraktė sistema",
+      "leather_seats": "Odinis salonas",
+      "automatic_transmission": "Automatinė pavarų dėžė",
+      "hybrid": "Hibridinė pavara",
+      "child_seat": "Vaikiška kėdutė (pagal užklausą)",
+      "towbar": "Priekabos kablys"
+    }
+  },
+  "tariffs": {
+    "hourly": "Valandinė",
+    "daily": "Paros",
+    "weekly": "Savaitės",
+    "longTerm": "Ilgalaikė",
+    "perHour": "už valandą",
+    "perDay": "už parą",
+    "perWeek": "už savaitę",
+    "minHours": "Mažiausiai {count} val.",
+    "dailyNote": "Patogu trumpam laikotarpiui",
+    "perDayEquivalent": "≈ {price, number} € per parą",
+    "save": "−{percent} %",
+    "fromWeeks": "Nuo {count} savaičių",
+    "deposit": "Užstatas",
+    "depositNote": "Grąžinamas grąžinus automobilį"
+  },
+  "rules": {
+    "minAge": "Vairuotojo amžius nuo {age} metų",
+    "experience": "Vairavimo stažas nuo {years} metų",
+    "mileageLimit": "Rida iki {km} km per parą",
+    "mileageUnlimited": "Neribota rida",
+    "minRentalDays": "Mažiausias nuomos laikotarpis — {days} d."
+  },
+  "gallery": {
+    "label": "Automobilio nuotraukos",
+    "slide": "{current} iš {total}",
+    "previous": "Ankstesnė nuotrauka",
+    "next": "Kita nuotrauka",
+    "show": "Rodyti nuotrauką {number}"
+  },
+  "advantages": {
+    "eyebrow": "Kodėl mes",
+    "title": "Viskas darbui jau įskaičiuota",
+    "highlight": "įskaičiuota",
+    "description": "Jūs vairuojate ir uždirbate — draudimu, priežiūra ir dokumentais rūpinamės mes.",
+    "items": {
+      "hybrid": {
+        "title": "Taupus hibridas",
+        "text": "Hibridiniai automobiliai mieste sunaudoja vos apie 4–5 l/100 km, todėl daugiau uždarbio lieka jums."
+      },
+      "insurance": {
+        "title": "Draudimas keleivių vežimui",
+        "text": "Privalomasis draudimas, tinkantis keleivių vežimui, jau įskaičiuotas į nuomos kainą."
+      },
+      "maintenance": {
+        "title": "Priežiūra mūsų sąskaita",
+        "text": "Planinė techninė priežiūra ir natūraliai susidėvėjusių dalių keitimas — mūsų rūpestis."
+      },
+      "mileage": {
+        "title": "Neribota rida",
+        "text": "Važiuokite tiek, kiek reikia darbui, be papildomų mokesčių už kilometrus."
+      },
+      "fast": {
+        "title": "Greitas įforminimas",
+        "text": "Užklausa internetu per kelias minutes, patvirtinimas — tą pačią darbo dieną."
+      }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "Kaip tai veikia",
+    "title": "Trys žingsniai iki vairo",
+    "highlight": "vairo",
+    "steps": {
+      "choose": {
+        "title": "Pasirinkite automobilį",
+        "text": "Peržiūrėkite automobilių parką, kainas ir sąlygas."
+      },
+      "book": {
+        "title": "Rezervuokite datas",
+        "text": "Pasirinkite laisvas datas ir užpildykite trumpą formą."
+      },
+      "confirm": {
+        "title": "Vadybininkas patvirtins",
+        "text": "Susisieksime, patvirtinsime rezervaciją ir susitarsime dėl automobilio perdavimo."
+      }
+    }
+  },
+  "fleet": {
+    "eyebrow": "Automobilių parkas",
+    "title": "Pasiruošę darbui jau šiandien",
+    "highlight": "šiandien",
+    "all": "Visi automobiliai",
+    "empty": "Automobilių sąrašas netrukus bus papildytas. Susisiekite su mumis — padėsime išsirinkti."
+  },
+  "pricing": {
+    "eyebrow": "Kainos",
+    "title": "Aiškios kainos be smulkaus šrifto",
+    "highlight": "smulkaus šrifto",
+    "description": "Kuo ilgiau nuomojatės, tuo mažiau mokate už parą.",
+    "includedTitle": "Į kainą įskaičiuota",
+    "included": {
+      "insurance": "Keleivių vežimo draudimas",
+      "maintenance": "Planinė techninė priežiūra",
+      "mileage": "Neribota rida"
+    },
+    "depositNote": "Užstatas {deposit} € grąžinamas grąžinus automobilį.",
+    "more": "Visos kainos ir sąlygos"
+  },
+  "requirements": {
+    "eyebrow": "Reikalavimai",
+    "title": "Ko reikia norint išsinuomoti",
+    "highlight": "išsinuomoti",
+    "experience": {
+      "title": "Vairavimo stažas nuo {years} metų",
+      "text": "Galiojantis B kategorijos vairuotojo pažymėjimas."
+    },
+    "age": {
+      "title": "Amžius nuo {age} metų",
+      "text": "Prabangos klasės automobiliams reikalavimai gali būti griežtesni."
+    },
+    "documents": {
+      "title": "Asmens dokumentai",
+      "text": "Asmens tapatybės kortelė arba pasas ir vairuotojo pažymėjimas."
+    },
+    "deposit": {
+      "title": "Užstatas {deposit} €",
+      "text": "Grąžinamas grąžinus automobilį be naujų pažeidimų."
+    },
+    "license": {
+      "title": "Leidimas vežti keleivius",
+      "text": "Reikalingas dirbant pavežėjimo platformose. Jei jo dar neturite — paaiškinsime, kaip jį gauti."
+    },
+    "help": {
+      "title": "Dar neturite leidimo?",
+      "text": "Papasakosime, kokių dokumentų reikia darbui pavežėjimo platformose ir kaip greitai juos susitvarkyti.",
+      "cta": "Klausti per WhatsApp"
+    }
+  },
+  "faq": {
+    "eyebrow": "DUK",
+    "title": "Dažniausi klausimai",
+    "description": "Neradote atsakymo? Parašykite mums — atsakome greitai.",
+    "items": {
+      "included": {
+        "q": "Kas įskaičiuota į nuomos kainą?",
+        "a": "Privalomasis draudimas, tinkantis keleivių vežimui, planinė techninė priežiūra ir neribota rida. Degalus ir plovimą apmoka vairuotojas."
+      },
+      "deposit": {
+        "q": "Kaip grąžinamas užstatas?",
+        "a": "{deposit} € užstatas grąžinamas grąžinus automobilį. Apžiūrime jį kartu su jumis ir, jei naujų pažeidimų ar baudų nėra, užstatą grąžiname tą pačią dieną arba per 3 darbo dienas pavedimu."
+      },
+      "accident": {
+        "q": "Kas daryti įvykus eismo įvykiui?",
+        "a": "Nedelsdami paskambinkite mums ir, jei reikia, policijai. Užpildykite eismo įvykio deklaraciją ir nufotografuokite vietą. Atsakomybė nustatoma pagal nuomos sutartį ir draudimo sąlygas."
+      },
+      "abroad": {
+        "q": "Ar galima išvažiuoti už Lietuvos ribų?",
+        "a": "Tik iš anksto suderinus su mumis raštu. Parašykite, į kurią šalį ir kuriam laikui planuojate vykti."
+      },
+      "extend": {
+        "q": "Kaip pratęsti nuomą?",
+        "a": "Susisiekite su mumis prieš baigiantis nuomos laikotarpiui. Jei automobilis laisvas, pratęsime nuomą ir perskaičiuosime kainą pagal palankiausią tarifą."
+      },
+      "hourly": {
+        "q": "Ar galima nuomotis valandomis?",
+        "a": "Taip, ekonominės klasės automobilius galima nuomotis ir kelioms valandoms. Mažiausia trukmė ir kaina nurodytos skiltyje „Kainos“."
+      },
+      "platform": {
+        "q": "Kaip pradėti dirbti pavežėjimo platformoje?",
+        "a": "Reikės vairuotojo pažymėjimo, leidimo vežti keleivius ir registracijos platformoje (pvz., Bolt). Paaiškinsime visus žingsnius ir padėsime pasiruošti dokumentus."
+      },
+      "payment": {
+        "q": "Kaip atsiskaityti? Ar išrašote sąskaitas faktūras?",
+        "a": "Atsiskaityti galima banko pavedimu arba kortele. Įmonėms ir individualią veiklą vykdantiems vairuotojams išrašome sąskaitas faktūras."
+      },
+      "requirements": {
+        "q": "Kokie reikalavimai vairuotojui?",
+        "a": "Vairavimo stažas nuo {years} metų, amžius nuo {age} metų, asmens dokumentas, vairuotojo pažymėjimas ir {deposit} € užstatas. Prabangos klasės automobiliams reikalavimai gali būti griežtesni."
+      },
+      "documents": {
+        "q": "Ką atsinešti atsiimant automobilį?",
+        "a": "Asmens tapatybės kortelę arba pasą, vairuotojo pažymėjimą ir užstatą. Sutartį pasirašome vietoje — tai užtrunka apie 15 minučių."
+      }
+    }
+  },
+  "contactSection": {
+    "eyebrow": "Kontaktai",
+    "title": "Užsukite arba parašykite",
+    "highlight": "parašykite",
+    "description": "Mus rasite Klaipėdoje. Atsakome telefonu, WhatsApp ir el. paštu.",
+    "address": "Adresas",
+    "phone": "Telefonas",
+    "whatsappValue": "Parašykite mums",
+    "telegramValue": "Parašykite mums",
+    "email": "El. paštas",
+    "hours": "Darbo laikas",
+    "mapTitle": "Baltic Nuoma biuras žemėlapyje"
+  },
+  "catalog": {
+    "filters": "Automobilių filtrai",
+    "category": "Klasė",
+    "allCategories": "Visi",
+    "dates": "Laisvi nuo–iki",
+    "from": "Nuo",
+    "to": "Iki",
+    "price": "Kaina per parą",
+    "upTo": "iki {price} €",
+    "sort": "Rikiavimas",
+    "sorts": {
+      "recommended": "Rekomenduojami",
+      "price_asc": "Pigiausi viršuje",
+      "price_desc": "Brangiausi viršuje"
+    },
+    "checking": "Tikriname laisvas datas…",
+    "availabilityError": "Nepavyko patikrinti datų — rodomi visi automobiliai.",
+    "found": "{count, plural, one {Rastas # automobilis} few {Rasti # automobiliai} many {Rasta # automobilio} other {Rasta # automobilių}}",
+    "reset": "Išvalyti filtrus",
+    "emptyTitle": "Automobilių nerasta",
+    "emptyText": "Pakeiskite datas ar filtrus arba susisiekite — padėsime rasti sprendimą.",
+    "emptyFleet": "Automobilių sąrašas netrukus bus papildytas."
+  },
+  "carPage": {
+    "breadcrumb": "Naršymo kelias",
+    "photosSoon": "Nuotraukos netrukus",
+    "about": "Apie automobilį",
+    "specs": "Techniniai duomenys",
+    "features": "Įranga",
+    "requirements": "Reikalavimai vairuotojui",
+    "bookTitle": "Rezervacija",
+    "bookText": "Internetinė rezervacija su užimtumo kalendoriumi pasirodys netrukus. Kol kas parašykite arba paskambinkite — patikrinsime laisvas datas.",
+    "others": "Kiti automobiliai",
+    "metaTitle": "{title} nuoma Klaipėdoje",
+    "metaDescription": "{title} nuoma Klaipėdoje: aiškios kainos, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu."
+  },
+  "pricesPage": {
+    "defaultCategory": "Ekonominė klasė",
+    "requirements": "Reikalavimai vairuotojui",
+    "depositTitle": "Užstatas {deposit} €",
+    "depositText": "Sumokamas atsiimant automobilį ir grąžinamas jį grąžinus, jei nėra naujų pažeidimų, baudų ar skolų.",
+    "longTermTitle": "Kuo ilgiau — tuo pigiau",
+    "longTermText": "Nuomojantis nuo {weeks} savaičių para kainuoja tik apie {perDay, number} € vietoje {daily} € — sutaupote {percent} %.",
+    "longTermFallback": "Ilgalaikei nuomai taikome palankesnius tarifus — susisiekite dėl pasiūlymo.",
+    "ctaTitle": "Išsirinkite automobilį",
+    "ctaText": "Peržiūrėkite automobilių parką ir laisvas datas.",
+    "cta": "Peržiūrėti automobilius"
   }
 }

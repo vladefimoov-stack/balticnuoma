@@ -2,7 +2,7 @@ import { Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { TelegramIcon, WhatsAppIcon } from "@/components/ui/BrandIcons";
-import { site, telegramUrl } from "@/lib/config/site";
+import { getPublicSettings } from "@/lib/data/settings";
 import { cn } from "@/lib/utils/cn";
 
 type Item = { href: string; label: string; icon: ReactNode; external: boolean };
@@ -14,15 +14,16 @@ type Item = { href: string; label: string; icon: ReactNode; external: boolean };
  */
 export async function FloatingContacts() {
   const t = await getTranslations("contact");
+  const { contacts } = await getPublicSettings();
 
   const items: Item[] = [
-    { href: site.whatsappUrl, label: t("whatsapp"), icon: <WhatsAppIcon size={20} />, external: true },
-    ...(telegramUrl
-      ? [{ href: telegramUrl, label: t("telegram"), icon: <TelegramIcon size={19} />, external: true }]
+    { href: contacts.whatsappUrl, label: t("whatsapp"), icon: <WhatsAppIcon size={20} />, external: true },
+    ...(contacts.telegramUrl
+      ? [{ href: contacts.telegramUrl, label: t("telegram"), icon: <TelegramIcon size={19} />, external: true }]
       : []),
     {
-      href: `tel:${site.phone.e164}`,
-      label: t("call", { phone: site.phone.display }),
+      href: `tel:${contacts.phoneE164}`,
+      label: t("call", { phone: contacts.phone }),
       icon: <Phone className="size-[19px]" aria-hidden />,
       external: false,
     },

@@ -12,7 +12,7 @@ import { site } from "@/lib/config/site";
 import { fontVariables } from "@/lib/fonts";
 
 /** Only these message namespaces are shipped to the browser (keeps JS small). */
-const CLIENT_NAMESPACES = ["nav", "contact", "common", "error"] as const;
+const CLIENT_NAMESPACES = ["nav", "contact", "common", "error", "catalog", "gallery"] as const;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -1,9 +1,11 @@
 import { ArrowUpRight, Clock, MapPin, Phone } from "lucide-react";
-import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/Logo";
 import { TelegramIcon, WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { Link } from "@/i18n/navigation";
-import { mapsDirectionsUrl, site, telegramUrl } from "@/lib/config/site";
+import { getLocale, getTranslations } from "next-intl/server";
+import { mapsDirectionsUrl, site } from "@/lib/config/site";
+import { getPublicSettings } from "@/lib/data/settings";
+import { formatOpeningHours } from "@/lib/format/hours";
 import { navItems } from "./nav-items";
 
 const linkClass = "text-sm text-muted transition-colors duration-300 hover:text-fg";
@@ -12,10 +14,12 @@ export async function Footer() {
   const t = await getTranslations("footer");
   const tn = await getTranslations("nav");
   const tc = await getTranslations("contact");
+  const locale = await getLocale();
+  const { contacts, openingHours } = await getPublicSettings();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-32 overflow-hidden border-t border-line bg-bg">
+    <footer className="relative mt-8 overflow-hidden border-t border-line bg-bg">
       <div aria-hidden className="absolute inset-x-0 top-0 hairline-accent opacity-60" />
 
       <div className="container-site grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr] lg:gap-8">
@@ -50,19 +54,19 @@ export async function Footer() {
             >
               <MapPin className="mt-0.5 size-4 shrink-0 text-amber" aria-hidden />
               <span>
-                {site.address.street}, {site.address.city}
+                {contacts.address}
                 <span className="ml-1.5 inline-flex items-center gap-0.5 text-xs text-amber/80 group-hover:text-amber">
                   {tc("directions")}
                   <ArrowUpRight className="size-3" aria-hidden />
                 </span>
               </span>
             </a>
-            <a href={`tel:${site.phone.e164}`} className={`${linkClass} inline-flex items-center gap-2.5`}>
+            <a href={`tel:${contacts.phoneE164}`} className={`${linkClass} inline-flex items-center gap-2.5`}>
               <Phone className="size-4 shrink-0 text-amber" aria-hidden />
-              {site.phone.display}
+              {contacts.phone}
             </a>
             <a
-              href={site.whatsappUrl}
+              href={contacts.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={`${linkClass} inline-flex items-center gap-2.5`}
@@ -70,9 +74,9 @@ export async function Footer() {
               <WhatsAppIcon size={16} className="shrink-0 text-amber" />
               WhatsApp
             </a>
-            {telegramUrl && (
+            {contacts.telegramUrl && (
               <a
-                href={telegramUrl}
+                href={contacts.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${linkClass} inline-flex items-center gap-2.5`}
@@ -85,7 +89,7 @@ export async function Footer() {
               <Clock className="size-4 shrink-0 text-amber" aria-hidden />
               <span>
                 <span className="sr-only">{t("hours")}: </span>
-                {t("hoursValue")}
+                {formatOpeningHours(openingHours, locale).join(", ")}
               </span>
             </p>
           </address>

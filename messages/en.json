@@ -47,7 +47,6 @@
     "legal": "Legal",
     "contacts": "Contacts",
     "hours": "Opening hours",
-    "hoursValue": "Mon–Fri 9:00–18:00",
     "terms": "Rental terms",
     "privacy": "Privacy policy",
     "cookies": "Cookie policy",
@@ -58,11 +57,13 @@
   "pages": {
     "cars": {
       "title": "Cars",
-      "description": "Our fleet: comfortable, economical cars for ride-hailing drivers, with premium and luxury classes coming soon."
+      "description": "Our fleet: comfortable, economical cars for ride-hailing drivers, with premium and luxury classes coming soon.",
+      "eyebrow": "Our fleet"
     },
     "prices": {
       "title": "Prices",
-      "description": "Hourly, daily, weekly and long-term car rental in Klaipėda. Clear rates, €500 deposit."
+      "description": "Hourly, daily, weekly and long-term car rental in Klaipėda. Clear rates, €500 deposit.",
+      "eyebrow": "Prices"
     },
     "terms": {
       "title": "Rental terms",
@@ -70,7 +71,10 @@
     },
     "contacts": {
       "title": "Contacts",
-      "description": "Baltic Nuoma office in Klaipėda, Birutės g. 21. Call, message us on WhatsApp or drop by."
+      "description": "Baltic Nuoma office in Klaipėda, Birutės g. 21. Call, message us on WhatsApp or drop by.",
+      "eyebrow": "Contacts",
+      "company": "Company",
+      "registeredAddress": "Registered address"
     },
     "privacy": {
       "title": "Privacy policy",
@@ -91,5 +95,329 @@
     "title": "Something went wrong",
     "text": "An unexpected error occurred. Please try again or get in touch.",
     "retry": "Try again"
+  },
+  "cars": {
+    "seats": "{count, plural, one {# seat} other {# seats}}",
+    "from": "from",
+    "day": "day",
+    "priceOnRequest": "Price on request",
+    "details": "Details"
+  },
+  "specs": {
+    "labels": {
+      "body": "Body type",
+      "year": "Year",
+      "fuel": "Fuel",
+      "transmission": "Gearbox",
+      "drive": "Drive",
+      "engine": "Engine",
+      "power": "Power",
+      "acceleration": "0–100 km/h",
+      "consumption": "Avg. consumption",
+      "consumptionElectric": "Energy use",
+      "range": "Electric range",
+      "seats": "Seats",
+      "doors": "Doors",
+      "trunk": "Boot",
+      "livery": "Livery"
+    },
+    "values": {
+      "fuel": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "hybrid": "Hybrid",
+        "plug_in_hybrid": "Plug-in hybrid",
+        "electric": "Electric",
+        "lpg": "LPG"
+      },
+      "transmission": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      },
+      "drive": {
+        "fwd": "Front-wheel",
+        "rwd": "Rear-wheel",
+        "awd": "All-wheel (4×4)"
+      },
+      "body": {
+        "sedan": "Sedan",
+        "hatchback": "Hatchback",
+        "wagon": "Estate",
+        "suv": "SUV",
+        "coupe": "Coupé",
+        "cabrio": "Convertible",
+        "minivan": "MPV",
+        "van": "Van"
+      },
+      "livery": {
+        "ride_hailing": "Ride-hailing branding"
+      }
+    },
+    "units": {
+      "liters": "{value} l",
+      "hp": "{value} hp",
+      "seconds": "{value} s",
+      "l100": "{value} l/100 km",
+      "kwh100": "{value} kWh/100 km",
+      "km": "{value} km"
+    }
+  },
+  "features": {
+    "items": {
+      "climate_control": "Climate control",
+      "navigation": "Navigation",
+      "heated_seats": "Heated seats",
+      "ventilated_seats": "Ventilated seats",
+      "apple_carplay": "Apple CarPlay",
+      "android_auto": "Android Auto",
+      "bluetooth": "Bluetooth",
+      "usb_charging": "USB charging",
+      "panoramic_roof": "Panoramic roof",
+      "adaptive_cruise": "Adaptive cruise control",
+      "parking_camera": "Rear-view camera",
+      "parking_sensors": "Parking sensors",
+      "keyless": "Keyless entry",
+      "leather_seats": "Leather interior",
+      "automatic_transmission": "Automatic gearbox",
+      "hybrid": "Hybrid drivetrain",
+      "child_seat": "Child seat (on request)",
+      "towbar": "Tow bar"
+    }
+  },
+  "tariffs": {
+    "hourly": "Hourly",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "longTerm": "Long-term",
+    "perHour": "per hour",
+    "perDay": "per day",
+    "perWeek": "per week",
+    "minHours": "Minimum {count} h",
+    "dailyNote": "Handy for short periods",
+    "perDayEquivalent": "≈ €{price, number} per day",
+    "save": "−{percent}%",
+    "fromWeeks": "From {count} weeks",
+    "deposit": "Deposit",
+    "depositNote": "Refunded when you return the car"
+  },
+  "rules": {
+    "minAge": "Driver aged {age}+",
+    "experience": "{years}+ years of driving experience",
+    "mileageLimit": "Up to {km} km per day",
+    "mileageUnlimited": "Unlimited mileage",
+    "minRentalDays": "Minimum rental — {days} days"
+  },
+  "gallery": {
+    "label": "Car photos",
+    "slide": "{current} of {total}",
+    "previous": "Previous photo",
+    "next": "Next photo",
+    "show": "Show photo {number}"
+  },
+  "advantages": {
+    "eyebrow": "Why us",
+    "title": "Everything for work is already included",
+    "highlight": "included",
+    "description": "You drive and earn — we take care of insurance, maintenance and paperwork.",
+    "items": {
+      "hybrid": {
+        "title": "Fuel-efficient hybrid",
+        "text": "Hybrids use only about 4–5 l/100 km in the city, so more of your earnings stay with you."
+      },
+      "insurance": {
+        "title": "Passenger-transport insurance",
+        "text": "Mandatory insurance that covers carrying passengers is already included in the rental price."
+      },
+      "maintenance": {
+        "title": "Maintenance on us",
+        "text": "Scheduled servicing and replacement of worn parts are our responsibility."
+      },
+      "mileage": {
+        "title": "Unlimited mileage",
+        "text": "Drive as much as your work needs — no extra charges per kilometre."
+      },
+      "fast": {
+        "title": "Quick paperwork",
+        "text": "Send a request online in a few minutes and get confirmation the same working day."
+      }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Three steps to the wheel",
+    "highlight": "wheel",
+    "steps": {
+      "choose": {
+        "title": "Choose a car",
+        "text": "Browse the fleet, prices and terms."
+      },
+      "book": {
+        "title": "Book your dates",
+        "text": "Pick available dates and fill in a short form."
+      },
+      "confirm": {
+        "title": "A manager confirms",
+        "text": "We'll get in touch, confirm the booking and arrange the car handover."
+      }
+    }
+  },
+  "fleet": {
+    "eyebrow": "Our fleet",
+    "title": "Ready for work today",
+    "highlight": "today",
+    "all": "All cars",
+    "empty": "The fleet list will be updated soon. Get in touch — we'll help you choose."
+  },
+  "pricing": {
+    "eyebrow": "Prices",
+    "title": "Clear prices, no fine print",
+    "highlight": "fine print",
+    "description": "The longer you rent, the less you pay per day.",
+    "includedTitle": "Included in the price",
+    "included": {
+      "insurance": "Passenger-transport insurance",
+      "maintenance": "Scheduled maintenance",
+      "mileage": "Unlimited mileage"
+    },
+    "depositNote": "The €{deposit} deposit is refunded when you return the car.",
+    "more": "All prices and terms"
+  },
+  "requirements": {
+    "eyebrow": "Requirements",
+    "title": "What you need to rent",
+    "highlight": "rent",
+    "experience": {
+      "title": "{years}+ years of driving experience",
+      "text": "A valid category B driving licence."
+    },
+    "age": {
+      "title": "Aged {age}+",
+      "text": "Requirements may be stricter for luxury cars."
+    },
+    "documents": {
+      "title": "Personal documents",
+      "text": "ID card or passport and your driving licence."
+    },
+    "deposit": {
+      "title": "€{deposit} deposit",
+      "text": "Refunded when the car is returned without new damage."
+    },
+    "license": {
+      "title": "Passenger transport permit",
+      "text": "Required for ride-hailing work. Don't have one yet? We'll explain how to get it."
+    },
+    "help": {
+      "title": "No permit yet?",
+      "text": "We'll tell you which documents you need for ride-hailing work and how to get them quickly.",
+      "cta": "Ask on WhatsApp"
+    }
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions",
+    "description": "Didn't find an answer? Message us — we reply quickly.",
+    "items": {
+      "included": {
+        "q": "What is included in the rental price?",
+        "a": "Mandatory insurance that covers carrying passengers, scheduled maintenance and unlimited mileage. Fuel and car washes are paid by the driver."
+      },
+      "deposit": {
+        "q": "How is the deposit returned?",
+        "a": "The €{deposit} deposit is refunded when you return the car. We inspect it together and, if there is no new damage or fines, refund the deposit the same day or within 3 working days by bank transfer."
+      },
+      "accident": {
+        "q": "What if I have an accident?",
+        "a": "Call us immediately and, if needed, the police. Fill in the accident report and take photos of the scene. Liability is determined by the rental agreement and insurance terms."
+      },
+      "abroad": {
+        "q": "Can I drive outside Lithuania?",
+        "a": "Only with our prior written consent. Tell us which country you plan to visit and for how long."
+      },
+      "extend": {
+        "q": "How do I extend the rental?",
+        "a": "Contact us before your rental period ends. If the car is free, we'll extend the rental and recalculate the price at the best tariff."
+      },
+      "hourly": {
+        "q": "Can I rent by the hour?",
+        "a": "Yes, economy cars can be rented for a few hours. The minimum duration and price are listed under “Prices”."
+      },
+      "platform": {
+        "q": "How do I start working on a ride-hailing platform?",
+        "a": "You'll need a driving licence, a passenger transport permit and registration on the platform (e.g. Bolt). We'll explain every step and help you prepare the documents."
+      },
+      "payment": {
+        "q": "How can I pay? Do you issue VAT invoices?",
+        "a": "You can pay by bank transfer or card. We issue invoices to companies and self-employed drivers."
+      },
+      "requirements": {
+        "q": "What are the driver requirements?",
+        "a": "At least {years} years of driving experience, aged {age}+, an ID document, a driving licence and a €{deposit} deposit. Requirements may be stricter for luxury cars."
+      },
+      "documents": {
+        "q": "What should I bring when picking up the car?",
+        "a": "Your ID card or passport, driving licence and the deposit. We sign the agreement on the spot — it takes about 15 minutes."
+      }
+    }
+  },
+  "contactSection": {
+    "eyebrow": "Contacts",
+    "title": "Drop by or message us",
+    "highlight": "message",
+    "description": "You'll find us in Klaipėda. We answer by phone, WhatsApp and email.",
+    "address": "Address",
+    "phone": "Phone",
+    "whatsappValue": "Message us",
+    "telegramValue": "Message us",
+    "email": "Email",
+    "hours": "Opening hours",
+    "mapTitle": "Baltic Nuoma office on the map"
+  },
+  "catalog": {
+    "filters": "Car filters",
+    "category": "Class",
+    "allCategories": "All",
+    "dates": "Available from–to",
+    "from": "From",
+    "to": "To",
+    "price": "Price per day",
+    "upTo": "up to €{price}",
+    "sort": "Sort by",
+    "sorts": {
+      "recommended": "Recommended",
+      "price_asc": "Price: low to high",
+      "price_desc": "Price: high to low"
+    },
+    "checking": "Checking availability…",
+    "availabilityError": "Couldn't check the dates — showing all cars.",
+    "found": "{count, plural, one {# car found} other {# cars found}}",
+    "reset": "Clear filters",
+    "emptyTitle": "No cars found",
+    "emptyText": "Try other dates or filters, or contact us — we'll find a solution.",
+    "emptyFleet": "The fleet list will be updated soon."
+  },
+  "carPage": {
+    "breadcrumb": "Breadcrumb",
+    "photosSoon": "Photos coming soon",
+    "about": "About the car",
+    "specs": "Specifications",
+    "features": "Equipment",
+    "requirements": "Driver requirements",
+    "bookTitle": "Booking",
+    "bookText": "Online booking with an availability calendar is coming soon. For now, message or call us — we'll check the dates for you.",
+    "others": "Other cars",
+    "metaTitle": "{title} rental in Klaipėda",
+    "metaDescription": "{title} rental in Klaipėda: clear prices, insurance and maintenance included. Book online."
+  },
+  "pricesPage": {
+    "defaultCategory": "Economy",
+    "requirements": "Driver requirements",
+    "depositTitle": "€{deposit} deposit",
+    "depositText": "Paid when you pick up the car and refunded on return if there is no new damage, fines or debts.",
+    "longTermTitle": "The longer, the cheaper",
+    "longTermText": "Rent for {weeks}+ weeks and a day costs only about €{perDay, number} instead of €{daily} — you save {percent}%.",
+    "longTermFallback": "We offer better rates for long-term rentals — contact us for a quote.",
+    "ctaTitle": "Choose your car",
+    "ctaText": "Browse the fleet and available dates.",
+    "cta": "Browse cars"
   }
 }
