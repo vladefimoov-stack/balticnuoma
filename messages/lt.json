@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Baltic Nuoma — automobilių nuoma Klaipėdoje",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Toyota Prius hibridų nuoma pavežėjams Klaipėdoje: nuo 18 € per parą, draudimas ir techninė priežiūra įskaičiuoti, neribota rida. Rezervuokite internetu."
+    "description": "Komfortiškų ir taupių automobilių nuoma Klaipėdoje — darbui pavežėjimo platformose ir kasdienėms kelionėms. Nuo 18 € per parą, draudimas ir priežiūra įskaičiuoti, neribota rida."
   },
   "common": {
     "skipToContent": "Pereiti prie turinio",
@@ -37,7 +37,7 @@
   "home": {
     "eyebrow": "Automobilių nuoma Klaipėdoje",
     "title": "Jūsų kelias. Jūsų uždarbis.",
-    "subtitle": "Ekonomiški Toyota Prius hibridai darbui pavežėjimo platformose. Draudimas, techninė priežiūra ir neribota rida jau įskaičiuoti.",
+    "subtitle": "Komfortiški ir taupūs automobiliai darbui pavežėjimo platformose ir kasdienėms kelionėms. Draudimas, techninė priežiūra ir neribota rida jau įskaičiuoti.",
     "cta": "Rezervuoti automobilį",
     "ctaSecondary": "Žiūrėti kainas"
   },
@@ -58,7 +58,7 @@
   "pages": {
     "cars": {
       "title": "Automobiliai",
-      "description": "Mūsų automobilių parkas: Toyota Prius hibridai pavežėjams, o netrukus — premium ir prabangos klasė."
+      "description": "Mūsų automobilių parkas: komfortiški ir taupūs automobiliai pavežėjams, o netrukus — premium ir prabangos klasė."
     },
     "prices": {
       "title": "Kainos",

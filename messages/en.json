@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Baltic Nuoma — car rental in Klaipėda",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Toyota Prius hybrid rental for ride-hailing drivers in Klaipėda: from €18 per day, insurance and maintenance included, unlimited mileage. Book online."
+    "description": "Comfortable, economical car rental in Klaipėda — for ride-hailing work and everyday trips. From €18 per day, insurance and maintenance included, unlimited mileage."
   },
   "common": {
     "skipToContent": "Skip to content",
@@ -37,7 +37,7 @@
   "home": {
     "eyebrow": "Car rental in Klaipėda",
     "title": "Your road. Your income.",
-    "subtitle": "Fuel-efficient Toyota Prius hybrids for ride-hailing work. Insurance, maintenance and unlimited mileage are already included.",
+    "subtitle": "Comfortable, economical cars for ride-hailing work and everyday trips. Insurance, maintenance and unlimited mileage are already included.",
     "cta": "Book a car",
     "ctaSecondary": "See prices"
   },
@@ -58,7 +58,7 @@
   "pages": {
     "cars": {
       "title": "Cars",
-      "description": "Our fleet: Toyota Prius hybrids for ride-hailing drivers, with premium and luxury classes coming soon."
+      "description": "Our fleet: comfortable, economical cars for ride-hailing drivers, with premium and luxury classes coming soon."
     },
     "prices": {
       "title": "Prices",

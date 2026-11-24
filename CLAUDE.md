@@ -53,7 +53,7 @@ components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
   providers/            Providers (LazyMotion, MotionConfig), SmoothScroll (Lenis)
-  ui/                   Button/ButtonLink/ButtonAnchor, Magnetic, BrandIcons
+  ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons
   three/ booking/ admin/  (later phases)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
@@ -105,9 +105,11 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
   Both load `latin-ext` — required for ą č ę ė į š ų ū ž.
 - Type scale: `text-display-xl | -lg | -md` (fluid clamp) for headings.
 - Custom utilities: `container-site`, `glass` (pair with `border border-line`),
-  `text-gradient`, `text-fade`, `hairline-accent`, `eyebrow`, `bg-aurora`.
+  `text-gradient`, `hairline-accent`, `eyebrow`, `bg-aurora`.
 - **No Bolt green and no Bolt logos anywhere.** Brand accents are amber → silver only.
 - Glassmorphism only on the navbar, floating contacts and cards over 3D.
+- Buttons are static (owner's request): no magnetic pull, sweep, glow or moving icons —
+  only a short color transition on hover.
 - Dark theme only for now; to add a light theme, override the same tokens under a
   `[data-theme="light"]` selector.
 

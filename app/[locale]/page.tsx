@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ButtonLink } from "@/components/ui/Button";
-import { Magnetic } from "@/components/ui/Magnetic";
 
 /**
  * Phase 1 placeholder hero. Phase 3 adds the content sections,
@@ -30,15 +29,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </h1>
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">{t("subtitle")}</p>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <Magnetic>
-            <ButtonLink href="/automobiliai" size="lg">
-              {t("cta")}
-              <ArrowRight
-                className="size-4 transition-transform duration-300 group-hover/btn:translate-x-1"
-                aria-hidden
-              />
-            </ButtonLink>
-          </Magnetic>
+          <ButtonLink href="/automobiliai" size="lg">
+            {t("cta")}
+            <ArrowRight className="size-4" aria-hidden />
+          </ButtonLink>
           <ButtonLink href="/kainos" size="lg" variant="secondary">
             {t("ctaSecondary")}
           </ButtonLink>

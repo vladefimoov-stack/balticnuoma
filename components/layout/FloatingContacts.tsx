@@ -44,9 +44,11 @@ export async function FloatingContacts() {
           aria-label={item.label}
           {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           className={cn(
-            "group relative grid size-11 place-items-center rounded-full text-fg/90 transition-[color,background-color,box-shadow,transform] duration-300",
-            "hover:text-amber focus-visible:text-amber",
-            "md:size-12 md:border md:border-line md:shadow-card md:glass md:hover:-translate-x-0.5 md:hover:shadow-glow",
+            // Smooth color change on hover/focus: glass → solid amber, icon → dark. No movement.
+            "group relative grid size-11 place-items-center rounded-full text-fg/90",
+            "transition-[color,background-color,border-color] duration-500 ease-out",
+            "hover:bg-amber hover:text-on-amber focus-visible:bg-amber focus-visible:text-on-amber",
+            "md:size-12 md:border md:border-line md:shadow-card md:glass md:hover:border-amber md:focus-visible:border-amber",
             i > 0 &&
               "max-md:before:absolute max-md:before:inset-y-3 max-md:before:-left-px max-md:before:w-px max-md:before:bg-line",
           )}
@@ -54,7 +56,7 @@ export async function FloatingContacts() {
           {item.icon}
           <span
             aria-hidden
-            className="pointer-events-none absolute top-1/2 right-full mr-3 hidden translate-x-1 -translate-y-1/2 rounded-pill border border-line px-3 py-1.5 text-xs font-medium whitespace-nowrap text-fg opacity-0 glass transition-[opacity,transform] duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 md:block"
+            className="pointer-events-none absolute top-1/2 right-full mr-3 hidden -translate-y-1/2 rounded-pill border border-line px-3 py-1.5 text-xs font-medium whitespace-nowrap text-fg opacity-0 glass transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100 md:block"
           >
             {item.label}
           </span>

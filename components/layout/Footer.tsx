@@ -113,7 +113,8 @@ export async function Footer() {
         </nav>
       </div>
 
-      <div className="container-site flex flex-col gap-3 border-t border-line py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between md:pr-24">
+      {/* Extra bottom/right padding keeps the floating contact buttons off the text. */}
+      <div className="container-site flex flex-col gap-3 border-t border-line pt-6 pb-24 text-xs text-muted sm:flex-row sm:items-center sm:justify-between md:pr-24 md:pb-8">
         <p>
           © {year} {site.legal.companyName}. {t("rights")}
         </p>
@@ -124,13 +125,6 @@ export async function Footer() {
           <span>
             {t("vatCode")}: {site.legal.vatCode}
           </span>
-        </p>
-      </div>
-
-      {/* Oversized faded wordmark — decorative */}
-      <div aria-hidden className="pointer-events-none overflow-hidden select-none">
-        <p className="-mb-[0.22em] translate-y-[0.06em] text-fade text-center font-display text-[18vw] leading-none font-semibold tracking-[-0.04em] whitespace-nowrap">
-          BALTIC
         </p>
       </div>
     </footer>

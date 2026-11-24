@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
-import { Magnetic } from "@/components/ui/Magnetic";
 import { Link, usePathname } from "@/i18n/navigation";
 import { site } from "@/lib/config/site";
 import { lockScroll } from "@/lib/motion/lenis";
@@ -99,15 +98,10 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <LanguageSwitcher className="hidden sm:flex" />
-            <Magnetic className="hidden md:inline-flex" strength={0.25}>
-              <ButtonLink href="/automobiliai" size="sm">
-                {t("book")}
-                <ArrowUpRight
-                  className="size-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
-                  aria-hidden
-                />
-              </ButtonLink>
-            </Magnetic>
+            <ButtonLink href="/automobiliai" size="sm" className="hidden md:inline-flex">
+              {t("book")}
+              <ArrowUpRight className="size-4" aria-hidden />
+            </ButtonLink>
             <button
               ref={toggleRef}
               type="button"

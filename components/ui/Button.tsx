@@ -5,17 +5,13 @@ import { cn } from "@/lib/utils/cn";
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "md" | "lg";
 
+// Buttons are intentionally static: no movement / sweep / glow — only a color change on hover.
 const base =
-  "group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-pill font-semibold " +
-  "whitespace-nowrap transition-[background-color,color,border-color,box-shadow,transform] duration-300 ease-out-expo " +
-  "disabled:pointer-events-none disabled:opacity-50 select-none";
+  "inline-flex items-center justify-center gap-2 rounded-pill font-semibold whitespace-nowrap " +
+  "transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 select-none";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-amber text-on-amber hover:bg-amber-soft hover:shadow-glow active:scale-[0.98] " +
-    // light sweep on hover
-    "before:absolute before:inset-y-0 before:-left-1/2 before:w-1/3 before:-skew-x-12 before:bg-white/40 " +
-    "before:opacity-0 before:transition-[left,opacity] before:duration-700 hover:before:left-[120%] hover:before:opacity-100",
+  primary: "bg-amber text-on-amber hover:bg-amber-soft",
   secondary:
     "border border-line-strong bg-white/[0.02] text-fg hover:border-amber/60 hover:bg-white/[0.04] hover:text-amber-soft",
   ghost: "text-muted hover:text-fg",
