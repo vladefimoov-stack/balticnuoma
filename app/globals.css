@@ -1,26 +1,184 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ──────────────────────────────────────────────────────────────────────────
+   Baltic Nuoma — design tokens
+   Every token is exposed as a CSS custom property (e.g. var(--color-amber))
+   so it can be read from JS / WebGL code as well as Tailwind utilities
+   (bg-surface, text-muted, border-line, text-amber …).
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Surfaces */
+  --color-bg: #0a0b0d;
+  --color-surface: #121418;
+  --color-surface-2: #1a1d23;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  /* Text */
+  --color-fg: #f2f3f5;
+  --color-muted: #8a8f98;
+
+  /* Accent — Baltic amber → cold silver */
+  --color-amber: #ffb547;
+  --color-amber-strong: #ffa41f;
+  --color-amber-soft: #ffd08a;
+  --color-silver: #c9d1dc;
+  --color-on-amber: #14100a;
+
+  /* Availability statuses */
+  --color-free: #22c55e;
+  --color-busy: #ef4444;
+  --color-pending: #f59e0b;
+  --color-blocked: #6b7280;
+
+  /* Typography */
+  --text-display-xl: clamp(2.5rem, 1.6rem + 4.2vw, 5.75rem);
+  --text-display-xl--line-height: 1.02;
+  --text-display-xl--letter-spacing: -0.035em;
+  --text-display-lg: clamp(2rem, 1.4rem + 2.6vw, 3.75rem);
+  --text-display-lg--line-height: 1.06;
+  --text-display-lg--letter-spacing: -0.03em;
+  --text-display-md: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  --text-display-md--line-height: 1.15;
+  --text-display-md--letter-spacing: -0.02em;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Layout */
+  --spacing-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --container-site: 88rem;
+
+  /* Radii */
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Glow */
+  --shadow-glow: 0 0 0 1px rgb(255 181 71 / 0.35), 0 8px 32px -8px rgb(255 181 71 / 0.45);
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 24px 48px -24px rgb(0 0 0 / 0.6);
 }
 
+/* Font families come from next/font CSS variables set on <html>. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+/* ── Base ─────────────────────────────────────────────────────────────── */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+    --nav-height: 4.5rem;
+  }
+
+  html {
+    background-color: var(--color-bg);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(255 181 71 / 0.28);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Thin, unobtrusive scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-2) transparent;
+  }
+
+  [id] {
+    scroll-margin-top: calc(var(--nav-height) + 1.5rem);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Utilities ────────────────────────────────────────────────────────── */
+@utility container-site {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Glassmorphism — use sparingly (navbar, cards over 3D). Pair with `border border-line`. */
+@utility glass {
+  background: rgb(18 20 24 / 0.62);
+  /* Lightning CSS adds the -webkit- prefix; writing both makes it drop one. */
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Amber → silver gradient text. */
+@utility text-gradient {
+  background: linear-gradient(100deg, var(--color-amber) 0%, var(--color-amber-soft) 35%, var(--color-silver) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Large decorative wordmark that fades out downward. */
+@utility text-fade {
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.07), transparent 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 1px amber → silver hairline (for dividers / accents). */
+@utility hairline-accent {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-amber) 30%, var(--color-silver) 70%, transparent);
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Subtle grain + vignette backdrop used behind hero sections. */
+@utility bg-aurora {
+  background:
+    radial-gradient(60% 50% at 70% 0%, rgb(255 181 71 / 0.1), transparent 70%),
+    radial-gradient(50% 40% at 10% 20%, rgb(201 209 220 / 0.06), transparent 70%), var(--color-bg);
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

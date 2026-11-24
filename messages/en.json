@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "title": "Baltic Nuoma — car rental in Klaipėda",
+    "titleTemplate": "%s | Baltic Nuoma",
+    "description": "Toyota Prius hybrid rental for ride-hailing drivers in Klaipėda: from €18 per day, insurance and maintenance included, unlimited mileage. Book online."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "comingSoon": "This page is being built. Full information is coming soon.",
+    "backHome": "Back to home",
+    "perDay": "per day",
+    "perWeek": "per week",
+    "perHour": "per hour",
+    "from": "from"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "cars": "Cars",
+    "prices": "Prices",
+    "terms": "Terms",
+    "contacts": "Contacts",
+    "book": "Book",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "switchTo": "Switch to {language}"
+  },
+  "contact": {
+    "label": "Contact us",
+    "whatsapp": "Message us on WhatsApp",
+    "telegram": "Message us on Telegram",
+    "call": "Call {phone}",
+    "callShort": "Call",
+    "directions": "Directions"
+  },
+  "home": {
+    "eyebrow": "Car rental in Klaipėda",
+    "title": "Your road. Your income.",
+    "subtitle": "Fuel-efficient Toyota Prius hybrids for ride-hailing work. Insurance, maintenance and unlimited mileage are already included.",
+    "cta": "Book a car",
+    "ctaSecondary": "See prices"
+  },
+  "footer": {
+    "tagline": "Car rental for ride-hailing drivers — and beyond. Klaipėda.",
+    "navigation": "Navigation",
+    "legal": "Legal",
+    "contacts": "Contacts",
+    "hours": "Opening hours",
+    "hoursValue": "Mon–Fri 9:00–18:00",
+    "terms": "Rental terms",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "companyCode": "Company code",
+    "vatCode": "VAT code",
+    "rights": "All rights reserved."
+  },
+  "pages": {
+    "cars": {
+      "title": "Cars",
+      "description": "Our fleet: Toyota Prius hybrids for ride-hailing drivers, with premium and luxury classes coming soon."
+    },
+    "prices": {
+      "title": "Prices",
+      "description": "Hourly, daily, weekly and long-term car rental in Klaipėda. Clear rates, €500 deposit."
+    },
+    "terms": {
+      "title": "Rental terms",
+      "description": "Car rental terms: driver requirements, deposit, insurance and liability."
+    },
+    "contacts": {
+      "title": "Contacts",
+      "description": "Baltic Nuoma office in Klaipėda, Birutės g. 21. Call, message us on WhatsApp or drop by."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "description": "How Baltic Nuoma processes personal data under the GDPR."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "description": "Which cookies the Baltic Nuoma website uses and how to manage them."
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "The road ends here",
+    "text": "This page doesn't exist or has moved. Head back home or browse our cars.",
+    "cars": "Browse cars"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "text": "An unexpected error occurred. Please try again or get in touch.",
+    "retry": "Try again"
+  }
+}

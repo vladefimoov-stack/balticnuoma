@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "title": "Baltic Nuoma — automobilių nuoma Klaipėdoje",
+    "titleTemplate": "%s | Baltic Nuoma",
+    "description": "Toyota Prius hibridų nuoma pavežėjams Klaipėdoje: nuo 18 € per parą, draudimas ir techninė priežiūra įskaičiuoti, neribota rida. Rezervuokite internetu."
+  },
+  "common": {
+    "skipToContent": "Pereiti prie turinio",
+    "comingSoon": "Šis puslapis kuriamas. Netrukus čia bus visa informacija.",
+    "backHome": "Grįžti į pradžią",
+    "perDay": "parai",
+    "perWeek": "savaitei",
+    "perHour": "valandai",
+    "from": "nuo"
+  },
+  "nav": {
+    "label": "Pagrindinė navigacija",
+    "home": "Pradžia",
+    "cars": "Automobiliai",
+    "prices": "Kainos",
+    "terms": "Sąlygos",
+    "contacts": "Kontaktai",
+    "book": "Rezervuoti",
+    "openMenu": "Atidaryti meniu",
+    "closeMenu": "Uždaryti meniu",
+    "language": "Kalba",
+    "switchTo": "Perjungti į {language}"
+  },
+  "contact": {
+    "label": "Susisiekite su mumis",
+    "whatsapp": "Rašyti per WhatsApp",
+    "telegram": "Rašyti per Telegram",
+    "call": "Skambinti {phone}",
+    "callShort": "Skambinti",
+    "directions": "Maršrutas"
+  },
+  "home": {
+    "eyebrow": "Automobilių nuoma Klaipėdoje",
+    "title": "Jūsų kelias. Jūsų uždarbis.",
+    "subtitle": "Ekonomiški Toyota Prius hibridai darbui pavežėjimo platformose. Draudimas, techninė priežiūra ir neribota rida jau įskaičiuoti.",
+    "cta": "Rezervuoti automobilį",
+    "ctaSecondary": "Žiūrėti kainas"
+  },
+  "footer": {
+    "tagline": "Automobilių nuoma pavežėjams — ir ne tik. Klaipėda.",
+    "navigation": "Navigacija",
+    "legal": "Teisinė informacija",
+    "contacts": "Kontaktai",
+    "hours": "Darbo laikas",
+    "hoursValue": "I–V 9:00–18:00",
+    "terms": "Nuomos sąlygos",
+    "privacy": "Privatumo politika",
+    "cookies": "Slapukų politika",
+    "companyCode": "Įmonės kodas",
+    "vatCode": "PVM kodas",
+    "rights": "Visos teisės saugomos."
+  },
+  "pages": {
+    "cars": {
+      "title": "Automobiliai",
+      "description": "Mūsų automobilių parkas: Toyota Prius hibridai pavežėjams, o netrukus — premium ir prabangos klasė."
+    },
+    "prices": {
+      "title": "Kainos",
+      "description": "Valandinė, paros, savaitės ir ilgalaikė automobilių nuoma Klaipėdoje. Aiškūs tarifai, užstatas 500 €."
+    },
+    "terms": {
+      "title": "Nuomos sąlygos",
+      "description": "Automobilių nuomos sąlygos: reikalavimai vairuotojui, užstatas, draudimas ir atsakomybė."
+    },
+    "contacts": {
+      "title": "Kontaktai",
+      "description": "Baltic Nuoma biuras Klaipėdoje, Birutės g. 21. Skambinkite, rašykite WhatsApp ar užsukite."
+    },
+    "privacy": {
+      "title": "Privatumo politika",
+      "description": "Kaip Baltic Nuoma tvarko asmens duomenis pagal BDAR."
+    },
+    "cookies": {
+      "title": "Slapukų politika",
+      "description": "Kokius slapukus naudoja Baltic Nuoma svetainė ir kaip juos valdyti."
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Kelias čia baigiasi",
+    "text": "Puslapis nerastas arba buvo perkeltas. Grįžkite į pradžią arba peržiūrėkite automobilius.",
+    "cars": "Peržiūrėti automobilius"
+  },
+  "error": {
+    "title": "Kažkas nutiko",
+    "text": "Įvyko netikėta klaida. Bandykite dar kartą arba susisiekite su mumis.",
+    "retry": "Bandyti dar kartą"
+  }
+}

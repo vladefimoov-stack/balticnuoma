@@ -1,0 +1,14 @@
+import type { StaticPathname } from "@/i18n/routing";
+
+export type NavKey = "cars" | "prices" | "terms" | "contacts";
+
+export const navItems: ReadonlyArray<{ href: StaticPathname; key: NavKey }> = [
+  { href: "/automobiliai", key: "cars" },
+  { href: "/kainos", key: "prices" },
+  { href: "/salygos", key: "terms" },
+  { href: "/kontaktai", key: "contacts" },
+];
+
+export function isActivePath(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+}

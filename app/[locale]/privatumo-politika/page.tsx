@@ -1,0 +1,7 @@
+import { createStubPage } from "@/lib/i18n/stub-page";
+
+// Phase 1 placeholder — replaced with real content in a later phase.
+const { generateMetadata, Page } = createStubPage("privacy");
+
+export { generateMetadata };
+export default Page;

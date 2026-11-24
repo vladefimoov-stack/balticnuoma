@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Baltic Nuoma
 
-## Getting Started
+Сайт аренды автомобилей **Baltic Nuoma** (Klaipėda): публичная часть на LT/EN с 3D-демонстрацией
+авто, онлайн-бронированием и админ-панелью для менеджеров.
 
-First, run the development server:
+Архитектура и соглашения — в [`CLAUDE.md`](./CLAUDE.md). Что должен предоставить владелец — в [`TODO.md`](./TODO.md).
+
+> Статус: фаза 1 (каркас). Инструкции по Supabase, email и 3D-генерации будут дополнены
+> в соответствующих фазах.
+
+## Локальный запуск
+
+Требования: Node.js ≥ 20.18, npm.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # заполните значения
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Скрипт                        | Что делает                                     |
+| ----------------------------- | ---------------------------------------------- |
+| `npm run dev`                 | dev-сервер (Turbopack)                         |
+| `npm run build` / `npm start` | production-сборка и запуск                     |
+| `npm run check`               | typecheck + ESLint + проверка ключей переводов |
+| `npm run format`              | Prettier (с сортировкой Tailwind-классов)      |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## URL-структура
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| LT (по умолчанию)                       | EN                            |
+| --------------------------------------- | ----------------------------- |
+| `/`                                     | `/en`                         |
+| `/automobiliai`, `/automobiliai/[slug]` | `/en/cars`, `/en/cars/[slug]` |
+| `/kainos`                               | `/en/prices`                  |
+| `/salygos`                              | `/en/terms`                   |
+| `/kontaktai`                            | `/en/contacts`                |
+| `/privatumo-politika`                   | `/en/privacy-policy`          |
+| `/slapukai`                             | `/en/cookies`                 |
+| `/admin`                                | — (только LT)                 |
 
-## Learn More
+## Деплой на Vercel (кратко)
 
-To learn more about Next.js, take a look at the following resources:
+1. Импортируйте репозиторий в Vercel (Framework preset: **Next.js**).
+2. В _Settings → Environment Variables_ добавьте переменные из `.env.example`
+   (как минимум `NEXT_PUBLIC_SITE_URL`).
+3. Подключите домен и обновите `NEXT_PUBLIC_SITE_URL`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Подробная настройка Supabase, Resend, Vercel Cron и 3D-провайдеров будет добавлена в фазах 2, 5, 6b и 8.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Бренд
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Логотипы — в `public/brand/`: `logo.svg` (горизонтальный), `logo-stacked.svg`, `logo-mark.svg`
+(знак), `logo-mono-light.svg` / `logo-mono-dark.svg` (одноцветные). Текст переведён в кривые,
+шрифт — Unbounded (SIL OFL).
