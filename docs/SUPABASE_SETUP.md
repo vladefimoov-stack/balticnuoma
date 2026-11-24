@@ -121,18 +121,23 @@
 
 1. Откройте https://vercel.com → проект **balticnuoma** → вкладка **Settings** →
    слева **Environment Variables**.
-2. Добавьте 4 переменные. Для каждой: впишите **Key** и **Value**, в **Environments** отметьте
-   **Production**, **Preview** и **Development**, нажмите **Save**:
+2. Нажмите **Add Environment Variable** и добавьте 4 переменные (кнопкой **Add new variable**
+   можно добавить их все в одном окне). Для каждой выберите **Type**, впишите **Key** и **Value**:
 
-   | Key (имя — копируйте точно)     | Value (значение)                            |
-   | ------------------------------- | ------------------------------------------- |
-   | `NEXT_PUBLIC_SUPABASE_URL`      | Project URL из шага 6.1                     |
-   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Publishable key (`sb_publishable_…`) из 6.2 |
-   | `SUPABASE_SERVICE_ROLE_KEY`     | Secret key (`sb_secret_…`) из 6.3           |
-   | `NEXT_PUBLIC_SITE_URL`          | `https://balticnuoma.vercel.app`            |
+   | Type       | Key (имя — копируйте точно)     | Value (значение)                            |
+   | ---------- | ------------------------------- | ------------------------------------------- |
+   | Config     | `NEXT_PUBLIC_SUPABASE_URL`      | Project URL из шага 6.1                     |
+   | Config     | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Publishable key (`sb_publishable_…`) из 6.2 |
+   | **Secret** | `SUPABASE_SERVICE_ROLE_KEY`     | Secret key (`sb_secret_…`) из 6.3           |
+   | Config     | `NEXT_PUBLIC_SITE_URL`          | `https://balticnuoma.vercel.app`            |
+   - **Secret** — значение после сохранения нельзя посмотреть, только заменить. Для секретного
+     ключа выбирайте именно его (если выбрать Config, Vercel покажет жёлтый значок ⚠ у имени).
+   - **Environments** (внизу окна): отметьте **Production** и **Preview**; для Config можно
+     отметить и **Development**. У Secret пункт Development может быть недоступен — это нормально.
+   - Нажмите **Save**.
 
-   Для `SUPABASE_SERVICE_ROLE_KEY` включите переключатель **Sensitive**, если он есть — тогда
-   значение больше никто не увидит в интерфейсе.
+   ⚠️ Не делайте скриншотов окна, где виден Secret key. Если ключ всё же попал на скриншот или в
+   чат — замените его (см. «Если секретный ключ засветился» ниже).
 
 3. Новые значения применяются только при новой сборке. Откройте вкладку **Deployments** →
    у самой верхней сборки нажмите **⋯** (три точки) → **Redeploy** → **Redeploy**.
@@ -146,6 +151,18 @@
 Я проверю, что база отвечает и сайт её видит. Секретный ключ не присылайте.
 
 ---
+
+## Если секретный ключ засветился
+
+Если `sb_secret_…` попал на скриншот, в чат или почту — выпустите новый, это 1 минута:
+
+1. Supabase → **Project Settings** → **API Keys** → блок **Secret keys** → **+ New secret key**
+   (имя, например, `vercel`) → **Create**. Скопируйте новый ключ.
+2. Vercel → **Settings** → **Environment Variables** → у `SUPABASE_SERVICE_ROLE_KEY` нажмите
+   **⋯** → **Edit** → вставьте новый ключ → **Save** (или удалите переменную и создайте заново
+   с типом **Secret**).
+3. Supabase → у старого ключа нажмите **⋯** → **Delete** (**Revoke**) и подтвердите.
+4. Vercel → **Deployments** → **⋯** → **Redeploy**.
 
 ## Что ещё полезно знать
 
