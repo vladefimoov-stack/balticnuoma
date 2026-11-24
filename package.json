@@ -22,10 +22,14 @@
     "db:types": "npx -y supabase@3.3.0 gen types typescript --local --schema public > lib/supabase/database.types.ts && prettier --write lib/supabase/database.types.ts",
     "db:types:remote": "npx -y supabase@3.3.0 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" --schema public > lib/supabase/database.types.ts && prettier --write lib/supabase/database.types.ts",
     "seed:admin": "node --env-file=.env.local scripts/seed-admin.mjs",
-    "db:bundle": "node scripts/build-setup-sql.mjs"
+    "db:bundle": "node scripts/build-setup-sql.mjs",
+    "test:unit": "tsx --test tests/unit/*.test.ts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
+    "@hookform/resolvers": "^7.0.9",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.3.1",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2",
     "clsx": "^2.1.1",
@@ -37,6 +41,8 @@
     "next-intl": "^4.16.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.92.0",
+    "resend": "^6.39.0",
     "sanitize-html": "^2.18.2",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.1",
@@ -55,6 +61,7 @@
     "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "engines": {

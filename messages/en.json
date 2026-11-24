@@ -370,10 +370,169 @@
     "specs": "Specifications",
     "features": "Equipment",
     "requirements": "Driver requirements",
-    "bookTitle": "Booking",
-    "bookText": "Online booking with an availability calendar is coming soon. For now, message or call us — we'll check the dates for you.",
     "others": "Other cars",
     "metaTitle": "{title} rental in Klaipėda",
     "metaDescription": "{title} rental in Klaipėda: clear prices, insurance and maintenance included. Book online."
+  },
+  "booking": {
+    "title": "Booking",
+    "intro": "Pick your dates in the calendar — the price is calculated instantly.",
+    "modeLabel": "Rental type",
+    "modeDays": "By day",
+    "modeHourly": "By hour",
+    "legend": {
+      "free": "Free",
+      "busy": "Booked",
+      "partial": "Partly booked",
+      "selected": "Selected"
+    },
+    "calendar": {
+      "label": "Availability calendar",
+      "prev": "Previous month",
+      "next": "Next month",
+      "loading": "Loading availability…",
+      "loadError": "Could not load availability.",
+      "retry": "Try again",
+      "dayFree": "free",
+      "dayBusy": "booked",
+      "dayPartial": "partly booked",
+      "dayUnavailable": "not available"
+    },
+    "hintStart": "Pick the first day of the rental.",
+    "hintEnd": "Pick the last day of the rental, or the same day again for one day.",
+    "hintDay": "Pick a day.",
+    "rangeBusy": "Some days in this range are booked. Please pick other dates.",
+    "clear": "Clear",
+    "startHour": "Start",
+    "hoursCount": "Duration",
+    "hoursOption": "{count} h",
+    "noSlots": "No free slot of this length on this day. Pick another day or duration.",
+    "freeSlots": "Free start times",
+    "duration": {
+      "days": "{count, plural, one {# day} other {# days}}",
+      "hours": "{count, plural, one {# hour} other {# hours}}"
+    },
+    "lines": {
+      "hours": "{count} h × {price}",
+      "days": "{count, plural, one {# day} other {# days}} × {price}",
+      "weeks": "{count, plural, one {# week} other {# weeks}} × {price}",
+      "extraWeek": "Extra week for the remaining days",
+      "longTermWeeks": "{count, plural, one {# week} other {# weeks}} × {price} (long-term)",
+      "longTermDays": "{count, plural, one {# day} other {# days}} × {price} (long-term)"
+    },
+    "period": "Dates",
+    "tariff": "Tariff",
+    "total": "Total",
+    "deposit": "Deposit (refundable)",
+    "continue": "Continue",
+    "back": "Change dates",
+    "form": {
+      "title": "Your details",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "phonePlaceholder": "+370 600 00000",
+      "email": "Email",
+      "licenseYear": "Year your driving licence was issued",
+      "licenseYearPlaceholder": "Select year",
+      "experience": "I am at least {age} years old and have been driving for at least {years} years.",
+      "comment": "Comment",
+      "commentPlaceholder": "Preferred handover time, special requests…",
+      "optional": "optional",
+      "consent": "I agree to the <terms>rental terms</terms> and the <privacy>privacy policy</privacy>.",
+      "honeypot": "Leave this field empty",
+      "submit": "Send request",
+      "submitting": "Sending…",
+      "note": "This is a request, not a payment. The booking is valid once a manager confirms it."
+    },
+    "errors": {
+      "required": "Please fill in this field.",
+      "tooLong": "This text is too long.",
+      "phone": "Enter a valid phone number.",
+      "email": "Enter a valid email address.",
+      "licenseYear": "Select a year.",
+      "confirm": "Please confirm that you meet the requirements.",
+      "consent": "Your consent is required.",
+      "date": "Pick a date."
+    },
+    "problems": {
+      "invalid": "Please check the highlighted fields.",
+      "rate_limited": "Too many requests in a row. Please try later or call us.",
+      "period_unavailable": "Sorry, this time has just been booked. Please pick another.",
+      "not_available": "This rental type is not available for this car.",
+      "min_days": "Minimum rental period: {min, plural, one {# day} other {# days}}.",
+      "min_hours": "Minimum hourly rental: {min} h.",
+      "too_long": "Online bookings are limited to {max} days. Contact us for a longer rental.",
+      "past": "The selected time has already passed. Please pick another.",
+      "too_far": "Bookings can be made up to one year ahead.",
+      "hours_range": "Hourly rentals are available from 7:00 to 24:00.",
+      "license": "This car requires at least {min} years of driving experience.",
+      "car_not_found": "This car cannot be booked at the moment.",
+      "unavailable": "Online booking is temporarily unavailable. Please call or message us.",
+      "network": "Could not send. Check your connection and try again."
+    },
+    "success": {
+      "title": "Request sent!",
+      "number": "Request number",
+      "text": "We have sent a confirmation to {email}. A manager will contact you shortly.",
+      "again": "New request",
+      "textNoEmail": "A manager will contact you shortly."
+    },
+    "contactAlt": "In a hurry? Message or call us:"
+  },
+  "emails": {
+    "brandTagline": "Car rental in Klaipėda",
+    "summary": {
+      "number": "Request no.",
+      "car": "Car",
+      "period": "Dates",
+      "duration": "Duration",
+      "tariff": "Tariff",
+      "price": "Price",
+      "total": "Total",
+      "deposit": "Deposit (refundable)"
+    },
+    "contacts": "Questions? Call {phone}.",
+    "contactsWithEmail": "Questions? Call {phone} or write to {email}.",
+    "footerNote": "You received this email because you sent a booking request on {site}.",
+    "received": {
+      "subject": "Request received — {number}",
+      "preview": "We have received your request: {car}, {period}.",
+      "title": "Request received",
+      "greeting": "Hello {name},",
+      "text": "We have received your request to rent the {car}. A manager will check the details and contact you shortly.",
+      "note": "This is not a confirmation yet — the booking is valid once a manager confirms it."
+    },
+    "confirmed": {
+      "subject": "Booking confirmed — {number}",
+      "preview": "{car}, {period} — your booking is confirmed.",
+      "title": "Booking confirmed",
+      "text": "Your booking is confirmed. A manager will contact you to arrange the handover time.",
+      "note": "Please bring your ID and driving licence when you pick up the car."
+    },
+    "rejected": {
+      "subject": "Booking not confirmed — {number}",
+      "preview": "Unfortunately we cannot confirm request {number}.",
+      "title": "We cannot confirm your booking",
+      "text": "Unfortunately we cannot confirm your request to rent the {car}.",
+      "reason": "Reason",
+      "cta": "Pick other dates"
+    },
+    "manager": {
+      "subject": "New request {number}: {car}, {period}",
+      "preview": "{name}, {phone} — {total}",
+      "title": "New booking request",
+      "customer": "Customer",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "licenseYear": "Licence since",
+      "comment": "Comment",
+      "language": "Email language",
+      "languageLt": "Lithuanian",
+      "languageEn": "English",
+      "cta": "Open in admin",
+      "footer": "Automatic notification from {site}."
+    }
   }
 }

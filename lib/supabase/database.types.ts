@@ -843,6 +843,7 @@ export type Database = {
           isSetofReturn: true;
         };
       };
+      consume_rate_limit: { Args: { p_key: string; p_max: number; p_window_seconds: number }; Returns: boolean };
     };
     Enums: {
       app_role: "admin" | "manager";

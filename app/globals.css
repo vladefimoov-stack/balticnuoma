@@ -157,6 +157,11 @@
 }
 
 /* Subtle grain + vignette backdrop used behind hero sections. */
+/* Booking calendar: a day with hourly bookings — half red (busy), half green (free). */
+@utility calendar-partial {
+  background-image: linear-gradient(135deg, rgb(239 68 68 / 0.32) 0 50%, rgb(34 197 94 / 0.12) 50% 100%);
+}
+
 @utility bg-aurora {
   background:
     radial-gradient(60% 50% at 70% 0%, rgb(255 181 71 / 0.1), transparent 70%),

@@ -1,8 +1,9 @@
-import { ChevronRight, Phone } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { BookingWidget } from "@/components/booking/BookingWidget";
 import { CarCard } from "@/components/cars/CarCard";
 import { CarFeatures } from "@/components/cars/CarFeatures";
 import { CarGallery } from "@/components/cars/CarGallery";
@@ -10,8 +11,6 @@ import { CarPlaceholder } from "@/components/cars/CarPlaceholder";
 import { CarSpecs } from "@/components/cars/CarSpecs";
 import { RulesList } from "@/components/cars/RulesList";
 import { TariffList } from "@/components/cars/TariffList";
-import { WhatsAppIcon } from "@/components/ui/BrandIcons";
-import { ButtonAnchor } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { Link } from "@/i18n/navigation";
 import { getCarBySlug, getPublishedCars, pick } from "@/lib/data/cars";
@@ -101,7 +100,8 @@ export default async function CarPage({ params }: Params) {
       </div>
 
       {/* DOM order = mobile order: gallery → price & booking → details.
-          On desktop the aside becomes a sticky right column spanning both rows. */}
+          On desktop the aside is the right column spanning both rows (not sticky: the
+          booking widget is taller than the viewport). */}
       <div className="container-site grid gap-12 py-10 lg:grid-cols-[1.6fr_1fr] lg:gap-x-14 lg:gap-y-14">
         <div className="min-w-0 lg:col-start-1 lg:row-start-1">
           {car.images.length > 0 ? (
@@ -121,7 +121,7 @@ export default async function CarPage({ params }: Params) {
           )}
         </div>
 
-        <aside className="flex flex-col gap-6 lg:sticky lg:top-[calc(var(--nav-height)+1.5rem)] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+        <aside className="flex flex-col gap-6 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
           <div className="flex flex-col gap-6 rounded-card border border-line bg-surface p-6">
             {car.fromPerDay !== null && (
               <p className="leading-tight">
@@ -137,20 +137,11 @@ export default async function CarPage({ params }: Params) {
             </div>
           </div>
 
-          <div id="rezervacija" className="flex flex-col gap-4 rounded-card border border-amber/25 bg-amber/5 p-6">
-            <h2 className="font-display text-lg font-semibold">{t("bookTitle")}</h2>
-            <p className="text-sm leading-relaxed text-muted">{t("bookText")}</p>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-              <ButtonAnchor href={contacts.whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <WhatsAppIcon size={18} />
-                WhatsApp
-              </ButtonAnchor>
-              <ButtonAnchor href={`tel:${contacts.phoneE164}`} variant="secondary" className="flex-1">
-                <Phone className="size-4" aria-hidden />
-                {contacts.phone}
-              </ButtonAnchor>
-            </div>
-          </div>
+          <BookingWidget
+            locale={locale}
+            car={{ id: car.id, pricing: car.pricing, rules: car.rules, deposit: car.deposit }}
+            contacts={{ phone: contacts.phone, phoneE164: contacts.phoneE164, whatsappUrl: contacts.whatsappUrl }}
+          />
         </aside>
 
         <div className="flex min-w-0 flex-col gap-14 lg:col-start-1 lg:row-start-2">

@@ -7,6 +7,7 @@ import {
   featuresSchema,
   pricingOverrideSchema,
   rentalRulesOverrideSchema,
+  resolveCarTerms,
   resolvePricing,
   resolveRentalRules,
   type CarSpecs,
@@ -145,15 +146,15 @@ type ListRow = {
 
 async function toListItem(row: ListRow): Promise<CarListItem> {
   const { pricing: globalPricing, rentalRules: globalRules } = await getPublicSettings();
-  const categoryPricing = pricingOverrideSchema.safeParse(row.category.default_pricing);
-  const carPricing = pricingOverrideSchema.safeParse(row.price_overrides);
-  const pricing = resolvePricing(
+  const { pricing, rules, deposit } = resolveCarTerms({
     globalPricing,
-    categoryPricing.success ? categoryPricing.data : null,
-    carPricing.success ? carPricing.data : null,
-  );
-  const categoryRules = rentalRulesOverrideSchema.safeParse(row.category.default_rental_rules);
-  const carRules = rentalRulesOverrideSchema.safeParse(row.rental_rules);
+    globalRules,
+    categoryPricing: row.category.default_pricing,
+    categoryRules: row.category.default_rental_rules,
+    carPricing: row.price_overrides,
+    carRules: row.rental_rules,
+    carDeposit: row.deposit,
+  });
   const specs = carSpecsSchema.safeParse(row.specs);
   const title: L10n = { lt: row.title_lt, en: row.title_en };
   const images = sortImages(row.images ?? []);
@@ -170,12 +171,8 @@ async function toListItem(row: ListRow): Promise<CarListItem> {
     specs: specs.success ? specs.data : {},
     cover: images[0] ? toImage(images[0], title) : null,
     pricing,
-    deposit: row.deposit ?? pricing.deposit,
-    rules: resolveRentalRules(
-      globalRules,
-      categoryRules.success ? categoryRules.data : null,
-      carRules.success ? carRules.data : null,
-    ),
+    deposit,
+    rules,
     fromPerDay: fromPricePerDay(pricing),
     sort: row.sort,
   };

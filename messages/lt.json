@@ -370,10 +370,169 @@
     "specs": "Techniniai duomenys",
     "features": "Įranga",
     "requirements": "Reikalavimai vairuotojui",
-    "bookTitle": "Rezervacija",
-    "bookText": "Internetinė rezervacija su užimtumo kalendoriumi pasirodys netrukus. Kol kas parašykite arba paskambinkite — patikrinsime laisvas datas.",
     "others": "Kiti automobiliai",
     "metaTitle": "{title} nuoma Klaipėdoje",
     "metaDescription": "{title} nuoma Klaipėdoje: aiškios kainos, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu."
+  },
+  "booking": {
+    "title": "Rezervacija",
+    "intro": "Pasirinkite datas kalendoriuje — kaina apskaičiuojama iš karto.",
+    "modeLabel": "Nuomos būdas",
+    "modeDays": "Paromis",
+    "modeHourly": "Valandomis",
+    "legend": {
+      "free": "Laisva",
+      "busy": "Užimta",
+      "partial": "Dalinai užimta",
+      "selected": "Pasirinkta"
+    },
+    "calendar": {
+      "label": "Užimtumo kalendorius",
+      "prev": "Ankstesnis mėnuo",
+      "next": "Kitas mėnuo",
+      "loading": "Kraunamas užimtumas…",
+      "loadError": "Nepavyko įkelti užimtumo.",
+      "retry": "Bandyti dar kartą",
+      "dayFree": "laisva",
+      "dayBusy": "užimta",
+      "dayPartial": "dalinai užimta",
+      "dayUnavailable": "negalima rinktis"
+    },
+    "hintStart": "Pasirinkite pirmą nuomos dieną.",
+    "hintEnd": "Pasirinkite paskutinę nuomos dieną arba spauskite tą pačią — vienai parai.",
+    "hintDay": "Pasirinkite dieną.",
+    "rangeBusy": "Tarp pasirinktų dienų yra užimtų. Pasirinkite kitas datas.",
+    "clear": "Išvalyti",
+    "startHour": "Pradžia",
+    "hoursCount": "Trukmė",
+    "hoursOption": "{count} val.",
+    "noSlots": "Šią dieną tokios trukmės laisvo laiko nėra. Pasirinkite kitą dieną ar trukmę.",
+    "freeSlots": "Laisvi pradžios laikai",
+    "duration": {
+      "days": "{count, plural, one {# para} few {# paros} other {# parų}}",
+      "hours": "{count, plural, one {# valanda} few {# valandos} other {# valandų}}"
+    },
+    "lines": {
+      "hours": "{count} val. × {price}",
+      "days": "{count, plural, one {# para} few {# paros} other {# parų}} × {price}",
+      "weeks": "{count, plural, one {# savaitė} few {# savaitės} other {# savaičių}} × {price}",
+      "extraWeek": "Papildoma savaitė likusioms dienoms",
+      "longTermWeeks": "{count, plural, one {# savaitė} few {# savaitės} other {# savaičių}} × {price} (ilgalaikė nuoma)",
+      "longTermDays": "{count, plural, one {# para} few {# paros} other {# parų}} × {price} (ilgalaikė nuoma)"
+    },
+    "period": "Laikotarpis",
+    "tariff": "Tarifas",
+    "total": "Iš viso",
+    "deposit": "Užstatas (grąžinamas)",
+    "continue": "Tęsti",
+    "back": "Keisti datas",
+    "form": {
+      "title": "Jūsų duomenys",
+      "firstName": "Vardas",
+      "lastName": "Pavardė",
+      "phone": "Telefonas",
+      "phonePlaceholder": "+370 600 00000",
+      "email": "El. paštas",
+      "licenseYear": "Vairuotojo pažymėjimo gavimo metai",
+      "licenseYearPlaceholder": "Pasirinkite metus",
+      "experience": "Man yra ne mažiau kaip {age} metų ir vairuoju ne mažiau kaip {years} m.",
+      "comment": "Komentaras",
+      "commentPlaceholder": "Pageidaujamas perdavimo laikas, papildomi pageidavimai…",
+      "optional": "neprivaloma",
+      "consent": "Sutinku su <terms>nuomos sąlygomis</terms> ir <privacy>privatumo politika</privacy>.",
+      "honeypot": "Nepildykite šio laukelio",
+      "submit": "Siųsti užklausą",
+      "submitting": "Siunčiama…",
+      "note": "Tai užklausa, ne mokėjimas. Rezervacija įsigalioja, kai ją patvirtina vadybininkas."
+    },
+    "errors": {
+      "required": "Užpildykite šį laukelį.",
+      "tooLong": "Per ilgas tekstas.",
+      "phone": "Įveskite teisingą telefono numerį.",
+      "email": "Įveskite teisingą el. pašto adresą.",
+      "licenseYear": "Pasirinkite metus.",
+      "confirm": "Patvirtinkite, kad atitinkate reikalavimus.",
+      "consent": "Reikalingas jūsų sutikimas.",
+      "date": "Pasirinkite datą."
+    },
+    "problems": {
+      "invalid": "Patikrinkite pažymėtus laukelius.",
+      "rate_limited": "Per daug užklausų iš eilės. Pabandykite vėliau arba paskambinkite mums.",
+      "period_unavailable": "Deja, šis laikas ką tik buvo užimtas. Pasirinkite kitą.",
+      "not_available": "Šis nuomos būdas šiam automobiliui negalimas.",
+      "min_days": "Mažiausias nuomos laikotarpis — {min, plural, one {# para} few {# paros} other {# parų}}.",
+      "min_hours": "Mažiausia valandinės nuomos trukmė — {min} val.",
+      "too_long": "Internetu galima rezervuoti iki {max} d. Dėl ilgesnės nuomos susisiekite su mumis.",
+      "past": "Pasirinktas laikas jau praėjo. Pasirinkite kitą.",
+      "too_far": "Rezervuoti galima ne daugiau kaip metus į priekį.",
+      "hours_range": "Valandinė nuoma galima nuo 7:00 iki 24:00.",
+      "license": "Šiam automobiliui reikalingas ne mažesnis kaip {min} m. vairavimo stažas.",
+      "car_not_found": "Šis automobilis šiuo metu nerezervuojamas.",
+      "unavailable": "Internetinė rezervacija laikinai neveikia. Paskambinkite arba parašykite mums.",
+      "network": "Nepavyko išsiųsti. Patikrinkite ryšį ir bandykite dar kartą."
+    },
+    "success": {
+      "title": "Užklausa išsiųsta!",
+      "number": "Užklausos numeris",
+      "text": "Patvirtinimą išsiuntėme adresu {email}. Vadybininkas netrukus susisieks su jumis.",
+      "again": "Nauja užklausa",
+      "textNoEmail": "Vadybininkas netrukus susisieks su jumis."
+    },
+    "contactAlt": "Norite greičiau? Parašykite arba paskambinkite:"
+  },
+  "emails": {
+    "brandTagline": "Automobilių nuoma Klaipėdoje",
+    "summary": {
+      "number": "Užklausos nr.",
+      "car": "Automobilis",
+      "period": "Laikotarpis",
+      "duration": "Trukmė",
+      "tariff": "Tarifas",
+      "price": "Kaina",
+      "total": "Iš viso",
+      "deposit": "Užstatas (grąžinamas)"
+    },
+    "contacts": "Klausimai? Skambinkite {phone}.",
+    "contactsWithEmail": "Klausimai? Skambinkite {phone} arba rašykite {email}.",
+    "footerNote": "Šį laišką gavote, nes pateikėte rezervacijos užklausą svetainėje {site}.",
+    "received": {
+      "subject": "Užklausa gauta — {number}",
+      "preview": "Gavome jūsų užklausą: {car}, {period}.",
+      "title": "Užklausa gauta",
+      "greeting": "Sveiki, {name}!",
+      "text": "Gavome jūsų užklausą išsinuomoti {car}. Vadybininkas patikrins informaciją ir netrukus susisieks su jumis.",
+      "note": "Tai dar ne patvirtinimas — rezervacija įsigalioja, kai ją patvirtina vadybininkas."
+    },
+    "confirmed": {
+      "subject": "Rezervacija patvirtinta — {number}",
+      "preview": "{car}, {period} — rezervacija patvirtinta.",
+      "title": "Rezervacija patvirtinta",
+      "text": "Jūsų rezervacija patvirtinta. Vadybininkas susisieks su jumis dėl automobilio perdavimo laiko.",
+      "note": "Atsiimdami automobilį turėkite asmens dokumentą ir vairuotojo pažymėjimą."
+    },
+    "rejected": {
+      "subject": "Rezervacija nepatvirtinta — {number}",
+      "preview": "Deja, užklausos {number} patvirtinti negalime.",
+      "title": "Rezervacijos patvirtinti negalime",
+      "text": "Deja, jūsų užklausos {car} nuomai patvirtinti negalime.",
+      "reason": "Priežastis",
+      "cta": "Pasirinkti kitas datas"
+    },
+    "manager": {
+      "subject": "Nauja užklausa {number}: {car}, {period}",
+      "preview": "{name}, {phone} — {total}",
+      "title": "Nauja rezervacijos užklausa",
+      "customer": "Klientas",
+      "name": "Vardas, pavardė",
+      "phone": "Telefonas",
+      "email": "El. paštas",
+      "licenseYear": "Pažymėjimas nuo",
+      "comment": "Komentaras",
+      "language": "Laiškų kalba",
+      "languageLt": "lietuvių",
+      "languageEn": "anglų",
+      "cta": "Atidaryti administravime",
+      "footer": "Automatinis pranešimas iš {site}."
+    }
   }
 }

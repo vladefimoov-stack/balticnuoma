@@ -27,9 +27,9 @@ the owner changed it (positioning above, static buttons). Owner-supplied items a
 | i18n      | `next-intl` v4 — `lt` default (no prefix), `en` under `/en` with localized paths |
 | Motion    | `framer-motion` (UI, via `LazyMotion` + `m.*`), `lenis` (smooth scroll)          |
 | Backend   | Supabase: Postgres + RLS, Auth, Storage, Realtime (phase 2)                      |
-| Email     | Resend + `react-email` (phase 5)                                                 |
-| Forms     | `react-hook-form` + `zod` (phase 5)                                              |
-| Tests     | Playwright smoke tests (phase 8)                                                 |
+| Email     | Resend + `react-email` (`lib/email/*`, sent after the response via `after()`)    |
+| Forms     | `react-hook-form` + `zod` (shared schema client ↔ server action)                 |
+| Tests     | `node:test` via `tsx` (unit), pgTAP (DB), Playwright smoke tests (phase 8)       |
 
 ## Commands
 
@@ -37,6 +37,7 @@ the owner changed it (positioning above, static buttons). Owner-supplied items a
 npm run dev          # dev server (Turbopack) on :3000
 npm run build        # production build (webpack)
 npm run check        # typecheck + lint + i18n key parity — run before every commit
+npm run test:unit    # pricing / availability / format unit tests (tests/unit, node:test + tsx)
 npm run format       # prettier (with tailwind class sorting)
 npm run i18n:check   # messages/en.json must have exactly the keys of lt.json
 
@@ -68,7 +69,7 @@ app/
     not-found.tsx, error.tsx
   admin/                ADMIN (phase 6) — LT only, own <html>, excluded from i18n middleware
   api/                  route handlers: health (deployment self-check), availability (catalog
-                        date filter), later booking endpoints
+                        date filter), busy (one car's busy periods for the booking calendar)
 components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
@@ -80,7 +81,8 @@ components/
   cars/                 CarCard, CarPlaceholder (SVG silhouettes), CarGallery, CarSpecs, CarFeatures,
                         TariffList, RulesList, Catalog (client filters)
   contact/              ContactList, MapEmbed (lazy Google Maps iframe)
-  booking/ admin/       (later phases)
+  booking/              BookingWidget (modes, quote, form, success), BookingCalendar (APG grid)
+  admin/                (phase 6)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
 lib/
@@ -94,10 +96,16 @@ lib/
   db/json.ts            zod contracts for JSONB columns + resolvePricing / resolveRentalRules
   data/                 server-only cached reads: settings.ts (getPublicSettings), cars.ts
                         (getPublishedCars, getCarBySlug, getCategories, pick()), defaults.ts, cache.ts
-  pricing/display.ts    "from" price, per-day equivalent, savings % (booking math: phase 5)
+  pricing/display.ts    "from" price, per-day equivalent, savings %
+  pricing/calculate.ts  booking quote: quoteDays (cheapest of daily / weekly / long-term), quoteHours
+  booking/              schema.ts (zod: selection + customer, error codes), selection.ts (interval,
+                        quote, timing checks), availability.ts (Vilnius day maths, free hourly slots),
+                        format.ts (BN-000123, LT/EN date ranges, €), server.ts (server-only: car terms,
+                        IP hash, rate limit), actions.ts ("use server" submitBooking)
   dates.ts              Europe/Vilnius day helpers (vilniusDayStart, vilniusToday, addDaysIso)
   format/hours.ts       opening hours → "I–V 9:00–18:00" / "Mon–Fri 9:00–18:00"
-  email/                (later phases)
+  email/                send.ts (Resend, preview files, no-key fallback), templates.tsx (react-email),
+                        booking.tsx (request → customer + manager; status emails for phase 6)
 supabase/
   config.toml           local stack config (sign-up disabled)
   migrations/           ordered SQL migrations (foundation, core, bookings, rls, storage)
@@ -106,7 +114,8 @@ supabase/
   tests/database/       pgTAP tests
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
 scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs
-docs/                   owner-facing guides (SUPABASE_SETUP.md)
+tests/unit/             node:test unit tests (run with tsx; `@/` paths work)
+docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md)
 middleware.ts           next-intl middleware (skips /api, /admin, static files)
 ```
 
@@ -170,6 +179,30 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
 - Scroll reveals: `Reveal` / `RevealText` keep server HTML visible and only animate elements that
   start below the fold. Never wrap the hero H1 (LCP) in them.
 
+## Booking (phase 5)
+
+- Flow: car page → `BookingWidget` (client) → `submitBooking` server action → `bookings` row
+  (`pending`) → emails after the response. The widget's quote is a preview only; the action
+  re-validates **everything**: zod schema → honeypot + min fill time (fake success for bots) →
+  dates (`checkSelectionTiming`) → rate limit → car terms loaded uncached with the admin client →
+  `quoteSelection` → licence years → insert. 23P01 → `period_unavailable`.
+- Day rentals select **first..last day inclusive**; the period is `[first 00:00, last+1 00:00)`
+  Vilnius. Hourly rentals: one day, start 7:00…, end ≤ 24:00, start ≥ now + 1 h. A day with hourly
+  bookings is `partial` (half red) and can't be part of a day rental.
+- `price_breakdown` stores `{ version: 1, currency, selection, quote }` — enough to rebuild emails
+  and the admin view later. Booking reference = `bookingNumber(number)` → `BN-000123`.
+- Rate limit: `public.consume_rate_limit(key, max, window)` (service role only, counters in
+  `private.rate_limit_hits`, key = `booking:<HMAC(IP)>`), `BOOKING_RATE_LIMIT_PER_HOUR` (default 5).
+  The limiter fails open (logs) so bookings never break because of it.
+- "Today" in the widget comes from the browser (`useSyncExternalStore`) — pages are ISR and may be
+  older than today. `/api/busy` is `no-store`.
+- Emails: customer in the booking's locale, manager always LT, `idempotencyKey` per booking/event.
+  Without `RESEND_API_KEY` nothing is sent (logged) and the success screen doesn't promise an
+  email. Manager address: `settings.notifications.booking_email` → `BOOKING_NOTIFY_EMAIL`.
+  Locally `EMAIL_PREVIEW_DIR=./.emails` writes every email to disk.
+- Copy: `booking` (client) and `emails` (server, via `createTranslator`) namespaces; price-line
+  labels `booking.lines.*` are shared by the widget and the emails.
+
 ## Design system
 
 Tokens are defined once in `app/globals.css` (`@theme`) and exposed both as Tailwind
@@ -228,7 +261,7 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - [x] 3 — Public pages: home sections, catalog with filters, car page, contacts; data
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [—] 4 — 3D & motion — **dropped by the owner** (no 3D on the site)
-- [ ] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
+- [x] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
 - [ ] 6 — Admin panel
 - [—] 6b — 3D generation from photos — **dropped by the owner**
 - [ ] 7 — SEO, legal pages, cookie banner

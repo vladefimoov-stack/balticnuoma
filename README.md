@@ -5,8 +5,8 @@
 
 Архитектура и соглашения — в [`CLAUDE.md`](./CLAUDE.md). Что должен предоставить владелец — в [`TODO.md`](./TODO.md).
 
-> Статус: фазы 1–2 (каркас, база данных). Инструкции по email будут дополнены
-> в соответствующих фазах.
+> Статус: фазы 1–3 и 5 готовы (каркас, база данных, публичные страницы, онлайн-бронирование).
+> Дальше — админ-панель (фаза 6).
 
 ## Локальный запуск
 
@@ -27,6 +27,7 @@ npm run dev                  # http://localhost:3000, Supabase Studio — http:/
 | `npm run dev`                 | dev-сервер (Turbopack)                         |
 | `npm run build` / `npm start` | production-сборка и запуск                     |
 | `npm run check`               | typecheck + ESLint + проверка ключей переводов |
+| `npm run test:unit`           | unit-тесты: расчёт цены, календарь, форматы    |
 | `npm run format`              | Prettier (с сортировкой Tailwind-классов)      |
 | `npm run db:reset`            | пересоздать локальную БД: миграции + seed      |
 | `npm run db:test`             | pgTAP-тесты БД (RLS, защита от двойных броней) |
@@ -81,7 +82,9 @@ npm run dev                  # http://localhost:3000, Supabase Studio — http:/
    (как минимум `NEXT_PUBLIC_SITE_URL` и ключи Supabase).
 3. Подключите домен и обновите `NEXT_PUBLIC_SITE_URL`.
 
-Настройка Resend (email) будет добавлена в фазе 5.
+Письма о бронированиях (Resend) — пошагово в [`docs/EMAIL_SETUP.md`](./docs/EMAIL_SETUP.md).
+Для локальной отладки писем задайте `EMAIL_PREVIEW_DIR=./.emails` — каждое письмо сохранится
+как `.html` / `.txt` (ключ Resend не нужен).
 
 ## Бренд
 

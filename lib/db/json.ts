@@ -71,6 +71,36 @@ export function resolveRentalRules(
   return overrides.reduce<RentalRules>((acc, o) => (o ? { ...acc, ...stripUndefined(o) } : acc), base);
 }
 
+/**
+ * Effective tariffs, rules and deposit of one car from the raw JSONB columns:
+ * global settings ← category defaults ← car overrides. Invalid overrides are ignored.
+ */
+export function resolveCarTerms(input: {
+  globalPricing: Pricing;
+  globalRules: RentalRules;
+  categoryPricing: unknown;
+  categoryRules: unknown;
+  carPricing: unknown;
+  carRules: unknown;
+  carDeposit: number | null;
+}) {
+  const parsed = <T>(schema: z.ZodType<T>, value: unknown) => {
+    const result = schema.safeParse(value);
+    return result.success ? result.data : null;
+  };
+  const pricing = resolvePricing(
+    input.globalPricing,
+    parsed(pricingOverrideSchema, input.categoryPricing),
+    parsed(pricingOverrideSchema, input.carPricing),
+  );
+  const rules = resolveRentalRules(
+    input.globalRules,
+    parsed(rentalRulesOverrideSchema, input.categoryRules),
+    parsed(rentalRulesOverrideSchema, input.carRules),
+  );
+  return { pricing, rules, deposit: input.carDeposit ?? pricing.deposit };
+}
+
 // ── Car specs (cars.specs) ───────────────────────────────────────────────────
 export const carSpecsSchema = z.object({
   fuel: z.enum(FUEL_TYPES).optional(),
