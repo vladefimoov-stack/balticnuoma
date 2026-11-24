@@ -48,33 +48,24 @@ npm run dev                  # http://localhost:3000, Supabase Studio — http:/
 
 ## Настройка Supabase (production)
 
-1. Создайте проект на [supabase.com](https://supabase.com): регион **EU Central (Frankfurt)** — рядом
-   с функциями Vercel (`fra1`). Сохраните пароль базы данных.
-2. _Authentication → Sign In / Providers_: выключите **Allow new users to sign up**
-   (регистрация закрыта, пользователей создаёт админ). В _URL Configuration_ укажите домен сайта.
-3. Примените миграции и seed (из корня репозитория):
+👉 **Подробная пошаговая инструкция для владельца (без командной строки):
+[`docs/SUPABASE_SETUP.md`](./docs/SUPABASE_SETUP.md).**
 
-   ```bash
-   npx supabase login
-   npx supabase link --project-ref <project-ref>
-   npx supabase db push --include-seed
-   ```
+Кратко для разработчика:
 
-   Без CLI: выполните по очереди файлы из `supabase/migrations/`, затем `supabase/seed.sql`
-   в _SQL Editor_. Seed идемпотентен — повторный запуск ничего не дублирует.
-
-4. _Project Settings → API Keys_: скопируйте URL, `anon`/publishable и `service_role`/secret ключи.
-5. Первый админ — локально, с production-ключами в `.env.local`:
-
-   ```bash
-   npm run seed:admin
-   ```
-
-   Второго пользователя (менеджера) можно добавить так же:
+1. Новый проект в регионе **Central EU (Frankfurt)**; Data API и схема `public` — по умолчанию.
+2. Схема + seed одним файлом: вставить [`supabase/production-setup.sql`](./supabase/production-setup.sql)
+   в _SQL Editor_ → **Run** (одна транзакция; повторный запуск безопасно отказывается; миграции
+   помечаются применёнными для CLI). Альтернатива через CLI:
+   `npx supabase link --project-ref <ref> && npx supabase db push --include-seed`.
+3. _Authentication_: выключить **Allow new users to sign up**, задать **Site URL**.
+4. В Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable),
+   `SUPABASE_SERVICE_ROLE_KEY` (secret, Sensitive), `NEXT_PUBLIC_SITE_URL` → Redeploy.
+5. Пользователи админки: `npm run seed:admin` (с production-ключами в `.env.local`), менеджер —
    `npm run seed:admin -- --email … --password … --name … --role manager`.
-
-6. В Vercel добавьте `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-   `SUPABASE_SERVICE_ROLE_KEY` (окружения Production и Preview) и сделайте Redeploy.
+6. Новые миграции после установки — `npx supabase db push` (или вставить новый файл миграции в
+   _SQL Editor_). `production-setup.sql` — только для **нового** проекта; он пересобирается
+   `npm run db:bundle`, а `npm run check` проверяет, что он актуален.
 
 **Структура БД.** Категории, справочник марок/моделей, автомобили (характеристики, опции,
 условия, цены — JSONB с zod-валидацией), фото, 3D (базовые модели, версии, задачи генерации),

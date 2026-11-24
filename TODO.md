@@ -16,7 +16,7 @@
 - [ ] **Домен** (например, balticnuoma.lt) → `NEXT_PUBLIC_SITE_URL`, DNS на Vercel.
 - [ ] **Vercel** — проект и доступ.
 - [ ] **Supabase** — создать проект (регион EU Central / Frankfurt), применить миграции и seed,
-      добавить ключи в Vercel (пошагово — README → «Настройка Supabase»).
+      добавить ключи в Vercel (пошагово — `docs/SUPABASE_SETUP.md`).
 - [ ] **Resend** — аккаунт и подтверждение домена отправителя (DNS-записи SPF/DKIM) → `RESEND_API_KEY`, `EMAIL_FROM`.
 - [ ] **Первый админ и менеджер** — email-адреса двух пользователей (`SEED_ADMIN_EMAIL`, …).
 - [ ] **Аналитика** — нужна ли (GA4 / Plausible / Vercel Analytics)? Загружается только после согласия на cookies.

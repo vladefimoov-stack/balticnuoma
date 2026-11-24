@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "i18n:check": "node scripts/check-messages.mjs",
-    "check": "npm run typecheck && npm run lint && npm run i18n:check",
+    "check": "npm run typecheck && npm run lint && npm run i18n:check && node scripts/build-setup-sql.mjs --check",
     "supabase": "npx -y supabase@3.3.0",
     "db:start": "npx -y supabase@3.3.0 start",
     "db:stop": "npx -y supabase@3.3.0 stop",
@@ -21,7 +21,8 @@
     "db:push": "npx -y supabase@3.3.0 db push",
     "db:types": "npx -y supabase@3.3.0 gen types typescript --local --schema public > lib/supabase/database.types.ts && prettier --write lib/supabase/database.types.ts",
     "db:types:remote": "npx -y supabase@3.3.0 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" --schema public > lib/supabase/database.types.ts && prettier --write lib/supabase/database.types.ts",
-    "seed:admin": "node --env-file=.env.local scripts/seed-admin.mjs"
+    "seed:admin": "node --env-file=.env.local scripts/seed-admin.mjs",
+    "db:bundle": "node scripts/build-setup-sql.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
