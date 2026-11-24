@@ -96,7 +96,7 @@
 2. Найдите переключатель **Allow new users to sign up** и **выключите** его.
    Нажмите **Save changes**.
 3. Там же, в разделе **Authentication**, откройте **URL Configuration**.
-4. В поле **Site URL** укажите `https://balticnuoma.vercel.app` (позже заменим на ваш домен).
+4. В поле **Site URL** укажите адрес сайта: `https://www.balticnuoma.lt`.
    Нажмите **Save changes**.
 
 ## Шаг 6. Скопировать три значения для сайта
@@ -129,7 +129,7 @@
    | Config     | `NEXT_PUBLIC_SUPABASE_URL`      | Project URL из шага 6.1                     |
    | Config     | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Publishable key (`sb_publishable_…`) из 6.2 |
    | **Secret** | `SUPABASE_SERVICE_ROLE_KEY`     | Secret key (`sb_secret_…`) из 6.3           |
-   | Config     | `NEXT_PUBLIC_SITE_URL`          | `https://balticnuoma.vercel.app`            |
+   | Config     | `NEXT_PUBLIC_SITE_URL`          | `https://www.balticnuoma.lt`                |
    - **Secret** — значение после сохранения нельзя посмотреть, только заменить. Для секретного
      ключа выбирайте именно его (если выбрать Config, Vercel покажет жёлтый значок ⚠ у имени).
    - **Environments** (внизу окна): отметьте **Production** и **Preview**; для Config можно
@@ -145,7 +145,12 @@
 
 Внешне сайт пока не изменится: машины из базы начнут показываться в фазе 3.
 
-## Шаг 8. Сообщите мне
+## Шаг 8. Проверка
+
+Откройте https://www.balticnuoma.lt/api/health — должно быть `"status": "ok"`, а у каждой
+проверки в `checks` — `"ok": true`. Если где-то `false`, в `detail` написано, что не так.
+
+## Шаг 9. Сообщите мне
 
 Напишите, что готово, и пришлите **Project URL** и **Publishable key** (они не секретные).
 Я проверю, что база отвечает и сайт её видит. Секретный ключ не присылайте.

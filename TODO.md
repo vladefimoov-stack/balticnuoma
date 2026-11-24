@@ -13,9 +13,9 @@
 
 ## Домен и инфраструктура
 
-- [ ] **Домен** (например, balticnuoma.lt) → `NEXT_PUBLIC_SITE_URL`, DNS на Vercel.
-- [ ] **Vercel** — проект и доступ.
-- [ ] **Supabase** — создать проект (регион EU Central / Frankfurt), применить миграции и seed,
+- [x] **Домен** www.balticnuoma.lt подключён к Vercel (balticnuoma.lt и balticnuoma.vercel.app → www).
+- [x] **Vercel** — проект и доступ.
+- [x] **Supabase** — создать проект (регион EU Central / Frankfurt), применить миграции и seed,
       добавить ключи в Vercel (пошагово — `docs/SUPABASE_SETUP.md`).
 - [ ] **Resend** — аккаунт и подтверждение домена отправителя (DNS-записи SPF/DKIM) → `RESEND_API_KEY`, `EMAIL_FROM`.
 - [ ] **Первый админ и менеджер** — email-адреса двух пользователей (`SEED_ADMIN_EMAIL`, …).
