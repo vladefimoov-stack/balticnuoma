@@ -30,6 +30,14 @@ npm run build        # production build (webpack)
 npm run check        # typecheck + lint + i18n key parity — run before every commit
 npm run format       # prettier (with tailwind class sorting)
 npm run i18n:check   # messages/en.json must have exactly the keys of lt.json
+
+# Database (Supabase CLI via npx, needs Docker)
+npm run db:start     # local Supabase stack (Postgres, Auth, Storage, Realtime, Studio)
+npm run db:reset     # re-apply all migrations + supabase/seed.sql
+npm run db:test      # pgTAP tests in supabase/tests (RLS, double-booking protection)
+npm run db:lint      # Supabase linter (security / performance advisories)
+npm run db:types     # regenerate lib/supabase/database.types.ts from the local DB
+npm run seed:admin   # create/promote an admin user (reads .env.local)
 ```
 
 ## Folder map
@@ -62,11 +70,19 @@ lib/
   fonts.ts              Unbounded (display) + Manrope (text), latin-ext subsets
   motion/lenis.ts       root Lenis handle: getLenis(), lockScroll()
   utils/cn.ts           clsx + tailwind-merge
-  supabase/ pricing/ 3d/providers/ email/   (later phases)
-supabase/migrations/, supabase/seed.sql      (phase 2)
+  supabase/             env.ts, public.ts (anon, cookie-less → static pages), server.ts (session,
+                        admin), client.ts (browser), admin.ts (service role, server-only),
+                        database.types.ts (generated — never edit), types.ts (aliases)
+  db/json.ts            zod contracts for JSONB columns + resolvePricing / resolveRentalRules
+  pricing/ 3d/providers/ email/   (later phases)
+supabase/
+  config.toml           local stack config (sign-up disabled)
+  migrations/           ordered SQL migrations (foundation, core, bookings, rls, storage)
+  seed.sql              idempotent seed: settings, categories, makes/models, 5 Prius, luxury draft
+  tests/database/       pgTAP tests
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
 public/models/          GLB files (hero-car.glb — owner must supply, see TODO.md)
-scripts/                check-messages.mjs, optimize-models (phase 4), seed-admin (phase 6)
+scripts/                check-messages.mjs, seed-admin.mjs, optimize-models (phase 4)
 middleware.ts           next-intl middleware (skips /api, /admin, static files)
 ```
 
@@ -85,6 +101,33 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
 - Every page calls `setRequestLocale(locale)` to stay statically renderable.
 - Time zone is `Europe/Vilnius` (set in `i18n/request.ts`; use it for all date math).
 - Admin is Lithuanian-only and does not use next-intl routing.
+
+## Database (Supabase)
+
+- **Never edit an applied migration** — add a new file `supabase/migrations/<timestamp>_<name>.sql`,
+  then `npm run db:reset && npm run db:test && npm run db:types`.
+- **Every new table needs RLS** enabled + explicit policies in the same migration. Default
+  privileges already revoke anon writes and TRUNCATE.
+- Roles: helpers `private.is_staff()` / `private.is_admin()` (security definer, in the non-exposed
+  `private` schema). Staff = profile role `admin` or `manager`; manager cannot delete cars /
+  catalog entries, change settings or roles. Roles come from `app_metadata.role` (service role only).
+- Visitors (anon) read only: categories, makes/models, base models, **published** cars, their
+  photos and active 3D version, `car_busy_periods`, settings with `is_public = true`.
+- **Bookings are never inserted with the anon key.** Public booking requests go through server
+  code using `createAdminClient()` after zod validation, rate limit and honeypot.
+- **Double-booking protection:** bookings (`pending`/`confirmed`) and `blocks` are mirrored by
+  triggers into `car_occupancy`, which has one GiST exclusion constraint `(car_id =, period &&)`.
+  An overlap raises SQLSTATE `23P01` with hint `period_unavailable` → show "dates taken".
+  Periods are half-open `[start, end)` `tstzrange` (back-to-back rentals are allowed).
+- Pricing / rules resolution: `settings.pricing` ← `categories.default_pricing` ←
+  `cars.price_overrides` (and `cars.deposit`); same for `rental_rules`. Use
+  `resolvePricing()` / `resolveRentalRules()` from `lib/db/json.ts`; `{}` = inherit.
+- JSONB columns are validated with the zod schemas in `lib/db/json.ts` on every read/write.
+- Public pages use `createPublicClient()` (no cookies → static/ISR). Guard with
+  `isSupabaseConfigured` so the site still builds without Supabase env vars.
+- Storage buckets: `car-images` (public), `models` (public: GLB, posters, liveries),
+  `model-inputs` (private: photos for 3D providers via signed URLs). Writes are staff-only.
+- Realtime publication: `model_jobs`, `bookings` (RLS applies — staff only).
 
 ## Design system
 
@@ -139,7 +182,8 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 
 - [x] 1 — Skeleton: Next.js, Tailwind tokens, fonts, i18n, layout, navbar, footer,
       floating contacts, logo, 404/500, docs
-- [ ] 2 — Supabase: migrations, RLS, seed, generated types
+- [x] 2 — Supabase: migrations, RLS, occupancy exclusion, storage, seed, pgTAP tests,
+      generated types, clients, seed-admin script
 - [ ] 3 — Public pages with static content + cars from DB
 - [ ] 4 — 3D & motion: hero scene, scroll scenario, car viewer, optimization
 - [ ] 5 — Booking: calendar, pricing, form, server action, emails
