@@ -75,6 +75,17 @@
 3. Откройте `cars` — там должно быть **6 строк**: `Toyota Prius #1 … #5` (статус `published`)
    и `Porsche Panamera 4 E-Hybrid` (статус `draft` — демо-карточка люкс-класса, на сайте не видна).
 
+**Таблицы есть, а `cars` пустая («This table is empty»)?** Значит, структура базы создана, а
+стартовые данные — нет (так бывает, если запускали отдельные файлы из `supabase/migrations/`).
+Добавьте данные отдельным скриптом — его можно запускать сколько угодно раз, дублей не будет:
+
+1. Откройте https://github.com/vladefimoov-stack/balticnuoma/blob/main/supabase/seed.sql →
+   **Copy raw file**.
+2. **SQL Editor** → **+ New query** → вставьте → **Run**.
+3. Внизу появится строка-итог. Должно быть: **status = OK**, settings 6, categories 3, makes 35,
+   vehicle_models 87, cars 6, storage_buckets 3, rls_policies 47, storage_policies 4,
+   realtime_tables 2. Если где-то меньше или status = CHECK — пришлите скриншот.
+
 ## Шаг 5. Закрыть регистрацию и указать адрес сайта
 
 Пользователей админки (вас и менеджера) создаём мы сами, поэтому регистрация «с улицы»

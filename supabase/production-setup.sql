@@ -1008,6 +1008,27 @@ join public.vehicle_models vm on vm.make_id = mk.id and vm.slug = 'panamera'
 where mk.slug = 'porsche'
 on conflict (slug) do nothing;
 
+-- ── Summary — shown as the result in the Supabase SQL Editor ───────────────
+-- Expected after a fresh install: settings 6, categories 3, makes 35, vehicle_models 87,
+-- cars 6, storage_buckets 3, rls_policies 47, storage_policies 4, realtime_tables 2.
+select
+  case
+    when (select count(*) from public.cars) >= 6
+     and (select count(*) from public.categories) >= 3
+     and (select count(*) from public.settings) >= 6
+     and (select count(*) from storage.buckets where id in ('car-images', 'models', 'model-inputs')) = 3
+    then 'OK' else 'CHECK'
+  end                                                                                     as status,
+  (select count(*) from public.settings)                                                  as settings,
+  (select count(*) from public.categories)                                                as categories,
+  (select count(*) from public.makes)                                                     as makes,
+  (select count(*) from public.vehicle_models)                                            as vehicle_models,
+  (select count(*) from public.cars)                                                      as cars,
+  (select count(*) from storage.buckets where id in ('car-images', 'models', 'model-inputs')) as storage_buckets,
+  (select count(*) from pg_policies where schemaname = 'public')                          as rls_policies,
+  (select count(*) from pg_policies where schemaname = 'storage' and policyname like 'media:%') as storage_policies,
+  (select count(*) from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public') as realtime_tables;
+
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Mark migrations as applied for the Supabase CLI
 -- ─────────────────────────────────────────────────────────────────────────────
