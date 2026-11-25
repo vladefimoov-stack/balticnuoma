@@ -3,7 +3,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { CACHE_TAGS } from "@/lib/data/cache";
-import { settingsSchemas } from "@/lib/db/json";
+import { notificationsSchema, settingsSchemas } from "@/lib/db/json";
+import { sendEmail } from "@/lib/email/send";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin, requireStaff } from "./auth";
 import type { ActionResult } from "./booking-actions";
@@ -158,4 +159,35 @@ export async function changeMyPassword(password: string, repeat: string): Promis
     return { ok: false, error: "Nepavyko pakeisti slaptažodžio." };
   }
   return { ok: true, message: "Slaptažodis pakeistas." };
+}
+
+/* ── Test email (admin) ─────────────────────────────────────────────────── */
+
+export async function sendTestEmail(): Promise<ActionResult> {
+  const staff = await requireAdmin();
+  const { data } = await staff.supabase.from("settings").select("value").eq("key", "notifications").maybeSingle();
+  const parsed = notificationsSchema.safeParse(data?.value);
+  const to = (parsed.success && parsed.data.booking_email) || process.env.BOOKING_NOTIFY_EMAIL?.trim();
+  if (!to) return { ok: false, error: "Nenurodytas vadybininko el. paštas — įrašykite ir išsaugokite jį aukščiau." };
+
+  const time = new Date().toLocaleString("lt-LT", { timeZone: "Europe/Vilnius" });
+  const res = await sendEmail({
+    to,
+    subject: "Bandomasis laiškas — Baltic Nuoma",
+    text: `Laiškai iš svetainės veikia.\n\nIšsiųsta ${time} iš administravimo (Nustatymai → Pranešimai).`,
+    html: `<p style="font-family:Arial,sans-serif;font-size:15px">Laiškai iš svetainės veikia ✔</p><p style="font-family:Arial,sans-serif;font-size:13px;color:#5b616b">Išsiųsta ${time} iš administravimo (Nustatymai → Pranešimai).</p>`,
+  });
+  if (res.sent) {
+    return {
+      ok: true,
+      message: `Išsiųsta adresu ${to}. Jei laiško nėra per kelias minutes — patikrinkite „Spam“ aplanką ir Resend → Emails.`,
+    };
+  }
+  if (res.reason === "not_configured") {
+    return {
+      ok: false,
+      error: "RESEND_API_KEY šiame diegime nenustatytas: pridėkite jį Vercel ir paspauskite Redeploy.",
+    };
+  }
+  return { ok: false, error: `Resend laiško nepriėmė: ${res.message ?? "nežinoma klaida"}` };
 }

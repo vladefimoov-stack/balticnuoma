@@ -1,5 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { checkResendKey, describeFrom, testSendToSink } from "@/lib/email/diagnostics";
+import { notificationsSchema } from "@/lib/db/json";
+import { consumeRateLimit } from "@/lib/booking/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { describeKeyType, describeSupabaseUrlProblem } from "@/lib/supabase/diagnostics";
 import { isSupabaseConfigured, supabaseAnonKey, supabaseUrl } from "@/lib/supabase/env";
@@ -11,6 +14,8 @@ import { createPublicClient } from "@/lib/supabase/public";
  * Supabase works with the public and the secret key.
  * Never returns key values or personal data (the Supabase URL is public anyway).
  * 200 = everything OK, 503 = something needs attention (see `checks`).
+ * `email` (Resend) is reported separately and doesn't change the status: bookings work without it.
+ * `?email=send` also makes one real test send to Resend's sink address (max 3 per hour).
  */
 export const dynamic = "force-dynamic";
 
@@ -29,7 +34,7 @@ const NO_API_RESPONSE = "no answer from the Supabase API — check NEXT_PUBLIC_S
 
 const authSettingsSchema = z.object({ disable_signup: z.boolean().optional() });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const env = {
     NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
@@ -103,6 +108,36 @@ export async function GET() {
 
   const ok = Object.values(env).every(Boolean) && Object.values(checks).every((c) => c.ok);
 
+  // ── Email (Resend) ──────────────────────────────────────────────────────
+  const from = describeFrom(process.env.EMAIL_FROM);
+  const email: Record<string, Check> = {
+    RESEND_API_KEY: { ok: Boolean(process.env.RESEND_API_KEY?.trim()) },
+    from: { ok: from.ok, detail: from.detail },
+    resendKey: await check(() => checkResendKey(process.env.RESEND_API_KEY, from.domain)),
+    managerAddress: await check(async () => {
+      if (process.env.BOOKING_NOTIFY_EMAIL?.trim()) return { ok: true, detail: "BOOKING_NOTIFY_EMAIL" };
+      if (!isSupabaseConfigured || !process.env.SUPABASE_SERVICE_ROLE_KEY) return { ok: false, detail: "not set" };
+      const { data } = await createAdminClient()
+        .from("settings")
+        .select("value")
+        .eq("key", "notifications")
+        .maybeSingle();
+      const parsed = notificationsSchema.safeParse(data?.value);
+      return parsed.success && parsed.data.booking_email
+        ? { ok: true, detail: "admin settings" }
+        : { ok: false, detail: "no manager address (admin → Nustatymai → Pranešimai or BOOKING_NOTIFY_EMAIL)" };
+    }),
+  };
+  if (request.nextUrl.searchParams.get("email") === "send") {
+    email.testSend = await check(async () => {
+      if (isSupabaseConfigured && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        const allowed = await consumeRateLimit(createAdminClient(), "health:email-test", 3, 3600);
+        if (!allowed) return { ok: false, detail: "rate limited (3 test sends per hour)" };
+      }
+      return testSendToSink();
+    });
+  }
+
   return NextResponse.json(
     {
       status: ok ? "ok" : "attention",
@@ -110,6 +145,7 @@ export async function GET() {
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? null,
       env,
       checks,
+      email,
       checkedAt: new Date().toISOString(),
     },
     { status: ok ? 200 : 503, headers: { "Cache-Control": "no-store" } },

@@ -1,10 +1,10 @@
 "use client";
 
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Mail, Plus, Save, Trash2 } from "lucide-react";
 import { useState, useTransition, type FormEvent, type InputHTMLAttributes, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import type { ActionResult } from "@/lib/admin/booking-actions";
-import { saveSetting } from "@/lib/admin/settings-actions";
+import { saveSetting, sendTestEmail } from "@/lib/admin/settings-actions";
 import type { Pricing, RentalRules } from "@/lib/db/json";
 import { cn } from "@/lib/utils/cn";
 import { PricingFields, RulesFields } from "./TermsFields";
@@ -138,6 +138,7 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
             placeholder="rezervacijos@balticnuoma.lt"
           />
         </label>
+        <TestEmailButton />
       </Section>
 
       <Section
@@ -215,6 +216,32 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
           <Plus className="size-4" aria-hidden /> Pridėti eilutę
         </button>
       </Section>
+    </div>
+  );
+}
+
+/** Sends a real email to the manager address — shows Resend's exact error if it fails. */
+function TestEmailButton() {
+  const [pending, start] = useTransition();
+  const [result, setResult] = useState<ActionResult | null>(null);
+  return (
+    <div className="flex flex-col gap-2 rounded-xl border border-line bg-bg/40 p-3">
+      <p className="text-sm text-muted">
+        Patikrinkite, ar laiškai pasiekia vadybininką (naudojamas išsaugotas adresas).
+      </p>
+      <div>
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          disabled={pending}
+          onClick={() => start(async () => setResult(await sendTestEmail()))}
+        >
+          {pending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Mail className="size-4" aria-hidden />}
+          Siųsti bandomąjį laišką
+        </Button>
+      </div>
+      {result && <Notice tone={result.ok ? "success" : "error"}>{result.ok ? result.message : result.error}</Notice>}
     </div>
   );
 }

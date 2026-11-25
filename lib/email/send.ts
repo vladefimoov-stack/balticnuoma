@@ -13,7 +13,8 @@ export type OutgoingEmail = {
   idempotencyKey?: string;
 };
 
-export type SendResult = { sent: true; id: string | null } | { sent: false; reason: "not_configured" | "error" };
+export type SendResult =
+  { sent: true; id: string | null } | { sent: false; reason: "not_configured" | "error"; message?: string };
 
 /** "jonas@example.lt" → "jo***@example.lt" — enough to debug, no full address in logs. */
 function maskEmail(email: string) {
@@ -52,12 +53,12 @@ export async function sendEmail(email: OutgoingEmail): Promise<SendResult> {
       console.error(
         `[email] Resend refused "${email.subject}" → ${maskEmail(email.to)}: ${error.name} ${error.message}`,
       );
-      return { sent: false, reason: "error" };
+      return { sent: false, reason: "error", message: `${error.name}: ${error.message}` };
     }
     return { sent: true, id: data?.id ?? null };
   } catch (error) {
     console.error(`[email] sending "${email.subject}" failed:`, error);
-    return { sent: false, reason: "error" };
+    return { sent: false, reason: "error", message: error instanceof Error ? error.message : "unknown error" };
   }
 }
 
