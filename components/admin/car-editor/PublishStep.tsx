@@ -10,6 +10,7 @@ import { CAR_STATUSES, resolveCarTerms, resolvePricing, resolveRentalRules } fro
 import { availableModes } from "@/lib/pricing/calculate";
 import { fromPricePerDay } from "@/lib/pricing/display";
 import { cn } from "@/lib/utils/cn";
+import { DELETE_CAR_CONFIRM } from "../CarRowActions";
 import { PricingOverrideFields, RulesOverrideFields } from "../TermsFields";
 import { adminInput, adminLabel, Card, CardTitle, CAR_STATUS_LABEL, Notice } from "../ui";
 
@@ -149,14 +150,14 @@ export function PublishStep({ carId, form, set, data, isAdmin, errorField }: Pro
           <Button variant="secondary" size="sm" disabled={pending} onClick={() => start(() => duplicateCar(carId))}>
             <Copy className="size-4" aria-hidden /> Dubliuoti automobilį
           </Button>
-          {isAdmin && (
+          {isAdmin && !data.archived && (
             <Button
               variant="secondary"
               size="sm"
               disabled={pending}
               className="hover:border-busy/60 hover:text-busy"
               onClick={() => {
-                if (!window.confirm("Ištrinti automobilį visam laikui? Nuotraukos irgi bus ištrintos.")) return;
+                if (!window.confirm(DELETE_CAR_CONFIRM(form.titleLt))) return;
                 start(async () => {
                   const res = await deleteCar(carId);
                   if (res && !res.ok) setError(res.error);

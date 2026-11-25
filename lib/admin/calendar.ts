@@ -4,6 +4,7 @@ import { parseRange, rangeLiteral } from "@/lib/db/range";
 import { bookingNumber } from "@/lib/booking/format";
 import type { CarStatus } from "@/lib/supabase/types";
 import type { Staff } from "./auth";
+import { isArchived } from "./cars";
 import { formatRange } from "./format";
 
 type Db = Staff["supabase"];
@@ -51,7 +52,7 @@ export async function getCalendar(db: Db, from: string) {
   };
 
   const [cars, bookings, blocks] = await Promise.all([
-    db.from("cars").select("id, title_lt, plate, status, sort").neq("status", "draft").order("sort").order("title_lt"),
+    db.from("cars").select("*").neq("status", "draft").order("sort").order("title_lt"),
     db
       .from("bookings")
       .select("id, number, car_id, status, period, customer_first_name, customer_last_name")
@@ -95,7 +96,9 @@ export async function getCalendar(db: Db, from: string) {
   return {
     days,
     today: vilniusToday(),
-    cars: (cars.data ?? []).map((c) => ({ id: c.id, title: c.title_lt, plate: c.plate, status: c.status })),
+    cars: (cars.data ?? [])
+      .filter((c) => !isArchived(c))
+      .map((c) => ({ id: c.id, title: c.title_lt, plate: c.plate, status: c.status })),
     items,
   };
 }

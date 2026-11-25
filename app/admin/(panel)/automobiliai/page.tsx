@@ -7,20 +7,32 @@ import { CarStatusBadge, EmptyState, Notice, PageHeader } from "@/components/adm
 import { buttonClasses } from "@/components/ui/Button";
 import { requireStaff } from "@/lib/admin/auth";
 import { createDraftCar, duplicateCar } from "@/lib/admin/car-actions";
+import { DeleteCarButton, RestoreCarButton } from "@/components/admin/CarRowActions";
 import { listCars } from "@/lib/admin/cars";
 
 export const metadata: Metadata = { title: "Automobiliai" };
 
-export default async function CarsPage({ searchParams }: { searchParams: Promise<{ istrinta?: string }> }) {
-  const { istrinta } = await searchParams;
+export default async function CarsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ istrinta?: string; archyvuota?: string; archyvas?: string }>;
+}) {
+  const { istrinta, archyvuota, archyvas } = await searchParams;
   const staff = await requireStaff();
-  const cars = await listCars(staff.supabase);
+  const all = await listCars(staff.supabase);
+  const showArchive = Boolean(archyvas);
+  const archivedCount = all.filter((c) => c.archived).length;
+  const cars = all.filter((c) => c.archived === showArchive);
 
   return (
     <>
       <PageHeader
-        title="Automobiliai"
-        description="Bet kokios markės ir klasės automobiliai. Juodraščiai svetainėje nerodomi."
+        title={showArchive ? "Ištrinti automobiliai" : "Automobiliai"}
+        description={
+          showArchive
+            ? "Automobiliai, kurie buvo ištrinti, bet turėjo rezervacijų — saugomi istorijai. Svetainėje ir sąrašuose nerodomi."
+            : "Bet kokios markės ir klasės automobiliai. Juodraščiai svetainėje nerodomi."
+        }
         actions={
           <form action={createDraftCar}>
             <button type="submit" className={buttonClasses({ size: "sm" })}>
@@ -32,17 +44,36 @@ export default async function CarsPage({ searchParams }: { searchParams: Promise
       />
       {istrinta && (
         <Notice tone="success" className="mb-5">
-          Automobilis ištrintas.
+          Automobilis ištrintas kartu su nuotraukomis.
         </Notice>
+      )}
+      {archyvuota && (
+        <Notice tone="success" className="mb-5">
+          Automobilis ištrintas iš svetainės ir sąrašų. Jis turėjo rezervacijų, todėl jų istorija išsaugota — jį rasite
+          skiltyje „Ištrinti automobiliai“.
+        </Notice>
+      )}
+      {(archivedCount > 0 || showArchive) && (
+        <Link
+          href={showArchive ? "/admin/automobiliai" : "/admin/automobiliai?archyvas=1"}
+          className="mb-5 inline-flex text-sm text-muted underline hover:text-fg"
+        >
+          {showArchive ? "← Aktyvūs automobiliai" : `Ištrinti automobiliai (${archivedCount})`}
+        </Link>
       )}
 
       {cars.length === 0 ? (
-        <EmptyState>Automobilių dar nėra. Spauskite „Pridėti automobilį“.</EmptyState>
+        <EmptyState>
+          {showArchive ? "Ištrintų automobilių nėra." : "Automobilių dar nėra. Spauskite „Pridėti automobilį“."}
+        </EmptyState>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {cars.map((car, index) => (
-            <li key={car.id} className="flex flex-col overflow-hidden rounded-card border border-line bg-surface">
-              <Link href={`/admin/automobiliai/${car.id}`} className="relative block aspect-[16/9] bg-surface-2">
+            <li key={car.id} className="flex flex-col rounded-card border border-line bg-surface">
+              <Link
+                href={`/admin/automobiliai/${car.id}`}
+                className="relative block aspect-[16/9] overflow-hidden rounded-t-card bg-surface-2"
+              >
                 {car.cover ? (
                   <Image
                     src={car.cover}
@@ -78,7 +109,7 @@ export default async function CarsPage({ searchParams }: { searchParams: Promise
                     <CalendarCheck className="size-3.5" aria-hidden /> {car.upcoming} būsimos rez. / užkl.
                   </span>
                 </p>
-                <div className="mt-auto flex flex-wrap gap-2">
+                <div className="mt-auto flex flex-nowrap items-center gap-1.5">
                   <Link
                     href={`/admin/automobiliai/${car.id}`}
                     className={buttonClasses({ variant: "secondary", size: "sm" })}
@@ -89,7 +120,7 @@ export default async function CarsPage({ searchParams }: { searchParams: Promise
                   <form action={duplicateCar.bind(null, car.id)}>
                     <button
                       type="submit"
-                      className={buttonClasses({ variant: "ghost", size: "sm" })}
+                      className={buttonClasses({ variant: "ghost", size: "sm", className: "px-2.5" })}
                       title="Sukurti kopiją (juodraštį)"
                     >
                       <Copy className="size-3.5" aria-hidden />
@@ -101,12 +132,20 @@ export default async function CarsPage({ searchParams }: { searchParams: Promise
                       href={`/automobiliai/${car.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={buttonClasses({ variant: "ghost", size: "sm" })}
+                      className={buttonClasses({ variant: "ghost", size: "sm", className: "px-2.5" })}
                       aria-label={`${car.title} svetainėje`}
                     >
                       <ExternalLink className="size-3.5" aria-hidden />
                     </a>
                   )}
+                  {staff.isAdmin &&
+                    (car.archived ? (
+                      <RestoreCarButton carId={car.id} />
+                    ) : (
+                      <span className="ml-auto">
+                        <DeleteCarButton carId={car.id} title={car.title} compact />
+                      </span>
+                    ))}
                 </div>
               </div>
             </li>

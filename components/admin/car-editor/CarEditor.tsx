@@ -7,6 +7,7 @@ import { saveCar } from "@/lib/admin/car-actions";
 import type { CarForm } from "@/lib/admin/car-schema";
 import type { CarEditorData } from "@/lib/admin/cars";
 import { cn } from "@/lib/utils/cn";
+import { RestoreCarButton } from "../CarRowActions";
 import { CarStatusBadge } from "../ui";
 import { BasicStep, type EditorLabels } from "./BasicStep";
 import { PhotosStep } from "./PhotosStep";
@@ -144,6 +145,12 @@ export function CarEditor({
           </div>
           <SaveIndicator save={save} onRetry={() => void flush()} />
         </div>
+        {data.archived && (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-pending/35 bg-pending/10 px-3.5 py-2.5 text-sm">
+            <span>Šis automobilis ištrintas (saugomas rezervacijų istorijai). Svetainėje jis nerodomas.</span>
+            {isAdmin && <RestoreCarButton carId={data.id} />}
+          </div>
+        )}
         {save.state === "error" && (
           <p
             role="alert"

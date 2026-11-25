@@ -203,6 +203,13 @@ export async function saveCar(carId: string, input: CarForm): Promise<SaveCarRes
   if (error) {
     if (error.code === "23505")
       return { ok: false, error: "Toks adresas jau naudojamas kitam automobiliui.", field: "slug" };
+    if (error.code === "23514" && error.message.includes("cars_archived_not_published")) {
+      return {
+        ok: false,
+        error: "Ištrintas automobilis negali būti paskelbtas — pirmiausia jį atkurkite.",
+        field: "status",
+      };
+    }
     console.error("[admin] save car failed:", error);
     return { ok: false, error: "Nepavyko išsaugoti. Bandykite dar kartą." };
   }
@@ -230,7 +237,14 @@ export async function duplicateCar(carId: string) {
   } = car;
   const { data: copy, error } = await db
     .from("cars")
-    .insert({ ...rest, title_lt: title, slug: await uniqueSlug(db, car.slug), status: "draft", plate: null })
+    .insert({
+      ...rest,
+      ...("archived_at" in rest ? { archived_at: null } : {}),
+      title_lt: title,
+      slug: await uniqueSlug(db, car.slug),
+      status: "draft",
+      plate: null,
+    })
     .select("id")
     .single();
   if (error) throw error;
@@ -259,18 +273,47 @@ export async function duplicateCar(carId: string) {
   redirect(`/admin/automobiliai/${copy.id}`);
 }
 
-/** Admin only. Cars with bookings can't be deleted (history) — hide them instead. */
+const MIGRATION_MISSING =
+  "Duomenų bazėje trūksta migracijos 20261125160000_car_archive.sql — paleiskite ją (docs/SUPABASE_SETUP.md).";
+
+/**
+ * Admin only. A car without bookings is deleted with its photos. A car with booking
+ * history is archived instead (hidden everywhere, old bookings keep showing it).
+ * Cars with upcoming bookings / requests can't be deleted until those are handled.
+ */
 export async function deleteCar(carId: string): Promise<ActionResult> {
   if (!id.safeParse(carId).success) return { ok: false, error: "Neteisingas ID." };
   const staff = await requireAdmin();
   const db = staff.supabase;
-  const { count } = await db.from("bookings").select("id", { count: "exact", head: true }).eq("car_id", carId);
-  if ((count ?? 0) > 0) {
+
+  const upcoming = await db
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("car_id", carId)
+    .in("status", ["pending", "confirmed"])
+    .overlaps("period", `[${new Date().toISOString()},2200-01-01T00:00:00Z)`);
+  if ((upcoming.count ?? 0) > 0) {
     return {
       ok: false,
-      error: "Automobilis turi rezervacijų istoriją — jo ištrinti negalima. Pakeiskite būseną į „Paslėpta“.",
+      error: `Automobilis turi būsimų rezervacijų ar užklausų (${upcoming.count}). Pirmiausia jas atšaukite arba atmeskite (Rezervacijos → filtras pagal automobilį).`,
     };
   }
+
+  const { count: history } = await db.from("bookings").select("id", { count: "exact", head: true }).eq("car_id", carId);
+  if ((history ?? 0) > 0) {
+    const { error } = await db
+      .from("cars")
+      .update({ archived_at: new Date().toISOString(), status: "hidden" })
+      .eq("id", carId);
+    if (error) {
+      if (error.code === "PGRST204" || error.code === "42703") return { ok: false, error: MIGRATION_MISSING };
+      console.error("[admin] archive car failed:", error);
+      return { ok: false, error: "Nepavyko ištrinti automobilio." };
+    }
+    refreshPublic(carId);
+    redirect("/admin/automobiliai?archyvuota=1");
+  }
+
   const { data: images } = await db.from("car_images").select("path").eq("car_id", carId);
   const { error } = await db.from("cars").delete().eq("id", carId);
   if (error) {
@@ -280,6 +323,19 @@ export async function deleteCar(carId: string): Promise<ActionResult> {
   if (images?.length) await db.storage.from(BUCKET).remove(images.map((i) => i.path));
   refreshPublic();
   redirect("/admin/automobiliai?istrinta=1");
+}
+
+/** Admin only: bring an archived car back (as hidden — publish it in the editor when ready). */
+export async function restoreCar(carId: string): Promise<ActionResult> {
+  if (!id.safeParse(carId).success) return { ok: false, error: "Neteisingas ID." };
+  const staff = await requireAdmin();
+  const { error } = await staff.supabase.from("cars").update({ archived_at: null }).eq("id", carId);
+  if (error) {
+    if (error.code === "PGRST204" || error.code === "42703") return { ok: false, error: MIGRATION_MISSING };
+    return { ok: false, error: "Nepavyko atkurti automobilio." };
+  }
+  refreshPublic(carId);
+  redirect(`/admin/automobiliai/${carId}?zingsnis=kainos`);
 }
 
 /* ── Photos (files are uploaded from the browser straight to Storage) ────── */

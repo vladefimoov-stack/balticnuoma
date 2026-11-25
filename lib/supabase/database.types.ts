@@ -394,6 +394,7 @@ export type Database = {
       cars: {
         Row: {
           active_model_version_id: string | null;
+          archived_at: string | null;
           base_model_id: string | null;
           body_type: Database["public"]["Enums"]["body_type"] | null;
           category_id: string;
@@ -426,6 +427,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           active_model_version_id?: string | null;
+          archived_at?: string | null;
           base_model_id?: string | null;
           body_type?: Database["public"]["Enums"]["body_type"] | null;
           category_id: string;
@@ -457,6 +459,7 @@ export type Database = {
         };
         Update: {
           active_model_version_id?: string | null;
+          archived_at?: string | null;
           base_model_id?: string | null;
           body_type?: Database["public"]["Enums"]["body_type"] | null;
           category_id?: string;
@@ -820,6 +823,7 @@ export type Database = {
         Args: { p_from: string; p_to: string };
         Returns: {
           active_model_version_id: string | null;
+          archived_at: string | null;
           base_model_id: string | null;
           body_type: Database["public"]["Enums"]["body_type"] | null;
           category_id: string;

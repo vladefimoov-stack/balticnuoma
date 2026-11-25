@@ -270,6 +270,11 @@ manualPrice`, lines dropped). Default status confirmed (occupies at once, 23P01 
   optional confirmation email when an email is given. `previewManualBooking` shows quote + conflicts.
   Staff may book hidden / maintenance cars (`loadBookingCar(…, { anyStatus: true })`) and past dates.
 - Code that reads bookings must handle `customer_email` / `license_year` being null.
+- Deleting a car (admin only): no bookings → hard delete + Storage cleanup; booking history →
+  archive (`cars.archived_at`, status `hidden`; CHECK `cars_archived_not_published`); upcoming
+  pending / confirmed bookings → refused. Admin car lists (cars, calendar, new booking) must filter
+  archived rows with `isArchived()` (`lib/admin/cars.ts`, works on `*` selects); restore = clear
+  `archived_at` (stays hidden).
 
 ## Design system
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ManualBookingForm } from "@/components/admin/ManualBookingForm";
 import { EmptyState, PageHeader } from "@/components/admin/ui";
 import { requireStaff } from "@/lib/admin/auth";
+import { isArchived } from "@/lib/admin/cars";
 import { isIsoDate, vilniusToday } from "@/lib/dates";
 
 export const metadata: Metadata = { title: "Nauja rezervacija" };
@@ -18,7 +19,7 @@ export default async function NewBookingPage({
   const staff = await requireStaff();
   const { data: cars } = await staff.supabase
     .from("cars")
-    .select("id, title_lt, plate, status")
+    .select("*")
     .neq("status", "draft")
     .order("sort")
     .order("title_lt");
@@ -26,7 +27,9 @@ export default async function NewBookingPage({
   const today = vilniusToday();
   const from = isIsoDate(params.nuo) ? params.nuo : today;
   const to = isIsoDate(params.iki) && params.iki >= from ? params.iki : from;
-  const options = (cars ?? []).map((c) => ({ id: c.id, title: c.title_lt, plate: c.plate, status: c.status }));
+  const options = (cars ?? [])
+    .filter((c) => !isArchived(c))
+    .map((c) => ({ id: c.id, title: c.title_lt, plate: c.plate, status: c.status }));
   const carId = options.find((c) => c.id === params.car)?.id ?? options[0]?.id ?? "";
 
   return (

@@ -32,15 +32,17 @@ export type CarListRow = {
   cover: string | null;
   photos: number;
   upcoming: number;
+  archived: boolean;
 };
+
+/** Archived = deleted in the admin but kept for booking history. `*` keeps this working before the migration. */
+export const isArchived = (row: object) => Boolean((row as { archived_at?: string | null }).archived_at);
 
 export async function listCars(db: Db): Promise<CarListRow[]> {
   const [cars, bookings] = await Promise.all([
     db
       .from("cars")
-      .select(
-        "id, slug, title_lt, plate, status, year, sort, category:categories!cars_category_id_fkey ( name_lt ), images:car_images ( path, is_cover, sort )",
-      )
+      .select("*, category:categories!cars_category_id_fkey ( name_lt ), images:car_images ( path, is_cover, sort )")
       .order("sort")
       .order("created_at"),
     db
@@ -66,6 +68,7 @@ export async function listCars(db: Db): Promise<CarListRow[]> {
       cover: images[0] ? storagePublicUrl("car-images", images[0].path) : null,
       photos: images.length,
       upcoming: upcoming.get(c.id) ?? 0,
+      archived: isArchived(c),
     };
   });
 }
@@ -147,6 +150,7 @@ export async function getCarEditor(db: Db, id: string) {
 
   return {
     id: c.id,
+    archived: isArchived(c),
     publishedAt: c.published_at,
     updatedAt: c.updated_at,
     form,

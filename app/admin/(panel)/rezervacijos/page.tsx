@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BookingStatusBadge, EmptyState, PageHeader, adminInput, adminLabel } from "@/components/admin/ui";
 import { buttonClasses } from "@/components/ui/Button";
 import { requireStaff } from "@/lib/admin/auth";
+import { isArchived } from "@/lib/admin/cars";
 import {
   filtersToQuery,
   listBookings,
@@ -59,7 +60,7 @@ export default async function BookingsPage({
   const staff = await requireStaff();
   const [{ rows, total }, cars, pendingCount] = await Promise.all([
     listBookings(staff.supabase, filters),
-    staff.supabase.from("cars").select("id, title_lt").neq("status", "draft").order("sort").order("title_lt"),
+    staff.supabase.from("cars").select("*").neq("status", "draft").order("sort").order("title_lt"),
     staff.supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
   ]);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -134,6 +135,7 @@ export default async function BookingsPage({
             {(cars.data ?? []).map((car) => (
               <option key={car.id} value={car.id}>
                 {car.title_lt}
+                {isArchived(car) ? " (ištrintas)" : ""}
               </option>
             ))}
           </select>
