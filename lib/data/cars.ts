@@ -1,6 +1,5 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
-import sanitizeHtml from "sanitize-html";
 import {
   carSpecsSchema,
   customSpecsSchema,
@@ -16,6 +15,7 @@ import {
   type Pricing,
   type RentalRules,
 } from "@/lib/db/json";
+import { cleanHtml } from "@/lib/content/html";
 import { fromPricePerDay } from "@/lib/pricing/display";
 import { isSupabaseConfigured, storagePublicUrl } from "@/lib/supabase/env";
 import { createPublicClient } from "@/lib/supabase/public";
@@ -115,16 +115,6 @@ function sortImages(rows: ImageRow[]) {
   return [...rows].sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort - b.sort);
 }
 
-/** Description HTML is written by staff; still sanitized to a small allow-list. */
-function cleanHtml(html: string | null) {
-  if (!html) return "";
-  return sanitizeHtml(html, {
-    allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h3", "h4", "blockquote", "a"],
-    allowedAttributes: { a: ["href", "target", "rel"] },
-    allowedSchemes: ["https", "mailto", "tel"],
-    transformTags: { a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer", target: "_blank" }) },
-  });
-}
 
 type ListRow = {
   id: string;

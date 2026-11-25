@@ -101,3 +101,24 @@ describe("luxury class (no hourly, no long-term)", () => {
     assert.equal(total(quoteDays(luxury.pricing, luxury.rules, 35)).type, "weekly");
   });
 });
+
+describe("rental rules inheritance", () => {
+  it("an empty car override keeps the category's limits", async () => {
+    const { rentalRulesOverrideSchema } = await import("@/lib/db/json");
+    const category = rentalRulesOverrideSchema.parse({ mileage_limit_km_per_day: 250, min_rental_days: 2 });
+    const car = rentalRulesOverrideSchema.parse({});
+    assert.deepEqual(car, {});
+    const rules = resolveRentalRules(DEFAULT_RENTAL_RULES, category, car);
+    assert.equal(rules.mileage_limit_km_per_day, 250);
+    assert.equal(rules.min_rental_days, 2);
+  });
+  it("a car can still lift a limit explicitly with null", async () => {
+    const { rentalRulesOverrideSchema } = await import("@/lib/db/json");
+    const rules = resolveRentalRules(
+      DEFAULT_RENTAL_RULES,
+      { mileage_limit_km_per_day: 250 },
+      rentalRulesOverrideSchema.parse({ mileage_limit_km_per_day: null }),
+    );
+    assert.equal(rules.mileage_limit_km_per_day, null);
+  });
+});

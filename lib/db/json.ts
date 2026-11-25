@@ -11,6 +11,8 @@ export const FUEL_TYPES = ["petrol", "diesel", "hybrid", "plug_in_hybrid", "elec
 export const TRANSMISSIONS = ["automatic", "manual"] as const;
 export const DRIVES = ["fwd", "rwd", "awd"] as const;
 export const MODEL_ANGLES = ["front", "side", "back", "three_quarter"] as const;
+export const BODY_TYPES = ["sedan", "hatchback", "wagon", "suv", "coupe", "cabrio", "minivan", "van"] as const;
+export const CAR_STATUSES = ["draft", "published", "hidden", "maintenance"] as const;
 export const THREE_D_PROVIDERS = ["meshy", "tripo", "mock"] as const;
 
 const money = z.number().nonnegative().max(1_000_000);
@@ -51,17 +53,29 @@ export function resolvePricing(base: Pricing, ...overrides: Array<PricingOverrid
 }
 
 // ── Rental rules: settings.rental_rules ← categories.default_rental_rules ← cars.rental_rules
-export const rentalRulesSchema = z.object({
+const rulesShape = {
   min_age: z.number().int().min(18).max(99),
   min_license_years: z.number().int().min(0).max(60),
-  min_rental_days: z.number().int().min(1).max(365).nullable().default(null),
-  mileage_limit_km_per_day: z.number().int().min(1).max(5000).nullable().default(null),
+  min_rental_days: z.number().int().min(1).max(365).nullable(),
+  mileage_limit_km_per_day: z.number().int().min(1).max(5000).nullable(),
+  allowed_rental_types: z.array(z.enum(RENTAL_TYPES)).min(1),
+};
+
+export const rentalRulesSchema = z.object({
+  ...rulesShape,
+  min_rental_days: rulesShape.min_rental_days.default(null),
+  mileage_limit_km_per_day: rulesShape.mileage_limit_km_per_day.default(null),
   /** Omitted = every tariff enabled in pricing is allowed. */
-  allowed_rental_types: z.array(z.enum(RENTAL_TYPES)).min(1).optional(),
+  allowed_rental_types: rulesShape.allowed_rental_types.optional(),
 });
 export type RentalRules = z.infer<typeof rentalRulesSchema>;
 
-export const rentalRulesOverrideSchema = rentalRulesSchema.partial();
+/**
+ * Category / car overrides: every key optional and WITHOUT defaults — a missing key
+ * means "inherit". (`rentalRulesSchema.partial()` would keep the `null` defaults and an
+ * empty override would wipe e.g. the category's mileage limit.)
+ */
+export const rentalRulesOverrideSchema = z.object(rulesShape).partial();
 export type RentalRulesOverride = z.infer<typeof rentalRulesOverrideSchema>;
 
 export function resolveRentalRules(

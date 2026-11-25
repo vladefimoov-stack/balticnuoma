@@ -76,7 +76,8 @@ app/
     prisijungimas/      login (email + password, rate-limited)
     (panel)/            everything behind the login: layout (requireStaff + AdminShell + LiveBookings),
                         page (dashboard), rezervacijos/ (list, [id] card, csv/ route), kalendorius/
-                        (fleet timeline + manual blocks); automobiliai/ kategorijos/ nustatymai/ (6b)
+                        (fleet timeline + manual blocks), automobiliai/ (list, [id] 3-step editor),
+                        kategorijos/ (list, [id] editor, "nauja"), nustatymai/ (+ naudotojai/), paskyra/
   api/                  route handlers: health (deployment self-check), availability (catalog
                         date filter), busy (one car's busy periods for the booking calendar)
 components/
@@ -93,7 +94,9 @@ components/
   booking/              BookingWidget (modes, quote, form, success), BookingCalendar (APG grid)
   admin/                AdminShell (sidebar / phone drawer), LoginForm, BookingActions + ManagerNote,
                         FleetCalendar, LiveBookings (Realtime → router.refresh), ui.tsx (PageHeader, Card,
-                        status badges, Notice, adminInput)
+                        status badges, Notice, adminInput), car-editor/ (CarEditor + BasicStep / PhotosStep /
+                        PublishStep), RichTextEditor, TermsFields (tariffs / rules with inheritance),
+                        CategoryEditor, SettingsForms, UsersManager (+ AccountForms)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
 lib/
@@ -121,7 +124,12 @@ lib/
                         (signIn / signOut), bookings.ts (filters, list + conflict hints, card), booking-
                         actions.ts (confirm / reject / cancel / reopen / note / reject overlapping),
                         booking-email.ts (DB row → email input), calendar.ts, block-actions.ts,
-                        dashboard.ts, format.ts (LT dates, periods, money)
+                        dashboard.ts, format.ts (LT dates, periods, money), car-schema.ts (editor form zod),
+                        cars.ts + car-actions.ts (draft / autosave / duplicate / delete, photos), image.ts
+                        (browser WebP compression + blur placeholder), categories.ts + category-actions.ts,
+                        settings-actions.ts (settings, users, my account)
+  content/html.ts       cleanHtml (description allow-list) used on save AND on render
+  utils/slug.ts         slugify() / SLUG_PATTERN — same rules as private.slugify
   db/range.ts           parse / build tstzrange literals
 supabase/
   config.toml           local stack config (sign-up disabled)
@@ -243,6 +251,17 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
   Manual blocks are whole days (last day inclusive).
 - Admin UI is dense and mobile-first enough to confirm a booking from a phone: tables become cards
   below `md`, the sidebar becomes a drawer below `lg`.
+- Car editor: "Pridėti automobilį" inserts a draft first, then the whole form autosaves (debounced
+  1.2 s, status changes immediately, one save in flight, `beforeunload` guard). Make / model are free
+  text resolved to `makes` / `vehicle_models` (created when new). Publishing requires at least one
+  bookable tariff after inheritance. Half-filled custom rows stay in the form but aren't sent.
+- Photos go browser → Storage (`car-images/cars/{car_id}/{uuid}.webp`, staff RLS) after compression
+  (≤ 2400 px, WebP / JPEG fallback), then `registerImage` stores the row; first photo = cover.
+  Duplicating a car copies the Storage objects; deleting a car / photo removes them.
+- Overrides (category / car): **empty = inherit**. `rentalRulesOverrideSchema` has no defaults on
+  purpose — `{}` must stay `{}` (a parsed `null` would wipe the category's limits).
+- Users: admin creates / re-passwords / deletes staff with the service role (`auth.admin`); at least
+  one admin must remain. Everyone can change their own name and password on /admin/paskyra.
 
 ## Design system
 
@@ -303,8 +322,8 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [—] 4 — 3D & motion — **dropped by the owner** (no 3D on the site)
 - [x] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
-- [~] 6 — Admin panel: 6a done (login, dashboard, bookings + CSV, calendar + blocks); 6b — cars
-  wizard, photos, categories, settings, users
+- [x] 6 — Admin panel: login, dashboard, bookings (+ CSV, emails), fleet calendar + blocks, car
+      editor (3 steps, autosave, photos, duplicate), categories, settings, users / my account
 - [—] 6b — 3D generation from photos — **dropped by the owner**
 - [ ] 7 — SEO, legal pages, cookie banner
 - [ ] 8 — Polish: Lighthouse, a11y, Playwright, README, final TODO

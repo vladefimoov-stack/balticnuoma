@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils/cn";
 
 type LogoMarkProps = { className?: string; title?: string };
@@ -7,6 +8,9 @@ type LogoMarkProps = { className?: string; title?: string };
  * turns into a road. Source files: /public/brand/*.svg
  */
 export function LogoMark({ className, title }: LogoMarkProps) {
+  // Unique per instance: with a shared id, a copy inside a display:none parent (e.g. the
+  // admin sidebar on phones) would "own" the gradient and the visible copy renders empty.
+  const gradientId = `bn-mark-${useId().replace(/:/g, "")}`;
   return (
     <svg
       viewBox="0 0 48 48"
@@ -16,13 +20,13 @@ export function LogoMark({ className, title }: LogoMarkProps) {
       aria-label={title}
     >
       <defs>
-        <linearGradient id="bn-mark-g" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+        <linearGradient id={gradientId} x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="var(--color-amber)" />
           <stop offset=".55" stopColor="var(--color-amber-soft)" />
           <stop offset="1" stopColor="var(--color-silver)" />
         </linearGradient>
       </defs>
-      <g fill="none" stroke="url(#bn-mark-g)" strokeLinecap="round">
+      <g fill="none" stroke={`url(#${gradientId})`} strokeLinecap="round">
         <path d="M3 38q10.5-7 21 0t21 0" strokeWidth="3.8" />
         <path d="M15 27q7-4.6 14 0t14 0" strokeWidth="3.1" />
         <path d="M26 17.5q4-2.8 8 0t8 0" strokeWidth="2.5" />

@@ -92,10 +92,10 @@ export function AdminShell({ user, pendingCount, children }: Props) {
         Atidaryti svetainę
       </a>
       <div className="flex items-center justify-between gap-3 px-3">
-        <div className="min-w-0">
+        <Link href="/admin/paskyra" className="min-w-0 rounded-lg hover:text-amber" title="Mano paskyra">
           <p className="truncate text-sm font-medium">{user.name}</p>
           <p className="text-xs text-muted">{user.role === "admin" ? "Administratorius" : "Vadybininkas"}</p>
-        </div>
+        </Link>
         <form action={signOut}>
           <button
             type="submit"
