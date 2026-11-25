@@ -31,9 +31,11 @@ export type BookingEmailInput = {
     lastName: string;
     phone: string;
     email: string;
-    licenseYear: number;
+    licenseYear: number | null;
     comment: string | null;
   };
+  /** "admin" = entered by staff (phone booking) — changes the footer's "why you got this". */
+  source?: string | null;
   /** Other pending requests for overlapping dates (manager email only). */
   otherRequests?: number;
 };
@@ -78,7 +80,10 @@ async function shared(t: T, input: BookingEmailInput, locale: Locale) {
     contacts: contacts.email
       ? t("emails.contactsWithEmail", { phone: contacts.phone, email: contacts.email })
       : t("emails.contacts", { phone: contacts.phone }),
-    footerLines: [`Baltic Nuoma · ${contacts.address}`, t("emails.footerNote", { site: host })],
+    footerLines: [
+      `Baltic Nuoma · ${contacts.address}`,
+      input.source === "admin" ? t("emails.footerNoteDirect") : t("emails.footerNote", { site: host }),
+    ],
     replyTo: contacts.email,
     period: formatSelection(input.selection, locale),
   };
@@ -155,7 +160,10 @@ export async function sendBookingRequestEmails(input: BookingEmailInput, notifyT
             label: t("emails.manager.email"),
             value: <EmailLink href={`mailto:${input.customer.email}`}>{input.customer.email}</EmailLink>,
           },
-          { label: t("emails.manager.licenseYear"), value: String(input.customer.licenseYear) },
+          {
+            label: t("emails.manager.licenseYear"),
+            value: input.customer.licenseYear ? String(input.customer.licenseYear) : "—",
+          },
           ...(input.customer.comment ? [{ label: t("emails.manager.comment"), value: input.customer.comment }] : []),
           {
             label: t("emails.manager.language"),

@@ -495,6 +495,7 @@
     "contacts": "Questions? Call {phone}.",
     "contactsWithEmail": "Questions? Call {phone} or write to {email}.",
     "footerNote": "You received this email because you sent a booking request on {site}.",
+    "footerNoteDirect": "You received this email because you booked a car with Baltic Nuoma.",
     "received": {
       "subject": "Request received — {number}",
       "preview": "We have received your request: {car}, {period}.",

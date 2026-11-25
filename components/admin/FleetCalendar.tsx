@@ -93,7 +93,7 @@ export function FleetCalendar({ days, today, cars, items }: Props) {
         </ul>
         <Button size="sm" variant="secondary" onClick={() => openForm()}>
           <Plus className="size-4" aria-hidden />
-          Užblokuoti datas
+          Užblokuoti / rezervuoti
         </Button>
       </div>
 
@@ -177,6 +177,15 @@ export function FleetCalendar({ days, today, cars, items }: Props) {
               {result.error}
             </Notice>
           )}
+          <p className="text-sm text-muted sm:col-span-2 lg:col-span-5">
+            Skambino klientas?{" "}
+            <Link
+              href={`/admin/rezervacijos/nauja?car=${form.carId}&nuo=${form.from}&iki=${form.to}`}
+              className="font-medium text-amber hover:underline"
+            >
+              Sukurti rezervaciją šioms datoms →
+            </Link>
+          </p>
         </form>
       )}
 

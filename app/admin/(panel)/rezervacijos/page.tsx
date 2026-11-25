@@ -1,4 +1,4 @@
-import { AlertTriangle, Download, Users } from "lucide-react";
+import { AlertTriangle, Download, Phone, Plus, Users } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BookingStatusBadge, EmptyState, PageHeader, adminInput, adminLabel } from "@/components/admin/ui";
@@ -27,15 +27,21 @@ const STATUS_TABS: Array<{ value: BookingFilters["status"]; label: string }> = [
 ];
 
 function Hints({ row }: { row: BookingListRow }) {
-  if (row.status !== "pending" || (!row.taken && row.otherRequests === 0)) return null;
+  const phone = row.source === "admin";
+  if (!phone && (row.status !== "pending" || (!row.taken && row.otherRequests === 0))) return null;
   return (
     <span className="flex flex-wrap gap-1.5">
-      {row.taken && (
+      {phone && (
+        <span className="inline-flex items-center gap-1 rounded-pill bg-white/5 px-2 py-0.5 text-[0.7rem] font-medium text-silver">
+          <Phone className="size-3" aria-hidden /> Telefonu
+        </span>
+      )}
+      {row.status === "pending" && row.taken && (
         <span className="inline-flex items-center gap-1 rounded-pill bg-busy/15 px-2 py-0.5 text-[0.7rem] font-medium text-busy">
           <AlertTriangle className="size-3" aria-hidden /> Datos užimtos
         </span>
       )}
-      {row.otherRequests > 0 && (
+      {row.status === "pending" && row.otherRequests > 0 && (
         <span className="inline-flex items-center gap-1 rounded-pill bg-pending/15 px-2 py-0.5 text-[0.7rem] font-medium text-pending">
           <Users className="size-3" aria-hidden /> +{row.otherRequests} užkl.
         </span>
@@ -66,13 +72,19 @@ export default async function BookingsPage({
         title="Rezervacijos"
         description="Užklausos iš svetainės ir patvirtintos rezervacijos. Užklausa datų neužblokuoja, kol jos nepatvirtinate."
         actions={
-          <a
-            href={`/admin/rezervacijos/csv${csvQuery ? `?${csvQuery}` : ""}`}
-            className={buttonClasses({ variant: "secondary", size: "sm" })}
-          >
-            <Download className="size-4" aria-hidden />
-            CSV
-          </a>
+          <>
+            <Link href="/admin/rezervacijos/nauja" className={buttonClasses({ size: "sm" })}>
+              <Plus className="size-4" aria-hidden />
+              Nauja rezervacija
+            </Link>
+            <a
+              href={`/admin/rezervacijos/csv${csvQuery ? `?${csvQuery}` : ""}`}
+              className={buttonClasses({ variant: "secondary", size: "sm" })}
+            >
+              <Download className="size-4" aria-hidden />
+              CSV
+            </a>
+          </>
         }
       />
 

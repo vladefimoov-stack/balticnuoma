@@ -9,7 +9,9 @@ import {
   type Pricing,
   type RentalRules,
 } from "@/lib/db/json";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { createAdminClient } from "@/lib/supabase/admin";
+import type { Database } from "@/lib/supabase/database.types";
 import type { L10n } from "@/lib/data/cars";
 
 type AdminClient = ReturnType<typeof createAdminClient>;
@@ -24,19 +26,24 @@ export type BookingCar = {
 };
 
 /**
- * Authoritative (uncached) tariffs of a published car for a booking — the widget's
- * quote is only a preview; the price stored on the booking is computed from this.
+ * Authoritative (uncached) tariffs of a car for a booking — the widget's quote is only a
+ * preview; the price stored on the booking is computed from this. The website books
+ * published cars only; staff (`anyStatus`) may also book hidden / maintenance cars.
  */
-export async function loadBookingCar(db: AdminClient, carId: string): Promise<BookingCar | null> {
+export async function loadBookingCar(
+  db: SupabaseClient<Database>,
+  carId: string,
+  opts: { anyStatus?: boolean } = {},
+): Promise<BookingCar | null> {
+  let carQuery = db
+    .from("cars")
+    .select(
+      "id, slug, title_lt, title_en, price_overrides, rental_rules, deposit, category:categories!inner ( default_pricing, default_rental_rules )",
+    )
+    .eq("id", carId);
+  carQuery = opts.anyStatus ? carQuery.neq("status", "draft") : carQuery.eq("status", "published");
   const [carResult, settingsResult] = await Promise.all([
-    db
-      .from("cars")
-      .select(
-        "id, slug, title_lt, title_en, price_overrides, rental_rules, deposit, category:categories!inner ( default_pricing, default_rental_rules )",
-      )
-      .eq("id", carId)
-      .eq("status", "published")
-      .maybeSingle(),
+    carQuery.maybeSingle(),
     db.from("settings").select("key, value").in("key", ["pricing", "rental_rules"]),
   ]);
   if (carResult.error) throw carResult.error;

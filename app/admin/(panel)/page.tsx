@@ -1,8 +1,9 @@
-import { ArrowRight, CalendarRange, Car, Gauge, Inbox } from "lucide-react";
+import { ArrowRight, CalendarRange, Car, Gauge, Inbox, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Card, CardTitle, EmptyState, Notice, PageHeader } from "@/components/admin/ui";
+import { buttonClasses } from "@/components/ui/Button";
 import { requireStaff } from "@/lib/admin/auth";
 import { getDashboard, UTILIZATION_DAYS, type DayEntry } from "@/lib/admin/dashboard";
 import { formatDateTime, formatDuration, formatMoney, formatRange } from "@/lib/admin/format";
@@ -88,7 +89,15 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
   return (
     <>
-      <PageHeader title="Apžvalga" description={`${day(d.today)} · ${staff.name}`} />
+      <PageHeader
+        title="Apžvalga"
+        description={`${day(d.today)} · ${staff.name}`}
+        actions={
+          <Link href="/admin/rezervacijos/nauja" className={buttonClasses({ size: "sm" })}>
+            <Plus className="size-4" aria-hidden /> Nauja rezervacija
+          </Link>
+        }
+      />
       {klaida === "teises" && (
         <Notice tone="warning" className="mb-5">
           Šis skyrius prieinamas tik administratoriui.

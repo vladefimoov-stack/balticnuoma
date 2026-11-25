@@ -111,7 +111,8 @@ export type Database = {
           car_id: string;
           comment: string | null;
           created_at: string;
-          customer_email: string;
+          created_by: string | null;
+          customer_email: string | null;
           customer_first_name: string;
           customer_last_name: string;
           customer_phone: string;
@@ -119,7 +120,7 @@ export type Database = {
           experience_confirmed: boolean;
           id: string;
           ip_hash: string | null;
-          license_year: number;
+          license_year: number | null;
           locale: string;
           manager_note: string | null;
           number: number;
@@ -128,10 +129,11 @@ export type Database = {
           price_breakdown: NonNullable<Json>;
           rejection_reason: string | null;
           rental_type: Database["public"]["Enums"]["rental_type"];
+          source: string;
           status: Database["public"]["Enums"]["booking_status"];
           status_changed_at: string | null;
           status_changed_by: string | null;
-          terms_accepted_at: string;
+          terms_accepted_at: string | null;
           total_price: number;
           updated_at: string;
         };
@@ -140,7 +142,8 @@ export type Database = {
           car_id: string;
           comment?: string | null;
           created_at?: string;
-          customer_email: string;
+          created_by?: string | null;
+          customer_email?: string | null;
           customer_first_name: string;
           customer_last_name: string;
           customer_phone: string;
@@ -148,7 +151,7 @@ export type Database = {
           experience_confirmed?: boolean;
           id?: string;
           ip_hash?: string | null;
-          license_year: number;
+          license_year?: number | null;
           locale?: string;
           manager_note?: string | null;
           number?: never;
@@ -157,10 +160,11 @@ export type Database = {
           price_breakdown?: NonNullable<Json>;
           rejection_reason?: string | null;
           rental_type: Database["public"]["Enums"]["rental_type"];
+          source?: string;
           status?: Database["public"]["Enums"]["booking_status"];
           status_changed_at?: string | null;
           status_changed_by?: string | null;
-          terms_accepted_at: string;
+          terms_accepted_at?: string | null;
           total_price: number;
           updated_at?: string;
         };
@@ -168,7 +172,8 @@ export type Database = {
           car_id?: string;
           comment?: string | null;
           created_at?: string;
-          customer_email?: string;
+          created_by?: string | null;
+          customer_email?: string | null;
           customer_first_name?: string;
           customer_last_name?: string;
           customer_phone?: string;
@@ -176,7 +181,7 @@ export type Database = {
           experience_confirmed?: boolean;
           id?: string;
           ip_hash?: string | null;
-          license_year?: number;
+          license_year?: number | null;
           locale?: string;
           manager_note?: string | null;
           number?: never;
@@ -185,10 +190,11 @@ export type Database = {
           price_breakdown?: NonNullable<Json>;
           rejection_reason?: string | null;
           rental_type?: Database["public"]["Enums"]["rental_type"];
+          source?: string;
           status?: Database["public"]["Enums"]["booking_status"];
           status_changed_at?: string | null;
           status_changed_by?: string | null;
-          terms_accepted_at?: string;
+          terms_accepted_at?: string | null;
           total_price?: number;
           updated_at?: string;
         };
@@ -198,6 +204,13 @@ export type Database = {
             columns: ["car_id"];
             isOneToOne: false;
             referencedRelation: "cars";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bookings_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
           {

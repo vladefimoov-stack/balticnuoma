@@ -26,16 +26,19 @@ function refresh(bookingId: string) {
   revalidatePath(`/admin/rezervacijos/${bookingId}`);
 }
 
-/** Send the customer the confirmed / rejected email after the response (never blocks the action). */
+/**
+ * Send the customer the confirmed / rejected email after the response (never blocks the action).
+ * Returns a short LT note for the result message: sent / no email on file / email not configured.
+ */
 async function notifyCustomer(
   staff: Staff,
   bookingId: string,
   status: { status: "confirmed" } | { status: "rejected"; reason: string },
-) {
-  if (!emailsEnabled()) return;
+): Promise<string> {
+  if (!emailsEnabled()) return " Laiškas nesiųstas — el. paštas dar nesukonfigūruotas.";
   const detail = await getBooking(staff.supabase, bookingId);
   const input = detail && emailInputFromBooking(detail.booking);
-  if (!input) return;
+  if (!input) return " Kliento el. pašto nėra — praneškite jam telefonu.";
   after(async () => {
     try {
       await sendBookingStatusEmail(input, status);
@@ -43,14 +46,8 @@ async function notifyCustomer(
       console.error(`[admin] ${status.status} email for ${bookingNumber(input.number)} failed:`, error);
     }
   });
+  return " Klientui siunčiamas laiškas.";
 }
-
-const emailNote = (many = false) =>
-  emailsEnabled()
-    ? many
-      ? " Klientams siunčiami laiškai."
-      : " Klientui siunčiamas laiškas."
-    : " Laiškas nesiųstas — el. paštas dar nesukonfigūruotas.";
 
 export async function confirmBooking(bookingId: string): Promise<ActionResult> {
   if (!id.safeParse(bookingId).success) return { ok: false, error: "Neteisingas ID." };
@@ -68,9 +65,9 @@ export async function confirmBooking(bookingId: string): Promise<ActionResult> {
     return { ok: false, error: "Nepavyko patvirtinti. Bandykite dar kartą." };
   }
   if (!data) return { ok: false, error: STALE };
-  await notifyCustomer(staff, bookingId, { status: "confirmed" });
+  const note = await notifyCustomer(staff, bookingId, { status: "confirmed" });
   refresh(bookingId);
-  return { ok: true, message: `Rezervacija patvirtinta.${emailNote()}` };
+  return { ok: true, message: `Rezervacija patvirtinta.${note}` };
 }
 
 export async function rejectBooking(bookingId: string, reason: string): Promise<ActionResult> {
@@ -90,9 +87,9 @@ export async function rejectBooking(bookingId: string, reason: string): Promise<
     return { ok: false, error: "Nepavyko atmesti. Bandykite dar kartą." };
   }
   if (!data) return { ok: false, error: STALE };
-  await notifyCustomer(staff, bookingId, { status: "rejected", reason: parsedReason.data });
+  const note = await notifyCustomer(staff, bookingId, { status: "rejected", reason: parsedReason.data });
   refresh(bookingId);
-  return { ok: true, message: `Užklausa atmesta.${emailNote()}` };
+  return { ok: true, message: `Užklausa atmesta.${note}` };
 }
 
 /** Cancel a confirmed booking (frees the dates). No automatic email — the manager tells the customer. */
@@ -163,6 +160,7 @@ export async function rejectOverlappingRequests(bookingId: string): Promise<Acti
   if (!detail || detail.booking.status !== "confirmed") return { ok: false, error: STALE };
 
   let rejected = 0;
+  let emailed = 0;
   for (const request of detail.otherRequests) {
     const reason = OVERLAP_REJECTION_REASON[request.locale === "en" ? "en" : "lt"];
     const { data } = await staff.supabase
@@ -174,10 +172,15 @@ export async function rejectOverlappingRequests(bookingId: string): Promise<Acti
       .maybeSingle();
     if (data) {
       rejected++;
-      await notifyCustomer(staff, request.id, { status: "rejected", reason });
+      const note = await notifyCustomer(staff, request.id, { status: "rejected", reason });
+      if (note.includes("siunčiamas")) emailed++;
       revalidatePath(`/admin/rezervacijos/${request.id}`);
     }
   }
   refresh(bookingId);
-  return { ok: true, message: `Atmesta užklausų: ${rejected}.${rejected > 0 ? emailNote(rejected > 1) : ""}` };
+  const noEmail = rejected - emailed;
+  return {
+    ok: true,
+    message: `Atmesta užklausų: ${rejected}.${emailed ? ` Laiškų siunčiama: ${emailed}.` : ""}${noEmail ? ` Be el. pašto: ${noEmail} — praneškite telefonu.` : ""}`,
+  };
 }

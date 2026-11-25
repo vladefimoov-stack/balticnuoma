@@ -55,14 +55,16 @@ type Row = {
   customer_first_name: string;
   customer_last_name: string;
   customer_phone: string;
-  customer_email: string;
-  license_year: number;
+  customer_email: string | null;
+  license_year: number | null;
   comment: string | null;
+  source?: string | null;
   car: { slug: string; title_lt: string; title_en: string | null } | null;
 };
 
+/** null when there is nothing to send to (no car, or a phone booking without an email). */
 export function emailInputFromBooking(row: Row): BookingEmailInput | null {
-  if (!row.car) return null;
+  if (!row.car || !row.customer_email) return null;
   const parsed = breakdownSchema.safeParse(row.price_breakdown);
   const selection = parsed.success ? parsed.data.selection : selectionFromRange(row.range);
   const quote: Quote = parsed.success
@@ -81,6 +83,7 @@ export function emailInputFromBooking(row: Row): BookingEmailInput | null {
     selection,
     quote,
     deposit: Number(row.deposit),
+    source: row.source ?? "website",
     customer: {
       firstName: row.customer_first_name,
       lastName: row.customer_last_name,

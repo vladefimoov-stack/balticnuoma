@@ -48,8 +48,7 @@ export function filtersToQuery(filters: Partial<BookingFilters>) {
 /* ── Rows ───────────────────────────────────────────────────────────────────── */
 
 const LIST_SELECT = `
-  id, number, status, period, rental_type, customer_first_name, customer_last_name, customer_phone,
-  customer_email, license_year, comment, manager_note, locale, total_price, deposit, created_at,
+  *,
   car:cars!bookings_car_id_fkey ( id, slug, title_lt, plate )
 `;
 
@@ -62,8 +61,9 @@ type RawListRow = {
   customer_first_name: string;
   customer_last_name: string;
   customer_phone: string;
-  customer_email: string;
-  license_year: number;
+  customer_email: string | null;
+  license_year: number | null;
+  source?: string;
   comment: string | null;
   manager_note: string | null;
   locale: string;
@@ -212,7 +212,14 @@ export async function getBooking(db: Db, id: string) {
   if (occupancy.error) throw occupancy.error;
   if (requests.error) throw requests.error;
 
+  // Staff member who entered a phone booking (separate query: works before and after the migration).
+  const createdBy = (data as { created_by?: string | null }).created_by;
+  const creator = createdBy
+    ? ((await db.from("profiles").select("full_name").eq("id", createdBy).maybeSingle()).data?.full_name ?? null)
+    : null;
+
   return {
+    creator,
     booking: { ...data, range },
     occupiedBy: occupancy.data.filter((o) => o.booking_id !== id).map((o) => ({ ...o, range: parseRange(o.period) })),
     otherRequests: requests.data.map((r) => ({ ...r, range: parseRange(r.period) })),

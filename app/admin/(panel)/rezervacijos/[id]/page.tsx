@@ -5,7 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { BookingActions, ManagerNote } from "@/components/admin/BookingActions";
-import { BookingStatusBadge, Card, CardTitle, PageHeader } from "@/components/admin/ui";
+import { BookingStatusBadge, Card, CardTitle, Notice, PageHeader } from "@/components/admin/ui";
 import { requireStaff } from "@/lib/admin/auth";
 import { emailInputFromBooking } from "@/lib/admin/booking-email";
 import { getBooking } from "@/lib/admin/bookings";
@@ -13,7 +13,7 @@ import { formatDateTime, formatDuration, formatMoney, formatRange, RENTAL_TYPE_L
 import { bookingNumber, formatPrice } from "@/lib/booking/format";
 import lt from "@/messages/lt.json";
 
-type Params = { params: Promise<{ id: string }> };
+type Params = { params: Promise<{ id: string }>; searchParams?: Promise<{ sukurta?: string; laiskas?: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
@@ -29,19 +29,21 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-export default async function BookingPage({ params }: Params) {
+export default async function BookingPage({ params, searchParams }: Params) {
   const { id } = await params;
+  const { sukurta, laiskas } = (await searchParams) ?? {};
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const staff = await requireStaff();
   const detail = await getBooking(staff.supabase, id);
   if (!detail) notFound();
 
-  const { booking: b, occupiedBy, otherRequests } = detail;
+  const { booking: b, occupiedBy, otherRequests, creator } = detail;
+  const fromAdmin = b.source === "admin";
   const t = createTranslator({ locale: "lt", messages: lt, namespace: "booking.lines" });
   const emailInput = emailInputFromBooking(b);
   const lines = emailInput?.quote.lines ?? [];
   const phoneDigits = b.customer_phone.replace(/\D/g, "");
-  const experience = new Date().getFullYear() - b.license_year;
+  const experience = b.license_year ? new Date().getFullYear() - b.license_year : null;
   const taken = b.status === "pending" && occupiedBy.length > 0;
 
   return (
@@ -61,9 +63,18 @@ export default async function BookingPage({ params }: Params) {
             <BookingStatusBadge status={b.status} />
           </span>
         }
-        description={`Gauta ${formatDateTime(b.created_at)}`}
+        description={
+          fromAdmin
+            ? `Įvesta administravime ${formatDateTime(b.created_at)}${creator ? ` · ${creator}` : ""}`
+            : `Užklausa iš svetainės · ${formatDateTime(b.created_at)}`
+        }
       />
 
+      {sukurta && (
+        <Notice tone="success" className="mb-5">
+          Rezervacija įvesta.{laiskas ? " Klientui siunčiamas patvirtinimo laiškas." : ""}
+        </Notice>
+      )}
       <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
         <div className="flex min-w-0 flex-col gap-5">
           <Card>
@@ -136,20 +147,30 @@ export default async function BookingPage({ params }: Params) {
                 </span>
               </Row>
               <Row label="El. paštas">
-                <a
-                  href={`mailto:${b.customer_email}`}
-                  className="inline-flex items-center gap-1.5 text-amber hover:underline"
-                >
-                  <Mail className="size-3.5" aria-hidden />
-                  {b.customer_email}
-                </a>
+                {b.customer_email ? (
+                  <a
+                    href={`mailto:${b.customer_email}`}
+                    className="inline-flex items-center gap-1.5 text-amber hover:underline"
+                  >
+                    <Mail className="size-3.5" aria-hidden />
+                    {b.customer_email}
+                  </a>
+                ) : (
+                  "—"
+                )}
               </Row>
               <Row label="Vairuotojo pažymėjimas nuo">
-                {b.license_year} ({experience} m. stažas)
+                {b.license_year ? `${b.license_year} (${experience} m. stažas)` : "—"}
               </Row>
-              <Row label="Patvirtino amžių ir stažą">{b.experience_confirmed ? "Taip" : "Ne"}</Row>
-              <Row label="Laiškų kalba">{b.locale === "en" ? "Anglų" : "Lietuvių"}</Row>
-              <Row label="Sutikimas su sąlygomis">{formatDateTime(b.terms_accepted_at)}</Row>
+              {fromAdmin ? (
+                <Row label="Įvesta">{`Administravime${creator ? ` · ${creator}` : ""}`}</Row>
+              ) : (
+                <>
+                  <Row label="Patvirtino amžių ir stažą">{b.experience_confirmed ? "Taip" : "Ne"}</Row>
+                  <Row label="Laiškų kalba">{b.locale === "en" ? "Anglų" : "Lietuvių"}</Row>
+                  <Row label="Sutikimas su sąlygomis">{formatDateTime(b.terms_accepted_at)}</Row>
+                </>
+              )}
             </dl>
             {b.comment && (
               <div className="mt-3 rounded-xl border border-line bg-bg/50 p-3">
@@ -213,7 +234,7 @@ export default async function BookingPage({ params }: Params) {
           <Card>
             <CardTitle>Istorija</CardTitle>
             <dl>
-              <Row label="Gauta">{formatDateTime(b.created_at)}</Row>
+              <Row label={fromAdmin ? "Įvesta" : "Gauta"}>{formatDateTime(b.created_at)}</Row>
               {b.status_changed_at && (
                 <Row label="Būsena pakeista">
                   {formatDateTime(b.status_changed_at)}

@@ -262,6 +262,14 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
   purpose — `{}` must stay `{}` (a parsed `null` would wipe the category's limits).
 - Users: admin creates / re-passwords / deletes staff with the service role (`auth.admin`); at least
   one admin must remain. Everyone can change their own name and password on /admin/paskyra.
+- Manual (phone) bookings: /admin/rezervacijos/nauja → `createManualBooking` (session client, RLS
+  "staff insert"). `bookings.source = 'admin'`, `created_by = auth.uid()`; email, licence year and
+  `terms_accepted_at` are optional for admin rows only (CHECK `bookings_website_fields_required`
+  keeps website rows strict). Price = tariff quote unless staff type a total (`price_breakdown.
+manualPrice`, lines dropped). Default status confirmed (occupies at once, 23P01 → "dates taken");
+  optional confirmation email when an email is given. `previewManualBooking` shows quote + conflicts.
+  Staff may book hidden / maintenance cars (`loadBookingCar(…, { anyStatus: true })`) and past dates.
+- Code that reads bookings must handle `customer_email` / `license_year` being null.
 
 ## Design system
 

@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FleetCalendar } from "@/components/admin/FleetCalendar";
@@ -26,6 +26,9 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         description={`${formatSelection({ mode: "days", startDate: from, endDate: last }, "lt")} · Užklausos datų neužima, kol jų nepatvirtinate.`}
         actions={
           <>
+            <Link href="/admin/rezervacijos/nauja" className={buttonClasses({ size: "sm" })}>
+              <Plus className="size-4" aria-hidden /> Nauja rezervacija
+            </Link>
             <Link
               href={`/admin/kalendorius?nuo=${addDaysIso(from, -step)}`}
               className={buttonClasses({ variant: "secondary", size: "sm" })}
