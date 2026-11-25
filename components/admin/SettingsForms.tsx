@@ -12,6 +12,13 @@ import { adminInput, adminLabel, Card, CardTitle, Notice } from "./ui";
 
 type Contacts = { phone: string; whatsapp_url: string; telegram_username: string; email: string; address: string };
 type Hours = Array<{ days: number[]; opens: string; closes: string }>;
+type Company = {
+  legal_name: string;
+  company_code: string;
+  vat_code: string;
+  registered_address: string;
+  privacy_email: string;
+};
 
 export type SettingsValues = {
   pricing: Pricing;
@@ -19,6 +26,7 @@ export type SettingsValues = {
   contacts: Contacts;
   opening_hours: Hours;
   notifications: { booking_email: string | null };
+  company: Company;
 };
 
 const DAY_LABELS = ["I", "II", "III", "IV", "V", "VI", "VII"];
@@ -72,6 +80,19 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
   const [contacts, setContacts] = useState(initial.contacts);
   const [hours, setHours] = useState(initial.opening_hours);
   const [notifyEmail, setNotifyEmail] = useState(initial.notifications.booking_email ?? "");
+  const [company, setCompany] = useState(initial.company);
+
+  const companyField = (key: keyof Company, label: string, props: InputHTMLAttributes<HTMLInputElement> = {}) => (
+    <label className="flex flex-col gap-1.5">
+      <span className={adminLabel}>{label}</span>
+      <input
+        value={company[key]}
+        onChange={(e) => setCompany({ ...company, [key]: e.target.value })}
+        className={adminInput}
+        {...props}
+      />
+    </label>
+  );
 
   const contactField = (key: keyof Contacts, label: string, props: InputHTMLAttributes<HTMLInputElement> = {}) => (
     <label className="flex flex-col gap-1.5">
@@ -118,6 +139,29 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
           {contactField("email", "El. paštas klientams", { type: "email", placeholder: "info@balticnuoma.lt" })}
           <div className="sm:col-span-2">
             {contactField("address", "Adresas", { placeholder: "Birutės g. 21, Klaipėda" })}
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        title="Įmonės rekvizitai"
+        description="Rodomi poraštėje ir teisiniuose puslapiuose (nuomos sąlygos, privatumo ir slapukų politika). Kol laukelis tuščias, jis nerodomas."
+        settingKey="company"
+        value={() => company}
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          {companyField("legal_name", "Juridinis pavadinimas", { placeholder: "UAB „Baltic Nuoma“", maxLength: 120 })}
+          {companyField("company_code", "Įmonės kodas", { placeholder: "300000000", maxLength: 20 })}
+          {companyField("vat_code", "PVM mokėtojo kodas", { placeholder: "LT100000000000", maxLength: 20 })}
+          {companyField("privacy_email", "El. paštas asmens duomenų klausimams", {
+            type: "email",
+            placeholder: "info@balticnuoma.lt",
+          })}
+          <div className="sm:col-span-2">
+            {companyField("registered_address", "Buveinės (juridinis) adresas", {
+              placeholder: "Birutės g. 21, LT-00000 Klaipėda",
+              maxLength: 200,
+            })}
           </div>
         </div>
       </Section>

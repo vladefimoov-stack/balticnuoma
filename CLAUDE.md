@@ -65,11 +65,13 @@ app/
   not-found.tsx         fallback 404 outside [locale]
   global-error.tsx      last-resort 500
   icon.svg, apple-icon.png
+  sitemap.ts, robots.ts  sitemap (LT + EN + cars, hreflang) / robots (previews: disallow all)
   [locale]/             PUBLIC SITE — <html> lives in [locale]/layout.tsx
     layout.tsx          fonts, NextIntlClientProvider (client namespaces only), Navbar, Footer, FloatingContacts
     page.tsx            home
     automobiliai/ salygos/ kontaktai/ privatumo-politika/ slapukai/   (no separate prices page —
-                        removed by the owner; /kainos redirects to /automobiliai)
+                        removed by the owner; /kainos redirects to /automobiliai). The 3 legal pages are
+                        createLegalPage() routes with texts in content/legal/
     [...rest]/page.tsx  → notFound() so unknown URLs get the localized 404
     not-found.tsx, error.tsx
   admin/                ADMIN — LT only, own <html> (layout.tsx), never indexed
@@ -79,28 +81,38 @@ app/
                         (fleet timeline + manual blocks), automobiliai/ (list, [id] 3-step editor),
                         kategorijos/ (list, [id] editor, "nauja"), nustatymai/ (+ naudotojai/), paskyra/
   api/                  route handlers: health (deployment self-check), availability (catalog
-                        date filter), busy (one car's busy periods for the booking calendar)
+                        date filter), busy (one car's busy periods for the booking calendar),
+                        og/[locale] + og/[locale]/cars/[slug] (Open Graph PNG cards, static / ISR)
 components/
   brand/                Logo, LogoMark (SVG)
   layout/               Navbar, Footer, FloatingContacts, LanguageSwitcher, PageHero, nav-items
-  providers/            Providers (LazyMotion, MotionConfig), SmoothScroll (Lenis), ScrollToTop
+  providers/            Providers (LazyMotion, MotionConfig, ConsentProvider), SmoothScroll (Lenis), ScrollToTop
+  consent/              ConsentProvider (useConsent), CookieBanner + CookieSettingsButton, GoogleAnalytics
+  seo/                  JsonLd
+  legal/                LegalPage (createLegalPage: hero, TOC, numbered sections, draft HTML comment)
   ui/                   Button/ButtonLink/ButtonAnchor, BrandIcons, Reveal/RevealText, Spotlight,
                         SectionHeading
   sections/             home sections: Hero, Advantages, HowItWorks, FleetPreview, Requirements, Faq,
                         ContactSection (no pricing block on the home page — owner's request)
   cars/                 CarCard, CarPlaceholder (SVG silhouettes), CarGallery, CarSpecs, CarFeatures,
                         TariffList, RulesList, Catalog (client filters)
-  contact/              ContactList, MapEmbed (lazy Google Maps iframe)
+  contact/              ContactList, MapEmbed (Google Maps iframe — only with "maps" consent, lazy)
   booking/              BookingWidget (modes, quote, form, success), BookingCalendar (APG grid)
   admin/                AdminShell (sidebar / phone drawer), LoginForm, BookingActions + ManagerNote,
                         FleetCalendar, LiveBookings (Realtime → router.refresh), ui.tsx (PageHeader, Card,
                         status badges, Notice, adminInput), car-editor/ (CarEditor + BasicStep / PhotosStep /
                         PublishStep), RichTextEditor, TermsFields (tariffs / rules with inheritance),
                         CategoryEditor, SettingsForms, UsersManager (+ AccountForms)
+content/legal/          terms / privacy / cookies × lt / en (JSX, interpolate LegalContext), ui.tsx helpers
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
 lib/
-  config/site.ts        business constants (phone, address, socials, requisites)
+  config/site.ts        compile-time fallbacks (phone, address, geo, site URL); requisites live in settings.company
+  seo/                  urls.ts (localizedPath, absoluteUrl, alternatesFor), metadata.ts (pageMetadata, OG
+                        sizes), schema.ts (AutoRental / Car + Offer / BreadcrumbList JSON-LD), og-image.tsx
+                        (next/og cards; fonts/ = merged Unbounded + Manrope WOFF, OFL)
+  legal/context.ts      getLegalContext() (requisites → placeholders when empty), LEGAL_UPDATED
+  consent.ts            consent cookie format (bn_consent, CONSENT_VERSION), GA id
   fonts.ts              Unbounded (display) + Manrope (text), latin-ext subsets
   motion/lenis.ts       root Lenis handle: getLenis(), lockScroll()
   utils/cn.ts           clsx + tailwind-merge
@@ -140,7 +152,7 @@ supabase/
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
 scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs
 tests/unit/             node:test unit tests (run with tsx; `@/` paths work)
-docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md, ADMIN_SETUP.md)
+docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md, ADMIN_SETUP.md, SEO_SETUP.md)
 middleware.ts           /admin → Supabase session refresh + login gate (X-Robots-Tag noindex);
                         everything else → next-intl (skips /api, static files)
 ```
@@ -200,12 +212,34 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
 - Every reader falls back to `lib/data/defaults.ts` / empty lists when Supabase is not configured
   or fails — the site must always build and render.
 - Localized DB text is `{ lt, en | null }` (`L10n`); render with `pick(text, locale)` (EN → LT fallback).
-- Contacts, opening hours, tariffs and rules come from `settings` (editable in admin), not from
-  `lib/config/site.ts` (that file holds only fallbacks and legal requisites).
+- Contacts, opening hours, tariffs, rules and company requisites (`settings.company`) come from
+  `settings` (editable in admin), not from `lib/config/site.ts` (that file holds only fallbacks).
 - The catalog stays static: cards render on the server, `Catalog` (client) only filters them;
   date availability comes from `GET /api/availability?from&to` (Vilnius days, `to` inclusive).
 - Scroll reveals: `Reveal` / `RevealText` keep server HTML visible and only animate elements that
   start below the fold. Never wrap the hero H1 (LCP) in them.
+
+## SEO, legal pages, cookies (phase 7)
+
+- Every public page's `generateMetadata` returns `pageMetadata({ locale, href, title, description })`
+  (`lib/seo/metadata.ts`): canonical + hreflang (lt / en / x-default) from `i18n/routing`, OG + Twitter
+  with the site card `/api/og/{locale}` (car pages: `/api/og/{locale}/cars/{slug}`). New public routes:
+  add them to `routing.ts`, `app/sitemap.ts` and give them `pageMetadata`.
+- JSON-LD: `AutoRental` (home + contacts, `@id` `/#business`), `Car` + daily `Offer` + `BreadcrumbList`
+  (car page), `BreadcrumbList` (catalog) — builders in `lib/seo/schema.ts`, rendered with `<JsonLd>`.
+- OG cards are rendered by `next/og` (Satori): it can't read WebP, so the car cover goes through `sharp`
+  (explicit dependency). Fonts are read from `lib/seo/fonts` (listed in `outputFileTracingIncludes`);
+  one merged file per weight — Satori doesn't fall back between files of one family.
+- `robots.ts`: preview deployments (`VERCEL_ENV != production`) disallow everything. `/api/og/` stays
+  crawlable for link previews. Search Console: `GOOGLE_SITE_VERIFICATION` (or DNS, `docs/SEO_SETUP.md`).
+- No taxi / ride-hailing keywords anywhere (brief's «Bolt», «pavežėjams» keywords are dropped).
+- Legal texts are drafts (`<!-- ЧЕРНОВИК: требует юридической проверки -->` is emitted on each page).
+  Edit `content/legal/*.{lt,en}.tsx`, then bump `LEGAL_UPDATED`. Requisites come from admin →
+  Nustatymai → Įmonės rekvizitai; empty ones render as amber `[…]` placeholders (footer hides them).
+- Cookies: anything that sets non-essential cookies must wait for `useConsent()` (categories `maps`,
+  `analytics`). GA4 loads only with `NEXT_PUBLIC_GA_MEASUREMENT_ID` + consent; withdrawing deletes `_ga*`
+  and reloads. Changing categories → bump `CONSENT_VERSION` and update the cookie table in
+  `content/legal/cookies.*`. "Necessary only" and "Accept all" must stay equally prominent.
 
 ## Booking (phase 5)
 
@@ -338,5 +372,6 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - [x] 6 — Admin panel: login, dashboard, bookings (+ CSV, emails), fleet calendar + blocks, car
       editor (3 steps, autosave, photos, duplicate), categories, settings, users / my account
 - [—] 6b — 3D generation from photos — **dropped by the owner**
-- [ ] 7 — SEO, legal pages, cookie banner
+- [x] 7 — SEO (canonical / hreflang, OG cards, sitemap, robots, JSON-LD), legal pages LT/EN (drafts),
+      company requisites in admin, cookie banner (map + optional GA4 after consent)
 - [ ] 8 — Polish: Lighthouse, a11y, Playwright, README, final TODO

@@ -3,7 +3,8 @@ import { Logo } from "@/components/brand/Logo";
 import { TelegramIcon, WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { Link } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { mapsDirectionsUrl, site } from "@/lib/config/site";
+import { mapsDirectionsUrl } from "@/lib/config/site";
+import { CookieSettingsButton } from "@/components/consent/CookieBanner";
 import { getPublicSettings } from "@/lib/data/settings";
 import { formatOpeningHours } from "@/lib/format/hours";
 import { navItems } from "./nav-items";
@@ -15,7 +16,7 @@ export async function Footer() {
   const tn = await getTranslations("nav");
   const tc = await getTranslations("contact");
   const locale = await getLocale();
-  const { contacts, openingHours } = await getPublicSettings();
+  const { contacts, openingHours, company } = await getPublicSettings();
   const year = new Date().getFullYear();
 
   return (
@@ -113,6 +114,9 @@ export async function Footer() {
                 {t("cookies")}
               </Link>
             </li>
+            <li>
+              <CookieSettingsButton className={`${linkClass} text-left`} />
+            </li>
           </ul>
         </nav>
       </div>
@@ -120,16 +124,22 @@ export async function Footer() {
       {/* Extra bottom/right padding keeps the floating contact buttons off the text. */}
       <div className="container-site flex flex-col gap-3 border-t border-line pt-6 pb-24 text-xs text-muted sm:flex-row sm:items-center sm:justify-between md:pr-24 md:pb-8">
         <p>
-          © {year} {site.legal.companyName}. {t("rights")}
+          © {year} {company.legalName}. {t("rights")}
         </p>
-        <p className="flex flex-wrap gap-x-4 gap-y-1">
-          <span>
-            {t("companyCode")}: {site.legal.companyCode}
-          </span>
-          <span>
-            {t("vatCode")}: {site.legal.vatCode}
-          </span>
-        </p>
+        {(company.companyCode || company.vatCode) && (
+          <p className="flex flex-wrap gap-x-4 gap-y-1">
+            {company.companyCode && (
+              <span>
+                {t("companyCode")}: {company.companyCode}
+              </span>
+            )}
+            {company.vatCode && (
+              <span>
+                {t("vatCode")}: {company.vatCode}
+              </span>
+            )}
+          </p>
+        )}
       </div>
     </footer>
   );

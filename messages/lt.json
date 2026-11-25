@@ -2,11 +2,13 @@
   "metadata": {
     "title": "Baltic Nuoma — automobilių nuoma Klaipėdoje",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Įvairių klasių automobilių nuoma Klaipėdoje — kasdienai, kelionėms ir ypatingoms progoms. Aiškios kainos nuo 18 € per parą, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu."
+    "description": "Įvairių klasių automobilių nuoma Klaipėdoje — kasdienai, kelionėms ir ypatingoms progoms. Aiškios kainos, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu.",
+    "descriptionFrom": "Įvairių klasių automobilių nuoma Klaipėdoje — kasdienai, kelionėms ir ypatingoms progoms. Kainos nuo {price} € per parą, draudimas ir priežiūra įskaičiuoti. Rezervuokite internetu.",
+    "ogHeadline": "Automobilių nuoma Klaipėdoje",
+    "ogTagline": "Įvairių klasių automobiliai kasdienai, kelionėms ir ypatingoms progoms. Rezervuokite internetu."
   },
   "common": {
     "skipToContent": "Pereiti prie turinio",
-    "comingSoon": "Šis puslapis kuriamas. Netrukus čia bus visa informacija.",
     "backHome": "Grįžti į pradžią",
     "perDay": "parai",
     "perWeek": "savaitei",
@@ -57,7 +59,8 @@
     "cars": {
       "title": "Automobiliai",
       "description": "Pasirinkite automobilį pagal poreikį: kasdienai, kelionei ar ypatingai progai.",
-      "eyebrow": "Automobilių parkas"
+      "eyebrow": "Automobilių parkas",
+      "metaTitle": "Automobilių nuoma Klaipėdoje — automobiliai ir kainos"
     },
     "terms": {
       "title": "Nuomos sąlygos",
@@ -68,7 +71,8 @@
       "description": "Baltic Nuoma biuras Klaipėdoje, Birutės g. 21. Skambinkite, rašykite WhatsApp ar užsukite.",
       "eyebrow": "Kontaktai",
       "company": "Įmonė",
-      "registeredAddress": "Juridinis adresas"
+      "registeredAddress": "Juridinis adresas",
+      "metaTitle": "Kontaktai — automobilių nuoma Klaipėdoje"
     },
     "privacy": {
       "title": "Privatumo politika",
@@ -537,5 +541,39 @@
       "note": "Užklausa datų neužblokuoja: automobilis rezervuojamas tik ją patvirtinus. Kol nepatvirtinta, tas pačias datas gali prašyti ir kiti klientai.",
       "otherRequests": "{count, plural, one {Šioms datoms yra dar # užklausa.} few {Šioms datoms yra dar # užklausos.} other {Šioms datoms yra dar # užklausų.}}"
     }
+  },
+  "consent": {
+    "title": "Slapukai",
+    "text": "Būtini slapukai užtikrina svetainės veikimą. Google Maps žemėlapį įkelsime tik jums sutikus — jis naudoja trečiųjų šalių slapukus.",
+    "textAnalytics": "Būtini slapukai užtikrina svetainės veikimą. Jums sutikus įkelsime Google Maps žemėlapį ir Google Analytics lankomumo statistiką — jie naudoja trečiųjų šalių slapukus.",
+    "policy": "Slapukų politika",
+    "acceptAll": "Priimti visus",
+    "necessaryOnly": "Tik būtini",
+    "settings": "Nustatymai",
+    "save": "Išsaugoti pasirinkimą",
+    "close": "Uždaryti",
+    "alwaysOn": "visada įjungti",
+    "open": "Slapukų nustatymai",
+    "categories": {
+      "necessary": {
+        "title": "Būtini",
+        "text": "Kalbos pasirinkimas, jūsų slapukų pasirinkimas ir darbuotojų prisijungimas. Be jų svetainė neveiktų."
+      },
+      "maps": {
+        "title": "Žemėlapis",
+        "text": "Google Maps žemėlapis kontaktuose. Jį įkėlus, Google gali įrašyti savo slapukus."
+      },
+      "analytics": {
+        "title": "Analitika",
+        "text": "Google Analytics: apibendrinta lankomumo statistika, padedanti tobulinti svetainę."
+      }
+    },
+    "mapText": "Žemėlapį teikia Google. Jį įkėlus, Google gali įrašyti slapukus jūsų naršyklėje.",
+    "mapShow": "Rodyti žemėlapį",
+    "mapOpen": "Atidaryti Google Maps"
+  },
+  "legal": {
+    "toc": "Turinys",
+    "updated": "Atnaujinta {date}"
   }
 }

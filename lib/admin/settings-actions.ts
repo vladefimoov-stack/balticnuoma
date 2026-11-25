@@ -9,7 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin, requireStaff } from "./auth";
 import type { ActionResult } from "./booking-actions";
 
-const EDITABLE = ["pricing", "rental_rules", "contacts", "opening_hours", "notifications"] as const;
+const EDITABLE = ["pricing", "rental_rules", "contacts", "opening_hours", "notifications", "company"] as const;
 type EditableKey = (typeof EDITABLE)[number];
 
 const MESSAGES: Record<EditableKey, string> = {
@@ -18,6 +18,7 @@ const MESSAGES: Record<EditableKey, string> = {
   contacts: "Patikrinkite kontaktus: telefonas, WhatsApp nuoroda (https://…), el. paštas.",
   opening_hours: "Patikrinkite darbo laiką (formatas 09:00, bent viena diena).",
   notifications: "Neteisingas el. pašto adresas.",
+  company: "Patikrinkite rekvizitus (kodai iki 20 simbolių, teisingas el. paštas).",
 };
 
 /** Admin only. Every value is validated with the same zod contract the site reads it with. */

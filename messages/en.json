@@ -2,11 +2,13 @@
   "metadata": {
     "title": "Baltic Nuoma — car rental in Klaipėda",
     "titleTemplate": "%s | Baltic Nuoma",
-    "description": "Car rental of every class in Klaipėda — for everyday driving, trips and special occasions. Clear prices from €18 per day, insurance and maintenance included. Book online."
+    "description": "Car rental of every class in Klaipėda — for everyday driving, trips and special occasions. Clear prices, insurance and maintenance included. Book online.",
+    "descriptionFrom": "Car rental of every class in Klaipėda — for everyday driving, trips and special occasions. Prices from €{price} per day, insurance and maintenance included. Book online.",
+    "ogHeadline": "Car rental in Klaipėda",
+    "ogTagline": "Cars of every class for everyday driving, trips and special occasions. Book online."
   },
   "common": {
     "skipToContent": "Skip to content",
-    "comingSoon": "This page is being built. Full information is coming soon.",
     "backHome": "Back to home",
     "perDay": "per day",
     "perWeek": "per week",
@@ -57,7 +59,8 @@
     "cars": {
       "title": "Cars",
       "description": "Choose a car for your needs: everyday driving, a trip or a special occasion.",
-      "eyebrow": "Our fleet"
+      "eyebrow": "Our fleet",
+      "metaTitle": "Car rental in Klaipėda — cars and prices"
     },
     "terms": {
       "title": "Rental terms",
@@ -68,7 +71,8 @@
       "description": "Baltic Nuoma office in Klaipėda, Birutės g. 21. Call, message us on WhatsApp or drop by.",
       "eyebrow": "Contacts",
       "company": "Company",
-      "registeredAddress": "Registered address"
+      "registeredAddress": "Registered address",
+      "metaTitle": "Contacts — car rental in Klaipėda"
     },
     "privacy": {
       "title": "Privacy policy",
@@ -537,5 +541,39 @@
       "note": "A request does not hold the dates: the car is reserved only once you confirm it. Until then other customers may request the same dates.",
       "otherRequests": "{count, plural, one {There is # more request for these dates.} other {There are # more requests for these dates.}}"
     }
+  },
+  "consent": {
+    "title": "Cookies",
+    "text": "Necessary cookies keep the website working. We load the Google Maps map only with your consent — it uses third-party cookies.",
+    "textAnalytics": "Necessary cookies keep the website working. With your consent we load the Google Maps map and Google Analytics visitor statistics — they use third-party cookies.",
+    "policy": "Cookie policy",
+    "acceptAll": "Accept all",
+    "necessaryOnly": "Necessary only",
+    "settings": "Settings",
+    "save": "Save my choice",
+    "close": "Close",
+    "alwaysOn": "always on",
+    "open": "Cookie settings",
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "text": "Your language, your cookie choice and staff sign-in. The website can't work without them."
+      },
+      "maps": {
+        "title": "Map",
+        "text": "The Google Maps map on the contacts section. Once it loads, Google may set its own cookies."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "text": "Google Analytics: aggregated visitor statistics that help us improve the website."
+      }
+    },
+    "mapText": "The map is provided by Google. Once it loads, Google may set cookies in your browser.",
+    "mapShow": "Show map",
+    "mapOpen": "Open in Google Maps"
+  },
+  "legal": {
+    "toc": "Contents",
+    "updated": "Updated {date}"
   }
 }

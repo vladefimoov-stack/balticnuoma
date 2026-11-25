@@ -1,7 +1,10 @@
-import { createStubPage } from "@/lib/i18n/stub-page";
+import { createLegalPage } from "@/components/legal/LegalPage";
+import en from "@/content/legal/privacy.en";
+import lt from "@/content/legal/privacy.lt";
 
-// Phase 1 placeholder — replaced with real content in a later phase.
-const { generateMetadata, Page } = createStubPage("privacy");
+export const revalidate = 300;
+
+const { generateMetadata, Page } = createLegalPage("privacy", "/privatumo-politika", { lt, en });
 
 export { generateMetadata };
 export default Page;

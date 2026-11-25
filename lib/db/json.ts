@@ -216,6 +216,16 @@ export const openingHoursSchema = z.array(
 
 export const notificationsSchema = z.object({ booking_email: z.email().nullable() });
 
+/** Legal requisites shown in the footer and the legal pages (empty = not filled in yet). */
+export const companySchema = z.object({
+  legal_name: z.string().trim().max(120),
+  company_code: z.string().trim().max(20),
+  vat_code: z.string().trim().max(20),
+  registered_address: z.string().trim().max(200),
+  privacy_email: z.email().or(z.literal("")),
+});
+export type Company = z.infer<typeof companySchema>;
+
 export const threeDSettingsSchema = z.object({
   provider: z.enum(THREE_D_PROVIDERS),
   /** Provider model id or alias ("latest"); never hard-coded in code. */
@@ -233,6 +243,7 @@ export const settingsSchemas = {
   contacts: contactsSchema,
   opening_hours: openingHoursSchema,
   notifications: notificationsSchema,
+  company: companySchema,
   three_d: threeDSettingsSchema,
 } as const;
 export type SettingKey = keyof typeof settingsSchemas;

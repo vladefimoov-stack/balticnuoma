@@ -15,6 +15,10 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Link } from "@/i18n/navigation";
 import { getCarBySlug, getPublishedCars, pick } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema, carSchema } from "@/lib/seo/schema";
+import { localizedPath } from "@/lib/seo/urls";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -42,11 +46,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "carPage" });
   const title = pick(car.title, locale);
   const text = plainText(pick(car.description, locale));
-  return {
+  return pageMetadata({
+    locale,
+    href: { pathname: "/automobiliai/[slug]", params: { slug } },
     title: t("metaTitle", { title }),
     description: text ? `${text.slice(0, 150)}${text.length > 150 ? "…" : ""}` : t("metaDescription", { title }),
-    openGraph: car.cover ? { images: [{ url: car.cover.url }] } : undefined,
-  };
+    image: { url: `/api/og/${locale}/cars/${slug}`, alt: title },
+  });
 }
 
 export default async function CarPage({ params }: Params) {
@@ -63,10 +69,21 @@ export default async function CarPage({ params }: Params) {
   const description = pick(car.description, locale);
   const subtitle = [car.make, car.model, car.year].filter(Boolean).join(" · ");
   const others = cars.filter((c) => c.id !== car.id).slice(0, 3);
+  const carPath = localizedPath({ pathname: "/automobiliai/[slug]", params: { slug } }, locale);
   const { contacts } = settings;
 
   return (
     <>
+      <JsonLd
+        data={[
+          carSchema(car, locale, plainText(description).slice(0, 500)),
+          breadcrumbSchema([
+            { name: tn("home"), path: localizedPath("/", locale) },
+            { name: tn("cars"), path: localizedPath("/automobiliai", locale) },
+            { name: title, path: carPath },
+          ]),
+        ]}
+      />
       <div className="pt-[calc(var(--nav-height)+2.5rem)] bg-aurora">
         <div className="container-site">
           <nav aria-label={t("breadcrumb")}>

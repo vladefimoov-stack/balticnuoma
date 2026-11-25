@@ -25,13 +25,6 @@ export const site = {
   /** Fallback opening hours (I–V 9:00–18:00). Editable later in admin settings. */
   openingHours: [{ days: ["Mo", "Tu", "We", "Th", "Fr"], opens: "09:00", closes: "18:00" }],
   timeZone: "Europe/Vilnius",
-  /** Company requisites — placeholders until the owner provides them. */
-  legal: {
-    companyName: "Baltic Nuoma",
-    companyCode: "[įmonės kodas]",
-    vatCode: "[PVM mokėtojo kodas]",
-    registeredAddress: "[juridinis adresas]",
-  },
 } as const;
 
 export const telegramUrl = site.telegramUsername ? `https://t.me/${site.telegramUsername}` : null;

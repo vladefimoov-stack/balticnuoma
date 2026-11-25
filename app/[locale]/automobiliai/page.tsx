@@ -6,6 +6,10 @@ import { Catalog } from "@/components/cars/Catalog";
 import { PageHero } from "@/components/layout/PageHero";
 import { getCategories, getPublishedCars, pick } from "@/lib/data/cars";
 import { vilniusToday } from "@/lib/dates";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { localizedPath } from "@/lib/seo/urls";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema } from "@/lib/seo/schema";
 
 export const revalidate = 300;
 
@@ -14,13 +18,14 @@ type Params = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.cars" });
-  return { title: t("title"), description: t("description") };
+  return pageMetadata({ locale, href: "/automobiliai", title: t("metaTitle"), description: t("description") });
 }
 
 export default async function CarsPage({ params }: Params) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.cars");
+  const tn = await getTranslations("nav");
   const [cars, categories] = await Promise.all([getPublishedCars(), getCategories()]);
 
   // Cards render on the server; the client Catalog only filters / reorders them.
@@ -30,6 +35,12 @@ export default async function CarsPage({ params }: Params) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: tn("home"), path: localizedPath("/", locale) },
+          { name: t("title"), path: localizedPath("/automobiliai", locale) },
+        ])}
+      />
       <PageHero eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
       <div className="container-site py-12 md:py-16">
         <Catalog

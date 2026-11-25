@@ -31,6 +31,13 @@ export default async function SettingsPage() {
     }),
     opening_hours: read("opening_hours", DEFAULT_OPENING_HOURS),
     notifications: read("notifications", { booking_email: null }),
+    company: read("company", {
+      legal_name: "",
+      company_code: "",
+      vat_code: "",
+      registered_address: "",
+      privacy_email: "",
+    }),
   } as SettingsValues;
 
   return (

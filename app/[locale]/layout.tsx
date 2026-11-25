@@ -10,9 +10,20 @@ import { Providers } from "@/components/providers/Providers";
 import { routing } from "@/i18n/routing";
 import { site } from "@/lib/config/site";
 import { fontVariables } from "@/lib/fonts";
+import { OG_LOCALE, OG_SIZE, siteOgImage } from "@/lib/seo/metadata";
 
 /** Only these message namespaces are shipped to the browser (keeps JS small). */
-const CLIENT_NAMESPACES = ["nav", "contact", "common", "error", "catalog", "gallery", "booking", "tariffs"] as const;
+const CLIENT_NAMESPACES = [
+  "nav",
+  "contact",
+  "common",
+  "error",
+  "catalog",
+  "gallery",
+  "booking",
+  "tariffs",
+  "consent",
+] as const;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -24,26 +35,28 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({
-    locale: hasLocale(routing.locales, locale) ? locale : "lt",
-    namespace: "metadata",
-  });
+  const { locale: raw } = await params;
+  const locale = hasLocale(routing.locales, raw) ? raw : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  const verification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
 
   return {
     metadataBase: new URL(site.url),
     title: { default: t("title"), template: t("titleTemplate") },
     description: t("description"),
     applicationName: site.name,
+    // Defaults for pages without their own metadata (404 etc.); public pages use pageMetadata().
     openGraph: {
       type: "website",
       siteName: site.name,
-      locale: locale === "en" ? "en_GB" : "lt_LT",
+      locale: OG_LOCALE[locale],
       title: t("title"),
       description: t("description"),
+      images: [{ url: siteOgImage(locale), ...OG_SIZE, alt: t("title") }],
     },
     twitter: { card: "summary_large_image" },
     formatDetection: { telephone: false },
+    ...(verification && { verification: { google: verification } }),
   };
 }
 

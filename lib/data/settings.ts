@@ -1,6 +1,7 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 import {
+  companySchema,
   contactsSchema,
   openingHoursSchema,
   pricingSchema,
@@ -20,11 +21,29 @@ import {
   type OpeningHours,
 } from "./defaults";
 
+/** Company requisites; `null` fields are not filled in yet (admin → Nustatymai → Įmonės rekvizitai). */
+export type CompanyInfo = {
+  legalName: string;
+  companyCode: string | null;
+  vatCode: string | null;
+  registeredAddress: string | null;
+  privacyEmail: string | null;
+};
+
 export type PublicSettings = {
   pricing: Pricing;
   rentalRules: RentalRules;
   contacts: Contacts;
   openingHours: OpeningHours;
+  company: CompanyInfo;
+};
+
+const DEFAULT_COMPANY: CompanyInfo = {
+  legalName: "Baltic Nuoma",
+  companyCode: null,
+  vatCode: null,
+  registeredAddress: null,
+  privacyEmail: null,
 };
 
 const FALLBACK: PublicSettings = {
@@ -32,6 +51,7 @@ const FALLBACK: PublicSettings = {
   rentalRules: DEFAULT_RENTAL_RULES,
   contacts: DEFAULT_CONTACTS,
   openingHours: DEFAULT_OPENING_HOURS,
+  company: DEFAULT_COMPANY,
 };
 
 function toE164(phone: string) {
@@ -45,7 +65,7 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
     const { data, error } = await createPublicClient()
       .from("settings")
       .select("key, value")
-      .in("key", ["pricing", "rental_rules", "contacts", "opening_hours"]);
+      .in("key", ["pricing", "rental_rules", "contacts", "opening_hours", "company"]);
     if (error) throw error;
 
     const byKey = new Map(data.map((row) => [row.key, row.value]));
@@ -53,6 +73,8 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
     const rules = rentalRulesSchema.safeParse(byKey.get("rental_rules"));
     const contacts = contactsSchema.safeParse(byKey.get("contacts"));
     const hours = openingHoursSchema.safeParse(byKey.get("opening_hours"));
+    const company = companySchema.safeParse(byKey.get("company"));
+    const co = company.success ? company.data : null;
 
     const c = contacts.success ? contacts.data : null;
     const telegram = c?.telegram_username?.replace(/^@/, "") ?? "";
@@ -61,6 +83,13 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
       pricing: pricing.success ? pricing.data : DEFAULT_PRICING,
       rentalRules: rules.success ? rules.data : DEFAULT_RENTAL_RULES,
       openingHours: hours.success && hours.data.length > 0 ? hours.data : DEFAULT_OPENING_HOURS,
+      company: {
+        legalName: co?.legal_name || DEFAULT_COMPANY.legalName,
+        companyCode: co?.company_code || null,
+        vatCode: co?.vat_code || null,
+        registeredAddress: co?.registered_address || null,
+        privacyEmail: co?.privacy_email || null,
+      },
       contacts: c
         ? {
             phone: c.phone || DEFAULT_CONTACTS.phone,

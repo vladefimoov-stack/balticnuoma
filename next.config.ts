@@ -32,6 +32,8 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: supabaseOrigin ? [{ ...supabaseOrigin, pathname: "/storage/v1/object/public/**" }] : [],
   },
+  // OG cards read their fonts from disk at runtime (lib/seo/og-image.tsx).
+  outputFileTracingIncludes: { "/api/og/**": ["./lib/seo/fonts/*.woff"] },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },

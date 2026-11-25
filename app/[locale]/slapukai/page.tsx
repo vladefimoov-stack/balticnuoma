@@ -1,7 +1,10 @@
-import { createStubPage } from "@/lib/i18n/stub-page";
+import { createLegalPage } from "@/components/legal/LegalPage";
+import en from "@/content/legal/cookies.en";
+import lt from "@/content/legal/cookies.lt";
 
-// Phase 1 placeholder — replaced with real content in a later phase.
-const { generateMetadata, Page } = createStubPage("cookies");
+export const revalidate = 300;
+
+const { generateMetadata, Page } = createLegalPage("cookies", "/slapukai", { lt, en });
 
 export { generateMetadata };
 export default Page;

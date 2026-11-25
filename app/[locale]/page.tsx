@@ -1,5 +1,6 @@
+import type { Metadata } from "next";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Advantages } from "@/components/sections/Advantages";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Faq } from "@/components/sections/Faq";
@@ -9,10 +10,34 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Requirements } from "@/components/sections/Requirements";
 import { getCategories, getPublishedCars } from "@/lib/data/cars";
 import { getPublicSettings } from "@/lib/data/settings";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { businessSchema } from "@/lib/seo/schema";
 
 export const revalidate = 300;
 
-export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
+type Params = { params: Promise<{ locale: Locale }> };
+
+/** Cheapest "from" day price across published cars (null when nothing is published / priced). */
+function cheapest(cars: Array<{ fromPerDay: number | null }>) {
+  const prices = cars.map((c) => c.fromPerDay).filter((p): p is number => p !== null);
+  return prices.length > 0 ? Math.min(...prices) : null;
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { locale } = await params;
+  const [t, cars] = await Promise.all([getTranslations({ locale, namespace: "metadata" }), getPublishedCars()]);
+  const price = cheapest(cars);
+  return pageMetadata({
+    locale,
+    href: "/",
+    title: t("title"),
+    description: price !== null ? t("descriptionFrom", { price }) : t("description"),
+    absoluteTitle: true,
+  });
+}
+
+export default async function HomePage({ params }: Params) {
   const { locale } = await params;
   setRequestLocale(locale);
 
@@ -24,6 +49,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
   return (
     <>
+      <JsonLd data={businessSchema(settings, locale, cheapest(cars))} />
       <Hero />
       <Advantages />
       <HowItWorks />

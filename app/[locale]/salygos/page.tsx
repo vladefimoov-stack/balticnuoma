@@ -1,7 +1,10 @@
-import { createStubPage } from "@/lib/i18n/stub-page";
+import { createLegalPage } from "@/components/legal/LegalPage";
+import en from "@/content/legal/terms.en";
+import lt from "@/content/legal/terms.lt";
 
-// Phase 1 placeholder — replaced with real content in a later phase.
-const { generateMetadata, Page } = createStubPage("terms");
+export const revalidate = 300;
+
+const { generateMetadata, Page } = createLegalPage("terms", "/salygos", { lt, en });
 
 export { generateMetadata };
 export default Page;
