@@ -9,6 +9,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Providers } from "@/components/providers/Providers";
 import { routing } from "@/i18n/routing";
 import { site } from "@/lib/config/site";
+import { CONSENT_COOKIE } from "@/lib/consent";
 import { fontVariables } from "@/lib/fonts";
 import { OG_LOCALE, OG_SIZE, siteOgImage } from "@/lib/seo/metadata";
 
@@ -24,6 +25,8 @@ const CLIENT_NAMESPACES = [
   "tariffs",
   "consent",
 ] as const;
+
+const CONSENT_PREPAINT = `try{if(document.cookie.indexOf("${CONSENT_COOKIE}=")>-1)document.documentElement.setAttribute("data-consent-set","")}catch(e){}`;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -76,7 +79,12 @@ export default async function LocaleLayout({
   const clientMessages = Object.fromEntries(CLIENT_NAMESPACES.map((ns) => [ns, messages[ns]]));
 
   return (
-    <html lang={locale} className={fontVariables}>
+    // suppressHydrationWarning: the consent script below may add data-consent-set before hydration.
+    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* Hide the server-rendered cookie banner before the first paint if a choice was already made. */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_PREPAINT }} />
+      </head>
       <body>
         <NextIntlClientProvider messages={clientMessages}>
           <Providers>

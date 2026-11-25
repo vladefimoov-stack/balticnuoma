@@ -12,6 +12,11 @@ import { useConsent } from "./ConsentProvider";
  * Cookie banner: shown until the visitor decides, and again from "Slapukų nustatymai".
  * "Necessary only" and "Accept all" look the same — refusing must be as easy as accepting.
  * Non-modal: the page stays usable; nothing optional loads before a choice.
+ *
+ * It is part of the server HTML (so it paints with the page instead of after hydration — on
+ * phones it's the LCP element for first-time visitors). For visitors who already chose, the
+ * inline script in [locale]/layout.tsx marks <html data-consent-set> before the first paint and
+ * CSS hides it; after hydration React removes it.
  */
 export function CookieBanner() {
   const t = useTranslations("consent");
@@ -38,7 +43,7 @@ export function CookieBanner() {
     return () => window.removeEventListener("keydown", onKey);
   }, [settingsOpen, consent, closeSettings]);
 
-  if (consent === undefined || (consent !== null && !settingsOpen)) return null;
+  if (consent !== undefined && consent !== null && !settingsOpen) return null;
   const detailed = expanded || settingsOpen;
 
   type Category = {
@@ -59,6 +64,8 @@ export function CookieBanner() {
     <section
       ref={ref}
       tabIndex={-1}
+      data-consent-banner
+      data-open={settingsOpen || undefined}
       role="dialog"
       aria-modal="false"
       aria-labelledby={`${id}-title`}

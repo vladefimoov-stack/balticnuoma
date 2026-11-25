@@ -70,6 +70,7 @@ const cookies: LegalDocument = (ctx) => {
             <strong>Kiti slapukai</strong> įrašomi tik jums sutikus.
           </p>
           <CookieTable
+            label="Naudojamų slapukų lentelė"
             head={{
               name: "Slapukas",
               provider: "Teikėjas",

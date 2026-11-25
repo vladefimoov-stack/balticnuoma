@@ -1,6 +1,15 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { CONSENT_COOKIE, CONSENT_MAX_AGE_DAYS, parseConsent, serializeConsent, type Consent } from "@/lib/consent";
 
 type Choice = Pick<Consent, "maps" | "analytics">;
@@ -44,6 +53,12 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   const raw = useSyncExternalStore(subscribe, readCookie, () => null);
   const consent = useMemo(() => (raw === null ? undefined : parseConsent(raw)), [raw]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // The pre-paint script hides the banner whenever a bn_consent cookie exists; if that cookie
+  // turns out to be unusable (old version), show the banner again.
+  useEffect(() => {
+    if (consent === null) document.documentElement.removeAttribute("data-consent-set");
+  }, [consent]);
 
   const save = useCallback(
     (choice: Choice) => {

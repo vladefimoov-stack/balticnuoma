@@ -70,6 +70,7 @@ const cookies: LegalDocument = (ctx) => {
             <strong>Other cookies</strong> are set only with your consent.
           </p>
           <CookieTable
+            label="Table of cookies we use"
             head={{
               name: "Cookie",
               provider: "Provider",

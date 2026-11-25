@@ -365,7 +365,8 @@
     "reset": "Išvalyti filtrus",
     "emptyTitle": "Automobilių nerasta",
     "emptyText": "Pakeiskite datas ar filtrus arba susisiekite — padėsime rasti sprendimą.",
-    "emptyFleet": "Automobilių sąrašas netrukus bus papildytas."
+    "emptyFleet": "Automobilių sąrašas netrukus bus papildytas.",
+    "results": "Automobilių sąrašas"
   },
   "carPage": {
     "breadcrumb": "Naršymo kelias",

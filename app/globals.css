@@ -297,3 +297,8 @@
     color: var(--color-amber-soft);
   }
 }
+
+/* Cookie banner: server-rendered, hidden before paint once a choice exists (see CookieBanner). */
+html[data-consent-set] [data-consent-banner]:not([data-open]) {
+  display: none;
+}

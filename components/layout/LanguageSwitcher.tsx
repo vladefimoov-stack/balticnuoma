@@ -38,13 +38,14 @@ export function LanguageSwitcher({ className, onNavigate }: { className?: string
             hrefLang={l}
             onClick={onNavigate}
             aria-current={active ? "true" : undefined}
-            aria-label={t("switchTo", { language: languageNames[l] })}
             className={cn(
               "rounded-pill px-2.5 py-1.5 uppercase transition-colors duration-300",
               active ? "bg-white/[0.08] text-fg" : "text-muted hover:text-fg",
             )}
           >
+            {/* Visible code + hidden hint: the accessible name must contain the visible text (WCAG 2.5.3). */}
             {l}
+            <span className="sr-only"> — {t("switchTo", { language: languageNames[l] })}</span>
           </Link>
         );
       })}

@@ -149,7 +149,7 @@ export function Catalog({ cars, categories, cards, today }: Props) {
                   onChange={() => update({ category: c.slug })}
                   className="sr-only"
                 />
-                {c.name} <span className="opacity-70">({c.count})</span>
+                {c.name} <span className="tabular-nums">({c.count})</span>
               </label>
             ))}
           </div>
@@ -246,6 +246,7 @@ export function Catalog({ cars, categories, cards, today }: Props) {
         )}
       </div>
 
+      <h2 className="sr-only">{t("results")}</h2>
       {visible.length > 0 ? (
         <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {visible.map((car) => (

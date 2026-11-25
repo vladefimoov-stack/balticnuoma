@@ -32,10 +32,16 @@ export function Req({ value }: { value: string }) {
 export type CookieRow = { name: string; provider: string; purpose: string; duration: string; category: string };
 
 /** Cookie inventory table (scrolls sideways on narrow screens instead of squashing). */
-export function CookieTable({ head, rows }: { head: CookieRow; rows: CookieRow[] }) {
+export function CookieTable({ label, head, rows }: { label: string; head: CookieRow; rows: CookieRow[] }) {
   const cols = ["name", "provider", "purpose", "duration", "category"] as const;
   return (
-    <div className="legal-table mt-4 overflow-x-auto rounded-card border border-line">
+    // Scrolls sideways on phones, so it must be reachable from the keyboard (focusable, named region).
+    <div
+      role="region"
+      aria-label={label}
+      tabIndex={0}
+      className="legal-table mt-4 overflow-x-auto rounded-card border border-line"
+    >
       <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
         <thead className="bg-surface text-xs tracking-wide text-fg uppercase">
           <tr>

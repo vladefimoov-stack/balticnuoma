@@ -365,7 +365,8 @@
     "reset": "Clear filters",
     "emptyTitle": "No cars found",
     "emptyText": "Try other dates or filters, or contact us — we'll find a solution.",
-    "emptyFleet": "The fleet list will be updated soon."
+    "emptyFleet": "The fleet list will be updated soon.",
+    "results": "Car list"
   },
   "carPage": {
     "breadcrumb": "Breadcrumb",

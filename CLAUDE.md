@@ -34,7 +34,7 @@ the owner changed it (positioning above, static buttons). Owner-supplied items a
 | Backend   | Supabase: Postgres + RLS, Auth, Storage, Realtime (phase 2)                      |
 | Email     | Resend + `react-email` (`lib/email/*`, sent after the response via `after()`)    |
 | Forms     | `react-hook-form` + `zod` (shared schema client ↔ server action)                 |
-| Tests     | `node:test` via `tsx` (unit), pgTAP (DB), Playwright smoke tests (phase 8)       |
+| Tests     | `node:test` via `tsx` (unit), pgTAP (DB), Playwright + axe (e2e, a11y)           |
 
 ## Commands
 
@@ -42,7 +42,9 @@ the owner changed it (positioning above, static buttons). Owner-supplied items a
 npm run dev          # dev server (Turbopack) on :3000
 npm run build        # production build (webpack)
 npm run check        # typecheck + lint + i18n key parity — run before every commit
-npm run test:unit    # pricing / availability / format unit tests (tests/unit, node:test + tsx)
+npm run test:unit    # pricing / availability / format / consent unit tests (tests/unit, node:test + tsx)
+npm run test:e2e     # Playwright smoke + axe on the production build (:3100); `npm run build` first.
+                     # E2E_BASE_URL=https://www.balticnuoma.lt → read-only run against a deployment
 npm run format       # prettier (with tailwind class sorting)
 npm run i18n:check   # messages/en.json must have exactly the keys of lt.json
 
@@ -152,6 +154,8 @@ supabase/
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
 scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs
 tests/unit/             node:test unit tests (run with tsx; `@/` paths work)
+tests/e2e/              Playwright specs: public, consent, booking (local only — creates a booking), a11y (axe)
+playwright.config.ts    desktop + Pixel 7 projects, webServer `next start -p 3100` (rate limit raised)
 docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md, ADMIN_SETUP.md, SEO_SETUP.md)
 middleware.ts           /admin → Supabase session refresh + login gate (X-Robots-Tag noindex);
                         everything else → next-intl (skips /api, static files)
@@ -236,6 +240,10 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
 - Legal texts are drafts (`<!-- ЧЕРНОВИК: требует юридической проверки -->` is emitted on each page).
   Edit `content/legal/*.{lt,en}.tsx`, then bump `LEGAL_UPDATED`. Requisites come from admin →
   Nustatymai → Įmonės rekvizitai; empty ones render as amber `[…]` placeholders (footer hides them).
+- The cookie banner is server-rendered (on phones it's the LCP element for first-time visitors — a
+  client-only banner pushed LCP to ~4 s). An inline pre-paint script in `[locale]/layout.tsx` sets
+  `<html data-consent-set>` when `bn_consent` exists and CSS hides the banner; `<html>` therefore has
+  `suppressHydrationWarning`.
 - Cookies: anything that sets non-essential cookies must wait for `useConsent()` (categories `maps`,
   `analytics`). GA4 loads only with `NEXT_PUBLIC_GA_MEASUREMENT_ID` + consent; withdrawing deletes `_ga*`
   and reloads. Changing categories → bump `CONSENT_VERSION` and update the cookie table in
@@ -249,6 +257,9 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
   dates (`checkSelectionTiming`) → rate limit → car terms loaded uncached with the admin client →
   `quoteSelection` → licence years → `isPeriodTaken` (confirmed / blocks only → `period_unavailable`)
   → same request already sent (`findDuplicateRequest`) → returns its number → insert `pending`.
+- zod reaches the browser only when the form is used: `BookingWidget` validates through a lazy resolver
+  (`import("@/lib/booking/schema")`, prefetched on "Tęsti"). Never import runtime values from
+  `lib/booking/schema` (or `lib/db/json`) statically in public client components — types only.
 - Success is shown in a popup (`SuccessDialog`, native modal `<dialog>`); the widget goes back to the
   calendar. The manager email says how many other pending requests overlap the dates.
 - Day rentals select **first..last day inclusive**; the period is `[first 00:00, last+1 00:00)`
@@ -357,7 +368,10 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - Secrets (service role, API keys) are only read in server code (`server-only`).
 - Prettier (120 cols) + `prettier-plugin-tailwindcss` sorts classes (also inside `cn()`).
 - Keep accessibility: semantic landmarks, visible focus (`:focus-visible` amber ring),
-  `aria-*` on icon-only buttons, `alt` on every image, WCAG AA contrast.
+  `aria-*` on icon-only buttons, `alt` on every image, WCAG AA contrast (no `opacity-*` on muted
+  text), no skipped heading levels, an accessible name that contains the visible text (no
+  `aria-label` that replaces short visible labels — add `sr-only` text instead), keyboard-reachable
+  scroll containers. `npm run test:e2e` runs axe on the main pages.
 
 ## Phase status
 
@@ -374,4 +388,5 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
 - [—] 6b — 3D generation from photos — **dropped by the owner**
 - [x] 7 — SEO (canonical / hreflang, OG cards, sitemap, robots, JSON-LD), legal pages LT/EN (drafts),
       company requisites in admin, cookie banner (map + optional GA4 after consent)
-- [ ] 8 — Polish: Lighthouse, a11y, Playwright, README, final TODO
+- [x] 8 — Polish: Lighthouse (mobile 90–98, LCP 1.1 s), axe a11y fixes, Playwright e2e (desktop +
+      phone, incl. a booking request), README, final TODO

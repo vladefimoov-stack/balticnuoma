@@ -1,6 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader2, Phone, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -13,7 +12,7 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
@@ -26,14 +25,7 @@ import {
   type Interval,
 } from "@/lib/booking/availability";
 import { formatPrice, formatSelection } from "@/lib/booking/format";
-import {
-  customerSchema,
-  type BookingErrorCode,
-  type Customer,
-  type CustomerField,
-  type CustomerInput,
-  type Selection,
-} from "@/lib/booking/schema";
+import type { BookingErrorCode, Customer, CustomerField, CustomerInput, Selection } from "@/lib/booking/schema";
 import { BOOKING_HORIZON_DAYS, quoteSelection } from "@/lib/booking/selection";
 import { addDaysIso, vilniusToday } from "@/lib/dates";
 import type { Pricing, RentalRules } from "@/lib/db/json";
@@ -62,6 +54,14 @@ const TARIFF_KEY = { hourly: "hourly", daily: "daily", weekly: "weekly", long_te
 
 // "Today" only exists in the browser: the page is static (ISR) and may be older than today.
 const noop = () => () => {};
+/** zod + the customer schema (~90 KB) aren't needed until the form is used — load them then. */
+const loadValidation = () => Promise.all([import("@hookform/resolvers/zod"), import("@/lib/booking/schema")]);
+
+const customerResolver: Resolver<CustomerInput, unknown, Customer> = async (values, context, options) => {
+  const [{ zodResolver }, { customerSchema }] = await loadValidation();
+  return zodResolver(customerSchema)(values, context, options);
+};
+
 function useVilniusToday() {
   return useSyncExternalStore(
     noop,
@@ -189,6 +189,7 @@ export function BookingWidget({ locale, car, contacts }: Props) {
   }
 
   function goToForm() {
+    void loadValidation(); // warm up while the visitor reads the form
     setStep("form");
     setProblem(null);
     requestAnimationFrame(() => {
@@ -202,7 +203,7 @@ export function BookingWidget({ locale, car, contacts }: Props) {
   const licenseYears = Array.from({ length: 60 }, (_, i) => currentYear - car.rules.min_license_years - i);
 
   const form = useForm<CustomerInput, unknown, Customer>({
-    resolver: zodResolver(customerSchema),
+    resolver: customerResolver,
     mode: "onTouched",
     defaultValues: {
       firstName: "",
