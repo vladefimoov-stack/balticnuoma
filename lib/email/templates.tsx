@@ -202,6 +202,7 @@ export function CustomerBookingEmail(
 /** Manager: new booking request with the customer's details and a link to the admin. */
 export function ManagerBookingEmail(
   props: Shared & {
+    note: string;
     customerTitle: string;
     customer: SummaryRow[];
     cta: { label: string; href: string };
@@ -216,6 +217,7 @@ export function ManagerBookingEmail(
     >
       <Text style={s.h1}>{props.title}</Text>
       <Summary rows={props.summary} />
+      <Text style={s.note}>{props.note}</Text>
       <Text style={s.sectionTitle}>{props.customerTitle}</Text>
       <Summary rows={props.customer} />
       <Button href={props.cta.href} style={s.button}>

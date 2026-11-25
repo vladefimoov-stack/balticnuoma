@@ -19,8 +19,9 @@
       добавить ключи в Vercel (пошагово — `docs/SUPABASE_SETUP.md`).
 - [ ] **Resend** — аккаунт, подтверждение домена balticnuoma.lt (DNS-записи) → `RESEND_API_KEY`, `EMAIL_FROM`
       (пошагово — `docs/EMAIL_SETUP.md`). Без этого заявки сохраняются, но писем нет.
-- [ ] **Миграция `20261124150000_booking_rate_limit.sql`** — выполнить в SQL Editor (защита формы
-      бронирования от спама; таблица «Обновления базы данных» в `docs/SUPABASE_SETUP.md`).
+- [ ] **Миграции** — выполнить в SQL Editor по очереди (таблица «Обновления базы данных» в
+      `docs/SUPABASE_SETUP.md`): `20261124150000_booking_rate_limit.sql` (лимит заявок),
+      `20261125100000_requests_do_not_block.sql` (заявки не занимают даты до подтверждения).
 - [ ] **Первый админ и менеджер** — email-адреса двух пользователей (`SEED_ADMIN_EMAIL`, …).
 - [ ] **Аналитика** — нужна ли (GA4 / Plausible / Vercel Analytics)? Загружается только после согласия на cookies.
 

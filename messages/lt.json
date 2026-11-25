@@ -443,7 +443,7 @@
       "honeypot": "Nepildykite šio laukelio",
       "submit": "Siųsti užklausą",
       "submitting": "Siunčiama…",
-      "note": "Tai užklausa, ne mokėjimas. Rezervacija įsigalioja, kai ją patvirtina vadybininkas."
+      "note": "Tai užklausa, o ne mokėjimas ar rezervacija: automobilis jums rezervuojamas, kai vadybininkas patvirtina užklausą."
     },
     "errors": {
       "required": "Užpildykite šį laukelį.",
@@ -474,9 +474,9 @@
     "success": {
       "title": "Užklausa išsiųsta!",
       "number": "Užklausos numeris",
-      "text": "Patvirtinimą išsiuntėme adresu {email}. Vadybininkas netrukus susisieks su jumis.",
-      "again": "Nauja užklausa",
-      "textNoEmail": "Vadybininkas netrukus susisieks su jumis."
+      "next": "Vadybininkas patikrins užimtumą ir netrukus susisieks su jumis. Automobilis jums rezervuojamas tik patvirtinus užklausą.",
+      "emailCopy": "Užklausos kopiją išsiuntėme adresu {email}.",
+      "close": "Gerai"
     },
     "contactAlt": "Norite greičiau? Parašykite arba paskambinkite:"
   },
@@ -501,7 +501,7 @@
       "title": "Užklausa gauta",
       "greeting": "Sveiki, {name}!",
       "text": "Gavome jūsų užklausą išsinuomoti {car}. Vadybininkas patikrins informaciją ir netrukus susisieks su jumis.",
-      "note": "Tai dar ne patvirtinimas — rezervacija įsigalioja, kai ją patvirtina vadybininkas."
+      "note": "Tai dar ne rezervacija: automobilis jums rezervuojamas tik vadybininkui patvirtinus užklausą."
     },
     "confirmed": {
       "subject": "Rezervacija patvirtinta — {number}",
@@ -532,7 +532,9 @@
       "languageLt": "lietuvių",
       "languageEn": "anglų",
       "cta": "Atidaryti administravime",
-      "footer": "Automatinis pranešimas iš {site}."
+      "footer": "Automatinis pranešimas iš {site}.",
+      "note": "Užklausa datų neužblokuoja: automobilis rezervuojamas tik ją patvirtinus. Kol nepatvirtinta, tas pačias datas gali prašyti ir kiti klientai.",
+      "otherRequests": "{count, plural, one {Šioms datoms yra dar # užklausa.} few {Šioms datoms yra dar # užklausos.} other {Šioms datoms yra dar # užklausų.}}"
     }
   }
 }

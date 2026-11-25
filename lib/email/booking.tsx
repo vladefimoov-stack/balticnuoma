@@ -34,6 +34,8 @@ export type BookingEmailInput = {
     licenseYear: number;
     comment: string | null;
   };
+  /** Other pending requests for overlapping dates (manager email only). */
+  otherRequests?: number;
 };
 
 function translator(locale: Locale) {
@@ -138,6 +140,10 @@ export async function sendBookingRequestEmails(input: BookingEmailInput, notifyT
           total: formatPrice(input.quote.total, "lt"),
         })}
         title={t("emails.manager.title")}
+        note={[
+          t("emails.manager.note"),
+          ...(input.otherRequests ? [t("emails.manager.otherRequests", { count: input.otherRequests })] : []),
+        ].join(" ")}
         customerTitle={t("emails.manager.customer")}
         customer={[
           { label: t("emails.manager.name"), value: name },

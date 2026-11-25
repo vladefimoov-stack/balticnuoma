@@ -443,7 +443,7 @@
       "honeypot": "Leave this field empty",
       "submit": "Send request",
       "submitting": "Sending…",
-      "note": "This is a request, not a payment. The booking is valid once a manager confirms it."
+      "note": "This is a request, not a payment or a booking: the car is reserved for you once a manager confirms the request."
     },
     "errors": {
       "required": "Please fill in this field.",
@@ -474,9 +474,9 @@
     "success": {
       "title": "Request sent!",
       "number": "Request number",
-      "text": "We have sent a confirmation to {email}. A manager will contact you shortly.",
-      "again": "New request",
-      "textNoEmail": "A manager will contact you shortly."
+      "next": "A manager will check availability and contact you shortly. The car is reserved for you only once the request is confirmed.",
+      "emailCopy": "We have sent a copy of your request to {email}.",
+      "close": "OK"
     },
     "contactAlt": "In a hurry? Message or call us:"
   },
@@ -501,7 +501,7 @@
       "title": "Request received",
       "greeting": "Hello {name},",
       "text": "We have received your request to rent the {car}. A manager will check the details and contact you shortly.",
-      "note": "This is not a confirmation yet — the booking is valid once a manager confirms it."
+      "note": "This is not a booking yet: the car is reserved for you only once a manager confirms your request."
     },
     "confirmed": {
       "subject": "Booking confirmed — {number}",
@@ -532,7 +532,9 @@
       "languageLt": "Lithuanian",
       "languageEn": "English",
       "cta": "Open in admin",
-      "footer": "Automatic notification from {site}."
+      "footer": "Automatic notification from {site}.",
+      "note": "A request does not hold the dates: the car is reserved only once you confirm it. Until then other customers may request the same dates.",
+      "otherRequests": "{count, plural, one {There is # more request for these dates.} other {There are # more requests for these dates.}}"
     }
   }
 }

@@ -9,6 +9,11 @@ filter and UI must support all classes.
 permits, earnings, platform questions in forms. The taxi offering will be revisited as a separate
 project after launch (`bookings.platform_driver` is kept, nullable, for that).
 
+**Requests don't hold the car (owner's decision, overrides the brief):** a booking sent from the
+website is only a request (`pending`). Its dates stay free in the public calendar and other visitors
+may request the same dates; the car is occupied only by bookings **confirmed** in the admin panel
+and by manual blocks. The manager picks which request to confirm.
+
 **No 3D (owner's decision):** phase 4 (3D hero / scroll scenes / car viewer) and phase 6b (3D
 generation from photos) are dropped. Cars are shown with photos (gallery) or the SVG silhouette.
 The 3D-related DB objects from phase 2 (`base_models`, `car_model_versions`, `model_jobs`,
@@ -151,10 +156,12 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
   photos, `car_busy_periods`, settings with `is_public = true`.
 - **Bookings are never inserted with the anon key.** Public booking requests go through server
   code using `createAdminClient()` after zod validation, rate limit and honeypot.
-- **Double-booking protection:** bookings (`pending`/`confirmed`) and `blocks` are mirrored by
-  triggers into `car_occupancy`, which has one GiST exclusion constraint `(car_id =, period &&)`.
-  An overlap raises SQLSTATE `23P01` with hint `period_unavailable` → show "dates taken".
-  Periods are half-open `[start, end)` `tstzrange` (back-to-back rentals are allowed).
+- **Double-booking protection:** **confirmed** bookings and `blocks` are mirrored by triggers into
+  `car_occupancy`, which has one GiST exclusion constraint `(car_id =, period &&)`. Pending
+  requests are NOT mirrored (they may overlap each other); confirming one onto taken dates raises
+  SQLSTATE `23P01` with hint `period_unavailable` → show "dates taken". `car_busy_periods` and
+  `available_cars()` therefore show confirmed bookings + blocks only. Periods are half-open
+  `[start, end)` `tstzrange` (back-to-back rentals are allowed).
 - Pricing / rules resolution: `settings.pricing` ← `categories.default_pricing` ←
   `cars.price_overrides` (and `cars.deposit`); same for `rental_rules`. Use
   `resolvePricing()` / `resolveRentalRules()` from `lib/db/json.ts`; `{}` = inherit.
@@ -185,7 +192,10 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
   (`pending`) → emails after the response. The widget's quote is a preview only; the action
   re-validates **everything**: zod schema → honeypot + min fill time (fake success for bots) →
   dates (`checkSelectionTiming`) → rate limit → car terms loaded uncached with the admin client →
-  `quoteSelection` → licence years → insert. 23P01 → `period_unavailable`.
+  `quoteSelection` → licence years → `isPeriodTaken` (confirmed / blocks only → `period_unavailable`)
+  → same request already sent (`findDuplicateRequest`) → returns its number → insert `pending`.
+- Success is shown in a popup (`SuccessDialog`, native modal `<dialog>`); the widget goes back to the
+  calendar. The manager email says how many other pending requests overlap the dates.
 - Day rentals select **first..last day inclusive**; the period is `[first 00:00, last+1 00:00)`
   Vilnius. Hourly rentals: one day, start 7:00…, end ≤ 24:00, start ≥ now + 1 h. A day with hourly
   bookings is `partial` (half red) and can't be part of a day rental.

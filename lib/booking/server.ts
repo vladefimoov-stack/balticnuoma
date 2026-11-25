@@ -97,3 +97,47 @@ export async function consumeRateLimit(db: AdminClient, key: string, max: number
   }
   return data === true;
 }
+
+/** Postgres range literal for a half-open interval. */
+export function rangeLiteral(interval: { start: number; end: number }) {
+  return `[${new Date(interval.start).toISOString()},${new Date(interval.end).toISOString()})`;
+}
+
+/** Is the period taken by a CONFIRMED booking or a manual block? (Requests never hold the car.) */
+export async function isPeriodTaken(db: AdminClient, carId: string, range: string) {
+  const { count, error } = await db
+    .from("car_occupancy")
+    .select("id", { count: "exact", head: true })
+    .eq("car_id", carId)
+    .overlaps("period", range);
+  if (error) throw error;
+  return (count ?? 0) > 0;
+}
+
+/** The same visitor re-sending the same request (double click, retry) gets the existing number. */
+export async function findDuplicateRequest(db: AdminClient, carId: string, range: string, email: string) {
+  const { data, error } = await db
+    .from("bookings")
+    .select("number")
+    .eq("car_id", carId)
+    .eq("status", "pending")
+    .eq("customer_email", email)
+    .eq("period", range)
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.number ?? null;
+}
+
+/** Other pending requests for overlapping dates — shown to the manager in the notification. */
+export async function countOverlappingRequests(db: AdminClient, carId: string, range: string, exceptId: string) {
+  const { count, error } = await db
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("car_id", carId)
+    .eq("status", "pending")
+    .neq("id", exceptId)
+    .overlaps("period", range);
+  if (error) throw error;
+  return count ?? 0;
+}

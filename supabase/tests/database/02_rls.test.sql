@@ -12,10 +12,10 @@ insert into auth.users (id, email, aud, role, raw_app_meta_data, raw_user_meta_d
 -- A logged-in user without a staff role (profile row removed) must behave like a visitor.
 delete from public.profiles where id = '00000000-0000-4000-8000-0000000000c3';
 
-insert into public.bookings (car_id, period, rental_type, customer_first_name, customer_last_name, customer_phone,
+insert into public.bookings (car_id, period, rental_type, status, customer_first_name, customer_last_name, customer_phone,
   customer_email, license_year, experience_confirmed, platform_driver, total_price, deposit, terms_accepted_at)
 values ((select id from public.cars where slug = 'toyota-prius-1'),
-  tstzrange('2030-12-01 10:00+02', '2030-12-03 10:00+02', '[)'), 'daily', 'Ona', 'Onaitė', '+37061111111',
+  tstzrange('2030-12-01 10:00+02', '2030-12-03 10:00+02', '[)'), 'daily', 'confirmed', 'Ona', 'Onaitė', '+37061111111',
   'ona@example.lt', 2018, true, 'yes', 36, 500, now());
 insert into public.blocks (car_id, period, reason)
 values ((select id from public.cars where slug = 'porsche-panamera-demo'),

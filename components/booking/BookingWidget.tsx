@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CheckCircle2, Loader2, Phone, RotateCcw } from "lucide-react";
+import { ArrowLeft, Loader2, Phone, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   useCallback,
@@ -34,13 +34,14 @@ import {
   type CustomerInput,
   type Selection,
 } from "@/lib/booking/schema";
-import { BOOKING_HORIZON_DAYS, quoteSelection, selectionInterval } from "@/lib/booking/selection";
+import { BOOKING_HORIZON_DAYS, quoteSelection } from "@/lib/booking/selection";
 import { addDaysIso, vilniusToday } from "@/lib/dates";
 import type { Pricing, RentalRules } from "@/lib/db/json";
 import { availableModes, type QuoteResult } from "@/lib/pricing/calculate";
 import { getLenis } from "@/lib/motion/lenis";
 import { cn } from "@/lib/utils/cn";
 import { BookingCalendar } from "./BookingCalendar";
+import { SuccessDialog, type BookingSuccess } from "./SuccessDialog";
 
 type Props = {
   locale: "lt" | "en";
@@ -49,7 +50,7 @@ type Props = {
 };
 
 type Mode = "days" | "hourly";
-type Step = "select" | "form" | "success";
+type Step = "select" | "form";
 type Problem = { code: BookingErrorCode | "network"; min?: number; max?: number };
 
 const MAX_HOURLY_OPTIONS = 12;
@@ -91,7 +92,7 @@ export function BookingWidget({ locale, car, contacts }: Props) {
     startHour: null,
   });
   const [problem, setProblem] = useState<Problem | null>(null);
-  const [result, setResult] = useState<{ number: string | null; email: string | null } | null>(null);
+  const [result, setResult] = useState<BookingSuccess | null>(null);
   const rootRef = useRef<HTMLElement>(null);
   const startedAt = useRef(0);
 
@@ -229,18 +230,14 @@ export function BookingWidget({ locale, car, contacts }: Props) {
     try {
       const res = await submitBooking({ carId: car.id, locale, selection, customer, startedAt: startedAt.current });
       if (res.ok) {
+        // A request does not hold the dates, so the calendar stays as it is (refreshed in
+        // case staff confirmed something meanwhile); the confirmation opens as a popup.
         setResult({ number: res.number, email: res.emailed ? customer.email : null });
-        setStep("success");
+        setStep("select");
         form.reset();
         setRange({ start: null, end: null });
         setHourly((h) => ({ ...h, date: null, startHour: null }));
-        // Show the new booking as taken right away, then refresh from the server.
-        setBusy((b) => (b ? [...b, selectionInterval(selection)] : b));
         void loadBusy();
-        requestAnimationFrame(() => {
-          scrollToWidget();
-          rootRef.current?.querySelector<HTMLElement>("[data-step-title]")?.focus({ preventScroll: true });
-        });
         return;
       }
       if (res.fields) {
@@ -281,378 +278,346 @@ export function BookingWidget({ locale, car, contacts }: Props) {
       aria-labelledby="booking-title"
       className="relative scroll-mt-28 rounded-card border border-amber/25 bg-surface p-5 sm:p-6"
     >
-      {step === "success" && result ? (
-        <div className="flex flex-col items-start gap-4 py-2" role="status">
-          <CheckCircle2 className="size-10 text-free" aria-hidden />
+      <>
+        <div className="flex flex-col gap-1.5">
           <h2
             id="booking-title"
-            data-step-title
+            data-step-title={step === "form" ? undefined : ""}
             tabIndex={-1}
             className="font-display text-xl font-semibold outline-none"
           >
-            {t("success.title")}
+            {t("title")}
           </h2>
-          {result.number && (
-            <p className="flex flex-col">
-              <span className="text-sm text-muted">{t("success.number")}</span>
-              <span className="font-display text-2xl font-semibold tracking-wide text-amber">{result.number}</span>
-            </p>
-          )}
-          <p className="text-sm leading-relaxed text-muted">
-            {result.email ? t("success.text", { email: result.email }) : t("success.textNoEmail")}
-          </p>
-          <Button variant="secondary" size="sm" onClick={() => setStep("select")}>
-            {t("success.again")}
-          </Button>
+          {step === "select" && <p className="text-sm text-muted">{t("intro")}</p>}
         </div>
-      ) : (
-        <>
-          <div className="flex flex-col gap-1.5">
-            <h2
-              id="booking-title"
-              data-step-title={step === "form" ? undefined : ""}
-              tabIndex={-1}
-              className="font-display text-xl font-semibold outline-none"
-            >
-              {t("title")}
-            </h2>
-            {step === "select" && <p className="text-sm text-muted">{t("intro")}</p>}
-          </div>
 
-          {step === "select" && (
-            <div className="mt-5 flex flex-col gap-5">
-              {modes.days && modes.hourly && (
-                <div
-                  role="radiogroup"
-                  aria-label={t("modeLabel")}
-                  className="grid grid-cols-2 gap-1 rounded-pill border border-line bg-bg/60 p-1"
-                >
-                  {(["days", "hourly"] as const).map((m) => (
-                    <button
-                      key={m}
-                      type="button"
-                      role="radio"
-                      aria-checked={mode === m}
-                      onClick={() => switchMode(m)}
-                      className={cn(
-                        "h-9 rounded-pill text-sm font-semibold transition-colors",
-                        mode === m ? "bg-amber text-on-amber" : "text-muted hover:text-fg",
-                      )}
-                    >
-                      {m === "days" ? t("modeDays") : t("modeHourly")}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {today && maxDate ? (
-                <BookingCalendar
-                  key={mode}
-                  locale={locale}
-                  minDate={today}
-                  maxDate={maxDate}
-                  statusOf={statusOf}
-                  isSelectable={isSelectable}
-                  start={mode === "days" ? range.start : hourly.date}
-                  end={mode === "days" ? range.end : null}
-                  rangePreview={mode === "days"}
-                  onSelect={selectDay}
-                />
-              ) : (
-                <div className="h-[22rem] animate-pulse rounded-xl bg-white/[0.03]" aria-hidden />
-              )}
-
-              <Legend hourly={modes.hourly} />
-
-              {loadFailed && (
-                <p className="flex flex-wrap items-center gap-3 text-sm text-busy" role="alert">
-                  {t("calendar.loadError")}
+        {step === "select" && (
+          <div className="mt-5 flex flex-col gap-5">
+            {modes.days && modes.hourly && (
+              <div
+                role="radiogroup"
+                aria-label={t("modeLabel")}
+                className="grid grid-cols-2 gap-1 rounded-pill border border-line bg-bg/60 p-1"
+              >
+                {(["days", "hourly"] as const).map((m) => (
                   <button
+                    key={m}
                     type="button"
-                    onClick={() => void loadBusy()}
-                    className="inline-flex items-center gap-1.5 text-fg underline"
-                  >
-                    <RotateCcw className="size-3.5" aria-hidden />
-                    {t("calendar.retry")}
-                  </button>
-                </p>
-              )}
-
-              <p className="text-sm text-muted empty:hidden" aria-live="polite">
-                {rangeError ? (
-                  <span className="text-busy" role="alert">
-                    {t("rangeBusy")}
-                  </span>
-                ) : mode === "days" ? (
-                  !range.start ? (
-                    t("hintStart")
-                  ) : !range.end ? (
-                    t("hintEnd")
-                  ) : null
-                ) : !hourly.date ? (
-                  t("hintDay")
-                ) : null}
-              </p>
-
-              {mode === "hourly" && hourly.date && (
-                <div className="flex flex-col gap-4">
-                  <label className="flex flex-col gap-2">
-                    <span className="text-sm text-muted">{t("hoursCount")}</span>
-                    <select
-                      className={inputClass}
-                      value={hourly.hours}
-                      onChange={(e) => setHourly((h) => ({ ...h, hours: Number(e.target.value), startHour: null }))}
-                    >
-                      {hourOptions.map((n) => (
-                        <option key={n} value={n}>
-                          {t("hoursOption", { count: n })}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-2 text-sm text-muted">{t("freeSlots")}</legend>
-                    {freeHours.length > 0 ? (
-                      <div className="grid grid-cols-4 gap-2">
-                        {freeHours.map((h) => (
-                          <button
-                            key={h}
-                            type="button"
-                            aria-pressed={hourly.startHour === h}
-                            onClick={() => setHourly((s) => ({ ...s, startHour: h }))}
-                            className={cn(
-                              "h-10 rounded-lg border text-sm tabular-nums transition-colors",
-                              hourly.startHour === h
-                                ? "border-amber bg-amber font-semibold text-on-amber"
-                                : "border-line bg-free/10 hover:border-amber/60",
-                            )}
-                          >
-                            {String(h).padStart(2, "0")}:00
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-busy">{t("noSlots")}</p>
+                    role="radio"
+                    aria-checked={mode === m}
+                    onClick={() => switchMode(m)}
+                    className={cn(
+                      "h-9 rounded-pill text-sm font-semibold transition-colors",
+                      mode === m ? "bg-amber text-on-amber" : "text-muted hover:text-fg",
                     )}
-                  </fieldset>
-                </div>
-              )}
+                  >
+                    {m === "days" ? t("modeDays") : t("modeHourly")}
+                  </button>
+                ))}
+              </div>
+            )}
 
-              {selection && quote && (
-                <QuoteSummary
-                  period={formatSelection(selection, locale)}
-                  quote={quote}
-                  deposit={car.deposit}
-                  price={price}
-                  problem={quote.ok ? null : problemText({ code: quote.reason, min: quote.min, max: quote.max })}
-                  labels={{
-                    period: t("period"),
-                    tariff: t("tariff"),
-                    total: t("total"),
-                    deposit: t("deposit"),
-                    tariffName: quote.ok ? tt(TARIFF_KEY[quote.quote.rentalType]) : "",
-                    lines: quote.ok
-                      ? quote.quote.lines.map((line) =>
-                          t(`lines.${line.kind}`, { count: line.quantity, price: price(line.unitPrice) }),
-                        )
-                      : [],
-                  }}
-                />
-              )}
+            {today && maxDate ? (
+              <BookingCalendar
+                key={mode}
+                locale={locale}
+                minDate={today}
+                maxDate={maxDate}
+                statusOf={statusOf}
+                isSelectable={isSelectable}
+                start={mode === "days" ? range.start : hourly.date}
+                end={mode === "days" ? range.end : null}
+                rangePreview={mode === "days"}
+                onSelect={selectDay}
+              />
+            ) : (
+              <div className="h-[22rem] animate-pulse rounded-xl bg-white/[0.03]" aria-hidden />
+            )}
 
-              {problem && (
-                <p className="rounded-xl border border-busy/30 bg-busy/10 px-4 py-3 text-sm text-fg" role="alert">
-                  {problemText(problem)}
-                </p>
-              )}
+            <Legend hourly={modes.hourly} />
 
-              <Button type="button" size="lg" disabled={!quote?.ok} onClick={goToForm} className="w-full">
-                {t("continue")}
-              </Button>
-            </div>
-          )}
-
-          {step === "form" && selection && quote?.ok && (
-            <form onSubmit={onSubmit} noValidate className="mt-4 flex flex-col gap-5">
-              <div className="flex flex-col gap-2 rounded-xl border border-line bg-bg/50 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold">{formatSelection(selection, locale)}</span>
-                    <span className="text-xs text-muted">
-                      {selection.mode === "days"
-                        ? t("duration.days", { count: quote.quote.days ?? 0 })
-                        : t("duration.hours", { count: selection.hours })}{" "}
-                      · {tt(TARIFF_KEY[quote.quote.rentalType])}
-                    </span>
-                  </div>
-                  <span className="font-display text-lg font-semibold whitespace-nowrap">
-                    {price(quote.quote.total)}
-                  </span>
-                </div>
-                <p className="text-xs text-muted">
-                  {t("deposit")}: {price(car.deposit)}
-                </p>
+            {loadFailed && (
+              <p className="flex flex-wrap items-center gap-3 text-sm text-busy" role="alert">
+                {t("calendar.loadError")}
                 <button
                   type="button"
-                  onClick={() => {
-                    setStep("select");
-                    setProblem(null);
-                  }}
-                  className="inline-flex items-center gap-1.5 self-start text-sm text-amber hover:text-amber-soft"
+                  onClick={() => void loadBusy()}
+                  className="inline-flex items-center gap-1.5 text-fg underline"
                 >
-                  <ArrowLeft className="size-3.5" aria-hidden />
-                  {t("back")}
+                  <RotateCcw className="size-3.5" aria-hidden />
+                  {t("calendar.retry")}
                 </button>
-              </div>
+              </p>
+            )}
 
-              <h3 data-step-title tabIndex={-1} className="font-display text-base font-semibold outline-none">
-                {t("form.title")}
-              </h3>
+            <p className="text-sm text-muted empty:hidden" aria-live="polite">
+              {rangeError ? (
+                <span className="text-busy" role="alert">
+                  {t("rangeBusy")}
+                </span>
+              ) : mode === "days" ? (
+                !range.start ? (
+                  t("hintStart")
+                ) : !range.end ? (
+                  t("hintEnd")
+                ) : null
+              ) : !hourly.date ? (
+                t("hintDay")
+              ) : null}
+            </p>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                <Field label={t("form.firstName")} error={errorText("firstName")} id="bk-first-name">
-                  <input
-                    id="bk-first-name"
-                    autoComplete="given-name"
+            {mode === "hourly" && hourly.date && (
+              <div className="flex flex-col gap-4">
+                <label className="flex flex-col gap-2">
+                  <span className="text-sm text-muted">{t("hoursCount")}</span>
+                  <select
                     className={inputClass}
-                    aria-invalid={!!errors.firstName}
-                    aria-describedby={errors.firstName ? "bk-first-name-error" : undefined}
-                    {...register("firstName")}
-                  />
-                </Field>
-                <Field label={t("form.lastName")} error={errorText("lastName")} id="bk-last-name">
-                  <input
-                    id="bk-last-name"
-                    autoComplete="family-name"
-                    className={inputClass}
-                    aria-invalid={!!errors.lastName}
-                    aria-describedby={errors.lastName ? "bk-last-name-error" : undefined}
-                    {...register("lastName")}
-                  />
-                </Field>
-              </div>
-              <Field label={t("form.phone")} error={errorText("phone")} id="bk-phone">
-                <input
-                  id="bk-phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder={t("form.phonePlaceholder")}
-                  className={inputClass}
-                  aria-invalid={!!errors.phone}
-                  aria-describedby={errors.phone ? "bk-phone-error" : undefined}
-                  {...register("phone")}
-                />
-              </Field>
-              <Field label={t("form.email")} error={errorText("email")} id="bk-email">
-                <input
-                  id="bk-email"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  className={inputClass}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "bk-email-error" : undefined}
-                  {...register("email")}
-                />
-              </Field>
-              <Field label={t("form.licenseYear")} error={errorText("licenseYear")} id="bk-license">
-                <select
-                  id="bk-license"
-                  className={inputClass}
-                  aria-invalid={!!errors.licenseYear}
-                  aria-describedby={errors.licenseYear ? "bk-license-error" : undefined}
-                  {...register("licenseYear", { valueAsNumber: true })}
-                >
-                  <option value="">{t("form.licenseYearPlaceholder")}</option>
-                  {licenseYears.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-              <Field
-                label={
-                  <>
-                    {t("form.comment")} <span className="text-muted/70">({t("form.optional")})</span>
-                  </>
-                }
-                error={errorText("comment")}
-                id="bk-comment"
-              >
-                <textarea
-                  id="bk-comment"
-                  rows={3}
-                  placeholder={t("form.commentPlaceholder")}
-                  className={cn(inputClass, "h-auto min-h-24 py-3")}
-                  aria-invalid={!!errors.comment}
-                  aria-describedby={errors.comment ? "bk-comment-error" : undefined}
-                  {...register("comment")}
-                />
-              </Field>
-
-              <Checkbox
-                id="bk-experience"
-                error={errorText("experienceConfirmed")}
-                {...register("experienceConfirmed")}
-              >
-                {t("form.experience", { age: car.rules.min_age, years: car.rules.min_license_years })}
-              </Checkbox>
-              <Checkbox id="bk-consent" error={errorText("consent")} {...register("consent")}>
-                {t.rich("form.consent", {
-                  terms: (chunks) => (
-                    <Link href="/salygos" target="_blank" className="text-amber underline hover:text-amber-soft">
-                      {chunks}
-                    </Link>
-                  ),
-                  privacy: (chunks) => (
-                    <Link
-                      href="/privatumo-politika"
-                      target="_blank"
-                      className="text-amber underline hover:text-amber-soft"
-                    >
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </Checkbox>
-
-              {/* Honeypot: invisible to people and screen readers, tempting for bots. */}
-              <div className="absolute -left-[9999px] size-px overflow-hidden" aria-hidden>
-                <label htmlFor="bk-website">{t("form.honeypot")}</label>
-                <input id="bk-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
-              </div>
-
-              {problem && (
-                <div
-                  className="flex flex-col gap-2 rounded-xl border border-busy/30 bg-busy/10 px-4 py-3 text-sm"
-                  role="alert"
-                >
-                  <p>{problemText(problem)}</p>
-                  {periodBack && (
-                    <button type="button" onClick={() => setStep("select")} className="self-start text-amber underline">
-                      {t("back")}
-                    </button>
+                    value={hourly.hours}
+                    onChange={(e) => setHourly((h) => ({ ...h, hours: Number(e.target.value), startHour: null }))}
+                  >
+                    {hourOptions.map((n) => (
+                      <option key={n} value={n}>
+                        {t("hoursOption", { count: n })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <fieldset className="flex flex-col gap-2">
+                  <legend className="mb-2 text-sm text-muted">{t("freeSlots")}</legend>
+                  {freeHours.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-2">
+                      {freeHours.map((h) => (
+                        <button
+                          key={h}
+                          type="button"
+                          aria-pressed={hourly.startHour === h}
+                          onClick={() => setHourly((s) => ({ ...s, startHour: h }))}
+                          className={cn(
+                            "h-10 rounded-lg border text-sm tabular-nums transition-colors",
+                            hourly.startHour === h
+                              ? "border-amber bg-amber font-semibold text-on-amber"
+                              : "border-line bg-free/10 hover:border-amber/60",
+                          )}
+                        >
+                          {String(h).padStart(2, "0")}:00
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-busy">{t("noSlots")}</p>
                   )}
-                </div>
-              )}
+                </fieldset>
+              </div>
+            )}
 
-              <Button type="submit" size="lg" disabled={formState.isSubmitting} className="w-full">
-                {formState.isSubmitting ? (
-                  <>
-                    <Loader2 className="size-4 animate-spin" aria-hidden />
-                    {t("form.submitting")}
-                  </>
-                ) : (
-                  t("form.submit")
+            {selection && quote && (
+              <QuoteSummary
+                period={formatSelection(selection, locale)}
+                quote={quote}
+                deposit={car.deposit}
+                price={price}
+                problem={quote.ok ? null : problemText({ code: quote.reason, min: quote.min, max: quote.max })}
+                labels={{
+                  period: t("period"),
+                  tariff: t("tariff"),
+                  total: t("total"),
+                  deposit: t("deposit"),
+                  tariffName: quote.ok ? tt(TARIFF_KEY[quote.quote.rentalType]) : "",
+                  lines: quote.ok
+                    ? quote.quote.lines.map((line) =>
+                        t(`lines.${line.kind}`, { count: line.quantity, price: price(line.unitPrice) }),
+                      )
+                    : [],
+                }}
+              />
+            )}
+
+            {problem && (
+              <p className="rounded-xl border border-busy/30 bg-busy/10 px-4 py-3 text-sm text-fg" role="alert">
+                {problemText(problem)}
+              </p>
+            )}
+
+            <Button type="button" size="lg" disabled={!quote?.ok} onClick={goToForm} className="w-full">
+              {t("continue")}
+            </Button>
+          </div>
+        )}
+
+        {step === "form" && selection && quote?.ok && (
+          <form onSubmit={onSubmit} noValidate className="mt-4 flex flex-col gap-5">
+            <div className="flex flex-col gap-2 rounded-xl border border-line bg-bg/50 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold">{formatSelection(selection, locale)}</span>
+                  <span className="text-xs text-muted">
+                    {selection.mode === "days"
+                      ? t("duration.days", { count: quote.quote.days ?? 0 })
+                      : t("duration.hours", { count: selection.hours })}{" "}
+                    · {tt(TARIFF_KEY[quote.quote.rentalType])}
+                  </span>
+                </div>
+                <span className="font-display text-lg font-semibold whitespace-nowrap">{price(quote.quote.total)}</span>
+              </div>
+              <p className="text-xs text-muted">
+                {t("deposit")}: {price(car.deposit)}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("select");
+                  setProblem(null);
+                }}
+                className="inline-flex items-center gap-1.5 self-start text-sm text-amber hover:text-amber-soft"
+              >
+                <ArrowLeft className="size-3.5" aria-hidden />
+                {t("back")}
+              </button>
+            </div>
+
+            <h3 data-step-title tabIndex={-1} className="font-display text-base font-semibold outline-none">
+              {t("form.title")}
+            </h3>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <Field label={t("form.firstName")} error={errorText("firstName")} id="bk-first-name">
+                <input
+                  id="bk-first-name"
+                  autoComplete="given-name"
+                  className={inputClass}
+                  aria-invalid={!!errors.firstName}
+                  aria-describedby={errors.firstName ? "bk-first-name-error" : undefined}
+                  {...register("firstName")}
+                />
+              </Field>
+              <Field label={t("form.lastName")} error={errorText("lastName")} id="bk-last-name">
+                <input
+                  id="bk-last-name"
+                  autoComplete="family-name"
+                  className={inputClass}
+                  aria-invalid={!!errors.lastName}
+                  aria-describedby={errors.lastName ? "bk-last-name-error" : undefined}
+                  {...register("lastName")}
+                />
+              </Field>
+            </div>
+            <Field label={t("form.phone")} error={errorText("phone")} id="bk-phone">
+              <input
+                id="bk-phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder={t("form.phonePlaceholder")}
+                className={inputClass}
+                aria-invalid={!!errors.phone}
+                aria-describedby={errors.phone ? "bk-phone-error" : undefined}
+                {...register("phone")}
+              />
+            </Field>
+            <Field label={t("form.email")} error={errorText("email")} id="bk-email">
+              <input
+                id="bk-email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                className={inputClass}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "bk-email-error" : undefined}
+                {...register("email")}
+              />
+            </Field>
+            <Field label={t("form.licenseYear")} error={errorText("licenseYear")} id="bk-license">
+              <select
+                id="bk-license"
+                className={inputClass}
+                aria-invalid={!!errors.licenseYear}
+                aria-describedby={errors.licenseYear ? "bk-license-error" : undefined}
+                {...register("licenseYear", { valueAsNumber: true })}
+              >
+                <option value="">{t("form.licenseYearPlaceholder")}</option>
+                {licenseYears.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field
+              label={
+                <>
+                  {t("form.comment")} <span className="text-muted/70">({t("form.optional")})</span>
+                </>
+              }
+              error={errorText("comment")}
+              id="bk-comment"
+            >
+              <textarea
+                id="bk-comment"
+                rows={3}
+                placeholder={t("form.commentPlaceholder")}
+                className={cn(inputClass, "h-auto min-h-24 py-3")}
+                aria-invalid={!!errors.comment}
+                aria-describedby={errors.comment ? "bk-comment-error" : undefined}
+                {...register("comment")}
+              />
+            </Field>
+
+            <Checkbox id="bk-experience" error={errorText("experienceConfirmed")} {...register("experienceConfirmed")}>
+              {t("form.experience", { age: car.rules.min_age, years: car.rules.min_license_years })}
+            </Checkbox>
+            <Checkbox id="bk-consent" error={errorText("consent")} {...register("consent")}>
+              {t.rich("form.consent", {
+                terms: (chunks) => (
+                  <Link href="/salygos" target="_blank" className="text-amber underline hover:text-amber-soft">
+                    {chunks}
+                  </Link>
+                ),
+                privacy: (chunks) => (
+                  <Link
+                    href="/privatumo-politika"
+                    target="_blank"
+                    className="text-amber underline hover:text-amber-soft"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </Checkbox>
+
+            {/* Honeypot: invisible to people and screen readers, tempting for bots. */}
+            <div className="absolute -left-[9999px] size-px overflow-hidden" aria-hidden>
+              <label htmlFor="bk-website">{t("form.honeypot")}</label>
+              <input id="bk-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+            </div>
+
+            {problem && (
+              <div
+                className="flex flex-col gap-2 rounded-xl border border-busy/30 bg-busy/10 px-4 py-3 text-sm"
+                role="alert"
+              >
+                <p>{problemText(problem)}</p>
+                {periodBack && (
+                  <button type="button" onClick={() => setStep("select")} className="self-start text-amber underline">
+                    {t("back")}
+                  </button>
                 )}
-              </Button>
-              <p className="text-xs leading-relaxed text-muted">{t("form.note")}</p>
-            </form>
-          )}
-        </>
-      )}
+              </div>
+            )}
+
+            <Button type="submit" size="lg" disabled={formState.isSubmitting} className="w-full">
+              {formState.isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" aria-hidden />
+                  {t("form.submitting")}
+                </>
+              ) : (
+                t("form.submit")
+              )}
+            </Button>
+            <p className="text-xs leading-relaxed text-muted">{t("form.note")}</p>
+          </form>
+        )}
+      </>
 
       <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5">
         <p className="text-xs text-muted">{t("contactAlt")}</p>
@@ -675,6 +640,14 @@ export function BookingWidget({ locale, car, contacts }: Props) {
           </a>
         </div>
       </div>
+      <SuccessDialog
+        result={result}
+        onClose={() => {
+          setResult(null);
+          scrollToWidget();
+          rootRef.current?.querySelector<HTMLElement>("#booking-title")?.focus({ preventScroll: true });
+        }}
+      />
     </section>
   );
 }

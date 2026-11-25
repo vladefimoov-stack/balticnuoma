@@ -9,15 +9,26 @@ import { PERIOD_UNAVAILABLE_SQLSTATE } from "@/lib/supabase/types";
 import { bookingNumber } from "./format";
 import { bookingRequestSchema, normalizePhone, type CustomerField, type SubmitBookingResult } from "./schema";
 import { checkSelectionTiming, quoteSelection, selectionInterval } from "./selection";
-import { bookingNotifyEmail, bookingRateLimit, clientIp, consumeRateLimit, hashIp, loadBookingCar } from "./server";
+import {
+  bookingNotifyEmail,
+  bookingRateLimit,
+  clientIp,
+  consumeRateLimit,
+  countOverlappingRequests,
+  findDuplicateRequest,
+  hashIp,
+  isPeriodTaken,
+  loadBookingCar,
+  rangeLiteral,
+} from "./server";
 
 /** A person needs longer than this to pick dates and fill the form. */
 const MIN_FILL_MS = 3_000;
 
 /**
  * Public booking request. Everything the browser sends is re-validated here:
- * schema → bot checks → dates → rate limit → authoritative price → insert
- * (the database refuses overlaps) → emails after the response.
+ * schema → bot checks → dates → rate limit → authoritative price → dates not taken by a
+ * confirmed booking / block → insert as a `pending` request → emails after the response.
  */
 export async function submitBooking(raw: unknown): Promise<SubmitBookingResult> {
   const parsed = bookingRequestSchema.safeParse(raw);
@@ -68,7 +79,7 @@ export async function submitBooking(raw: unknown): Promise<SubmitBookingResult> 
     return { ok: false, error: "license", min: car.rules.min_license_years };
   }
 
-  const interval = selectionInterval(selection);
+  const range = rangeLiteral(selectionInterval(selection));
   const customerRow = {
     firstName: customer.firstName,
     lastName: customer.lastName,
@@ -78,11 +89,24 @@ export async function submitBooking(raw: unknown): Promise<SubmitBookingResult> 
     comment: customer.comment || null,
   };
 
+  const emailed = Boolean(process.env.RESEND_API_KEY?.trim());
+
+  // A request does not hold the car: only confirmed bookings and manual blocks make dates
+  // unavailable. Several visitors may ask for the same dates; the manager confirms one.
+  try {
+    if (await isPeriodTaken(db, car.id, range)) return { ok: false, error: "period_unavailable" };
+    const duplicate = await findDuplicateRequest(db, car.id, range, customerRow.email);
+    if (duplicate !== null) return { ok: true, number: bookingNumber(duplicate), emailed };
+  } catch (error) {
+    console.error("[booking] availability check failed:", error);
+    return { ok: false, error: "unavailable" };
+  }
+
   const { data: booking, error } = await db
     .from("bookings")
     .insert({
       car_id: car.id,
-      period: `[${new Date(interval.start).toISOString()},${new Date(interval.end).toISOString()})`,
+      period: range,
       rental_type: quote.quote.rentalType,
       status: "pending",
       customer_first_name: customerRow.firstName,
@@ -121,6 +145,7 @@ export async function submitBooking(raw: unknown): Promise<SubmitBookingResult> 
           quote: quote.quote,
           deposit: car.deposit,
           customer: customerRow,
+          otherRequests: await countOverlappingRequests(db, car.id, range, booking.id).catch(() => 0),
         },
         await bookingNotifyEmail(db),
       );
@@ -129,5 +154,5 @@ export async function submitBooking(raw: unknown): Promise<SubmitBookingResult> 
     }
   });
 
-  return { ok: true, number: bookingNumber(booking.number), emailed: Boolean(process.env.RESEND_API_KEY?.trim()) };
+  return { ok: true, number: bookingNumber(booking.number), emailed };
 }
