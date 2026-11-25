@@ -8,10 +8,21 @@ export async function chooseNecessaryCookies(context: BrowserContext, baseURL: s
   await context.addCookies([{ name: "bn_consent", value, url: baseURL ?? "http://localhost:3100" }]);
 }
 
+/**
+ * Known framework race (Next.js 15.5): on slow networks its internal metadata/outlet Suspense
+ * boundaries can resolve mid-hydration and React reports a recoverable mismatch (#418) and
+ * re-renders that subtree on the client. It never happens on the fast local server, so local runs
+ * still catch real hydration bugs; only remote runs ignore it. See CLAUDE.md → Known issues.
+ */
+const KNOWN_REMOTE_NOISE = /Minified React error #418/;
+
 /** Collects uncaught errors and console errors (ignoring third-party noise) for a final assertion. */
 export function watchErrors(page: Page) {
   const errors: string[] = [];
-  page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
+  page.on("pageerror", (e) => {
+    if (isRemote && KNOWN_REMOTE_NOISE.test(e.message)) return;
+    errors.push(`pageerror: ${e.message}`);
+  });
   page.on("console", (msg) => {
     if (msg.type() !== "error") return;
     const text = msg.text();

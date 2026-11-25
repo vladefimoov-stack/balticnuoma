@@ -80,12 +80,11 @@ export default async function LocaleLayout({
 
   return (
     // suppressHydrationWarning: the consent script below may add data-consent-set before hydration.
+    // The script is the first thing in <body> (Next.js manages <head>); it runs before the banner is parsed.
     <html lang={locale} className={fontVariables} suppressHydrationWarning>
-      <head>
+      <body>
         {/* Hide the server-rendered cookie banner before the first paint if a choice was already made. */}
         <script dangerouslySetInnerHTML={{ __html: CONSENT_PREPAINT }} />
-      </head>
-      <body>
         <NextIntlClientProvider messages={clientMessages}>
           <Providers>
             <a

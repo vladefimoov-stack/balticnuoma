@@ -91,8 +91,21 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   return <ConsentContext.Provider value={value}>{children}</ConsentContext.Provider>;
 }
 
-export function useConsent() {
+const noopSubscribe = () => () => {};
+
+/**
+ * Consent state for one component. While THIS component hydrates it always reports `undefined`
+ * (like the server): parts of the page inside Suspense boundaries can hydrate after the provider
+ * has already read the cookie, and rendering the real value then would not match the server HTML
+ * (React error #418, seen on slow networks on pages with the map).
+ */
+export function useConsent(): ConsentState {
   const ctx = useContext(ConsentContext);
+  const hydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
   if (!ctx) throw new Error("useConsent must be used inside <ConsentProvider>");
-  return ctx;
+  return hydrated ? ctx : { ...ctx, consent: undefined };
 }

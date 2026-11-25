@@ -373,6 +373,19 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
   `aria-label` that replaces short visible labels — add `sr-only` text instead), keyboard-reachable
   scroll containers. `npm run test:e2e` runs axe on the main pages.
 
+## Known issues
+
+- **Rare hydration mismatch on slow networks (React #418), pre-existing.** Next.js 15.5 renders its
+  own metadata / outlet Suspense boundaries (`<div hidden><!--$--><!--/$--></div>` at the top of
+  `<body>`, `<!--$--><!--/$-->` at the end of `<main>`). When the HTML streams slowly they can resolve
+  mid-hydration and React reports a recoverable mismatch (usually at the footer), then re-renders that
+  subtree on the client — no visible breakage. Measured with a slow-HTML proxy: ~5–10 % of loads on
+  pages with more content (contacts, catalog, home), 0 % on legal pages; same rate on the phase 7 build,
+  so not caused by our code. `htmlLimitedBots` doesn't change it. Re-check after a Next.js upgrade;
+  live e2e runs ignore #418 (`tests/e2e/helpers.ts`), local runs don't.
+- `useConsent()` reports `undefined` while the calling component hydrates (own `useSyncExternalStore`
+  flag) — components inside late-hydrating boundaries must not render consent-dependent UI before that.
+
 ## Phase status
 
 - [x] 1 — Skeleton: Next.js, Tailwind tokens, fonts, i18n, layout, navbar, footer,
