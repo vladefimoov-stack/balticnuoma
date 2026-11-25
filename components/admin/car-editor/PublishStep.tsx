@@ -1,18 +1,18 @@
 "use client";
 
-import { Copy, ExternalLink, Trash2 } from "lucide-react";
-import { useState, useTransition } from "react";
+import { Copy, ExternalLink } from "lucide-react";
+import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
-import { deleteCar, duplicateCar } from "@/lib/admin/car-actions";
+import { duplicateCar } from "@/lib/admin/car-actions";
 import type { CarForm } from "@/lib/admin/car-schema";
 import type { CarEditorData } from "@/lib/admin/cars";
 import { CAR_STATUSES, resolveCarTerms, resolvePricing, resolveRentalRules } from "@/lib/db/json";
 import { availableModes } from "@/lib/pricing/calculate";
 import { fromPricePerDay } from "@/lib/pricing/display";
 import { cn } from "@/lib/utils/cn";
-import { DELETE_CAR_CONFIRM } from "../CarRowActions";
+import { DeleteCarButton } from "../CarRowActions";
 import { PricingOverrideFields, RulesOverrideFields } from "../TermsFields";
-import { adminInput, adminLabel, Card, CardTitle, CAR_STATUS_LABEL, Notice } from "../ui";
+import { adminInput, adminLabel, Card, CardTitle, CAR_STATUS_LABEL } from "../ui";
 
 const STATUS_HELP: Record<(typeof CAR_STATUSES)[number], string> = {
   draft: "Ruošiamas, svetainėje nerodomas.",
@@ -32,7 +32,6 @@ type Props = {
 
 export function PublishStep({ carId, form, set, data, isAdmin, errorField }: Props) {
   const [pending, start] = useTransition();
-  const [error, setError] = useState<string | null>(null);
   const category = data.categories.find((c) => c.id === form.categoryId);
   const inheritedPricing = resolvePricing(data.globalPricing, category?.pricing);
   const inheritedRules = resolveRentalRules(data.globalRules, category?.rules);
@@ -141,32 +140,11 @@ export function PublishStep({ carId, form, set, data, isAdmin, errorField }: Pro
 
       <Card>
         <CardTitle>Kiti veiksmai</CardTitle>
-        {error && (
-          <Notice tone="error" className="mb-3">
-            {error}
-          </Notice>
-        )}
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" size="sm" disabled={pending} onClick={() => start(() => duplicateCar(carId))}>
             <Copy className="size-4" aria-hidden /> Dubliuoti automobilį
           </Button>
-          {isAdmin && !data.archived && (
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={pending}
-              className="hover:border-busy/60 hover:text-busy"
-              onClick={() => {
-                if (!window.confirm(DELETE_CAR_CONFIRM(form.titleLt))) return;
-                start(async () => {
-                  const res = await deleteCar(carId);
-                  if (res && !res.ok) setError(res.error);
-                });
-              }}
-            >
-              <Trash2 className="size-4" aria-hidden /> Ištrinti
-            </Button>
-          )}
+          {!data.archived && <DeleteCarButton carId={carId} title={form.titleLt} canDelete={isAdmin} />}
         </div>
       </Card>
     </div>

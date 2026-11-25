@@ -138,14 +138,13 @@ export default async function CarsPage({
                       <ExternalLink className="size-3.5" aria-hidden />
                     </a>
                   )}
-                  {staff.isAdmin &&
-                    (car.archived ? (
-                      <RestoreCarButton carId={car.id} />
-                    ) : (
-                      <span className="ml-auto">
-                        <DeleteCarButton carId={car.id} title={car.title} compact />
-                      </span>
-                    ))}
+                  {car.archived ? (
+                    staff.isAdmin && <RestoreCarButton carId={car.id} />
+                  ) : (
+                    <span className="ml-auto">
+                      <DeleteCarButton carId={car.id} title={car.title} compact canDelete={staff.isAdmin} />
+                    </span>
+                  )}
                 </div>
               </div>
             </li>
