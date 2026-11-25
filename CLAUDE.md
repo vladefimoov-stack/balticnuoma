@@ -72,7 +72,11 @@ app/
                         removed by the owner; /kainos redirects to /automobiliai)
     [...rest]/page.tsx  → notFound() so unknown URLs get the localized 404
     not-found.tsx, error.tsx
-  admin/                ADMIN (phase 6) — LT only, own <html>, excluded from i18n middleware
+  admin/                ADMIN — LT only, own <html> (layout.tsx), never indexed
+    prisijungimas/      login (email + password, rate-limited)
+    (panel)/            everything behind the login: layout (requireStaff + AdminShell + LiveBookings),
+                        page (dashboard), rezervacijos/ (list, [id] card, csv/ route), kalendorius/
+                        (fleet timeline + manual blocks); automobiliai/ kategorijos/ nustatymai/ (6b)
   api/                  route handlers: health (deployment self-check), availability (catalog
                         date filter), busy (one car's busy periods for the booking calendar)
 components/
@@ -87,7 +91,9 @@ components/
                         TariffList, RulesList, Catalog (client filters)
   contact/              ContactList, MapEmbed (lazy Google Maps iframe)
   booking/              BookingWidget (modes, quote, form, success), BookingCalendar (APG grid)
-  admin/                (phase 6)
+  admin/                AdminShell (sidebar / phone drawer), LoginForm, BookingActions + ManagerNote,
+                        FleetCalendar, LiveBookings (Realtime → router.refresh), ui.tsx (PageHeader, Card,
+                        status badges, Notice, adminInput)
 i18n/                   routing.ts (locales + localized pathnames), navigation.ts, request.ts
 messages/               lt.json (source of truth), en.json
 lib/
@@ -110,7 +116,13 @@ lib/
   dates.ts              Europe/Vilnius day helpers (vilniusDayStart, vilniusToday, addDaysIso)
   format/hours.ts       opening hours → "I–V 9:00–18:00" / "Mon–Fri 9:00–18:00"
   email/                send.ts (Resend, preview files, no-key fallback), templates.tsx (react-email),
-                        booking.tsx (request → customer + manager; status emails for phase 6)
+                        booking.tsx (request → customer + manager; confirmed / rejected → customer)
+  admin/                auth.ts (getStaff / requireStaff / requireAdmin, safeNextPath), session-actions.ts
+                        (signIn / signOut), bookings.ts (filters, list + conflict hints, card), booking-
+                        actions.ts (confirm / reject / cancel / reopen / note / reject overlapping),
+                        booking-email.ts (DB row → email input), calendar.ts, block-actions.ts,
+                        dashboard.ts, format.ts (LT dates, periods, money)
+  db/range.ts           parse / build tstzrange literals
 supabase/
   config.toml           local stack config (sign-up disabled)
   migrations/           ordered SQL migrations (foundation, core, bookings, rls, storage)
@@ -120,8 +132,9 @@ supabase/
 public/brand/           logo.svg, logo-stacked.svg, logo-mark.svg, logo-mono-{light,dark}.svg
 scripts/                check-messages.mjs, seed-admin.mjs, build-setup-sql.mjs
 tests/unit/             node:test unit tests (run with tsx; `@/` paths work)
-docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md)
-middleware.ts           next-intl middleware (skips /api, /admin, static files)
+docs/                   owner-facing guides (SUPABASE_SETUP.md, EMAIL_SETUP.md, ADMIN_SETUP.md)
+middleware.ts           /admin → Supabase session refresh + login gate (X-Robots-Tag noindex);
+                        everything else → next-intl (skips /api, static files)
 ```
 
 ## i18n rules
@@ -213,6 +226,24 @@ middleware.ts           next-intl middleware (skips /api, /admin, static files)
 - Copy: `booking` (client) and `emails` (server, via `createTranslator`) namespaces; price-line
   labels `booking.lines.*` are shared by the widget and the emails.
 
+## Admin panel (phase 6)
+
+- Every page and action starts with `requireStaff()` / `requireAdmin()` (`lib/admin/auth.ts`) and then
+  uses the **session client** (`staff.supabase`) — RLS is the real permission check. The service-role
+  client is not used in the admin except for the login rate limit.
+- Middleware only refreshes the session and redirects anonymous visitors to `/admin/prisijungimas`
+  (`?next=` is validated by `safeNextPath`). `next/link` is allowed in `app/admin` / `components/admin`.
+- Actions return `ActionResult` (`{ ok, message } | { ok: false, error }`, LT text) and call
+  `revalidatePath("/admin", "layout")`; mutations of cars / categories / settings must also call
+  `revalidateTag` for the public site.
+- Status changes are guarded (`.eq("status", "pending")` …) so two staff members can't both act on a
+  stale page; 23P01 on confirm → "dates taken". Confirm / reject send the customer email via `after()`
+  (rejection reasons for EN bookings are offered in English). Cancelling sends no email.
+- Calendar: confirmed = red, pending = orange (lanes when requests overlap), block = gray stripes.
+  Manual blocks are whole days (last day inclusive).
+- Admin UI is dense and mobile-first enough to confirm a booking from a phone: tables become cards
+  below `md`, the sidebar becomes a drawer below `lg`.
+
 ## Design system
 
 Tokens are defined once in `app/globals.css` (`@theme`) and exposed both as Tailwind
@@ -272,7 +303,8 @@ utilities and as CSS variables (read them from JS/WebGL with `getComputedStyle`)
       layer with ISR + tags; LT/EN copy (legal pages → phase 7)
 - [—] 4 — 3D & motion — **dropped by the owner** (no 3D on the site)
 - [x] 5 — Booking: calendar, pricing, form (no ride-hailing question), server action, emails
-- [ ] 6 — Admin panel
+- [~] 6 — Admin panel: 6a done (login, dashboard, bookings + CSV, calendar + blocks); 6b — cars
+  wizard, photos, categories, settings, users
 - [—] 6b — 3D generation from photos — **dropped by the owner**
 - [ ] 7 — SEO, legal pages, cookie banner
 - [ ] 8 — Polish: Lighthouse, a11y, Playwright, README, final TODO

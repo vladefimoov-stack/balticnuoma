@@ -22,7 +22,8 @@
 - [ ] **Миграции** — выполнить в SQL Editor по очереди (таблица «Обновления базы данных» в
       `docs/SUPABASE_SETUP.md`): `20261124150000_booking_rate_limit.sql` (лимит заявок),
       `20261125100000_requests_do_not_block.sql` (заявки не занимают даты до подтверждения).
-- [ ] **Первый админ и менеджер** — email-адреса двух пользователей (`SEED_ADMIN_EMAIL`, …).
+- [ ] **Входы в админку** — создать себя (admin) и менеджера в Supabase → Authentication → Users
+      (пошагово — `docs/ADMIN_SETUP.md`).
 - [ ] **Аналитика** — нужна ли (GA4 / Plausible / Vercel Analytics)? Загружается только после согласия на cookies.
 
 ## Контент
