@@ -1,6 +1,9 @@
 import "server-only";
 import { addDaysIso, vilniusDayStart, vilniusToday } from "@/lib/dates";
+import { DEFAULT_PRICING, DEFAULT_RENTAL_RULES } from "@/lib/data/defaults";
+import { pricingSchema, rentalRulesSchema, resolveCarTerms } from "@/lib/db/json";
 import { parseRange, rangeLiteral, type Range } from "@/lib/db/range";
+import { availableModes } from "@/lib/pricing/calculate";
 import type { Staff } from "./auth";
 import { dayBoundsOf, isWholeDays } from "./format";
 
@@ -36,7 +39,7 @@ export async function getDashboard(db: Db) {
   const todayStart = vilniusDayStart(today);
   const windowEnd = vilniusDayStart(addDaysIso(today, UTILIZATION_DAYS));
 
-  const [pending, pendingCount, soon, upcoming, cars] = await Promise.all([
+  const [pending, pendingCount, soon, upcoming, cars, published, terms] = await Promise.all([
     db
       .from("bookings")
       .select(
@@ -59,8 +62,35 @@ export async function getDashboard(db: Db) {
       .eq("status", "confirmed")
       .overlaps("period", rangeLiteral(todayStart, windowEnd)),
     db.from("cars").select("id", { count: "exact", head: true }).eq("status", "published"),
+    db
+      .from("cars")
+      .select(
+        "id, title_lt, price_overrides, rental_rules, deposit, category:categories ( default_pricing, default_rental_rules )",
+      )
+      .eq("status", "published"),
+    db.from("settings").select("key, value").in("key", ["pricing", "rental_rules"]),
   ]);
-  for (const r of [pending, pendingCount, soon, upcoming, cars]) if (r.error) throw r.error;
+  for (const r of [pending, pendingCount, soon, upcoming, cars, published, terms]) if (r.error) throw r.error;
+
+  // Published cars that can't be booked online: no tariff left enabled after inheritance.
+  const setting = (key: string) => terms.data?.find((row) => row.key === key)?.value;
+  const globalPricing = pricingSchema.safeParse(setting("pricing"));
+  const globalRules = rentalRulesSchema.safeParse(setting("rental_rules"));
+  const unbookableCars = (published.data ?? [])
+    .filter((car) => {
+      const resolved = resolveCarTerms({
+        globalPricing: globalPricing.success ? globalPricing.data : DEFAULT_PRICING,
+        globalRules: globalRules.success ? globalRules.data : DEFAULT_RENTAL_RULES,
+        categoryPricing: car.category?.default_pricing,
+        categoryRules: car.category?.default_rental_rules,
+        carPricing: car.price_overrides,
+        carRules: car.rental_rules,
+        carDeposit: car.deposit,
+      });
+      const modes = availableModes(resolved.pricing, resolved.rules);
+      return !modes.days && !modes.hourly;
+    })
+    .map((car) => ({ id: car.id, title: car.title_lt }));
 
   const soonRows = (soon.data ?? []).map((b) => ({ ...b, range: parseRange(b.period) }));
   const forDay = (day: string): DayEntry[] => {
@@ -106,6 +136,7 @@ export async function getDashboard(db: Db) {
     tomorrow,
     pending: (pending.data ?? []).map((b) => ({ ...b, range: parseRange(b.period) })),
     pendingCount: pendingCount.count ?? 0,
+    unbookableCars,
     todayEntries: forDay(today),
     tomorrowEntries: forDay(tomorrow),
     utilization,

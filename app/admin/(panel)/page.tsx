@@ -98,6 +98,21 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </Link>
         }
       />
+      {d.unbookableCars.length > 0 && (
+        <Notice tone="warning" className="mb-5">
+          <strong>Svetainėje negalima rezervuoti:</strong>{" "}
+          {d.unbookableCars.map((car, i) => (
+            <span key={car.id}>
+              {i > 0 && ", "}
+              <Link href={`/admin/automobiliai/${car.id}`} className="underline">
+                {car.title}
+              </Link>
+            </span>
+          ))}
+          . Neįjungtas nė vienas tarifas — patikrinkite Nustatymai → Bendri tarifai, automobilio kategoriją ir
+          automobilio kainas (žingsnis „Paskelbimas“).
+        </Notice>
+      )}
       {klaida === "teises" && (
         <Notice tone="warning" className="mb-5">
           Šis skyrius prieinamas tik administratoriui.

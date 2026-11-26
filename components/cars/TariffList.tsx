@@ -14,6 +14,7 @@ type Tariff = { key: string; name: string; price: number; unit: string; note?: s
 /** Compact list of the car's enabled tariffs + deposit (car page sidebar). */
 export async function TariffList({ pricing, deposit, className }: TariffListProps) {
   const t = await getTranslations("tariffs");
+  const tc = await getTranslations("cars");
   const tariffs: Tariff[] = [];
 
   if (pricing.hourly.enabled) {
@@ -55,6 +56,12 @@ export async function TariffList({ pricing, deposit, className }: TariffListProp
 
   return (
     <dl className={cn("divide-y divide-line overflow-hidden rounded-card border border-line bg-surface", className)}>
+      {tariffs.length === 0 && (
+        <div className="px-5 py-4 text-sm text-muted">
+          <dt className="sr-only">{t("perDay")}</dt>
+          <dd>{tc("priceOnRequest")}</dd>
+        </div>
+      )}
       {tariffs.map((tariff) => (
         <div key={tariff.key} className="flex items-baseline gap-3 px-5 py-4">
           <dt>

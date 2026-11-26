@@ -80,6 +80,8 @@ export function BookingWidget({ locale, car, contacts }: Props) {
   const modes = availableModes(car.pricing, car.rules);
 
   const [mode, setMode] = useState<Mode>(modes.days ? "days" : "hourly");
+  /** No tariff enabled (settings / category / car): don't offer a mode the server would reject. */
+  const bookable = modes.days || modes.hourly;
   const [step, setStep] = useState<Step>("select");
   const [busy, setBusy] = useState<Interval[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -288,10 +290,12 @@ export function BookingWidget({ locale, car, contacts }: Props) {
           >
             {t("title")}
           </h2>
-          {step === "select" && <p className="text-sm text-muted">{t("intro")}</p>}
+          {step === "select" && (
+            <p className="text-sm text-muted">{bookable ? t("intro") : t("problems.unavailable")}</p>
+          )}
         </div>
 
-        {step === "select" && (
+        {bookable && step === "select" && (
           <div className="mt-5 flex flex-col gap-5">
             {modes.days && modes.hourly && (
               <div
