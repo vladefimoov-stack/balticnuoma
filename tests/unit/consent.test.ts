@@ -18,6 +18,16 @@ describe("cookie consent cookie", () => {
     assert.equal(parseConsent(old), null);
   });
 
+  it("asks again once GA is switched on if the choice was made without the analytics option", () => {
+    const before = serializeConsent({ maps: true, analytics: false, at: 1 }, false);
+    assert.deepEqual(parseConsent(before, false), { maps: true, analytics: false, at: 1 });
+    assert.equal(parseConsent(before, true), null); // GA added later → banner again
+    const legacy = encodeURIComponent(JSON.stringify({ v: CONSENT_VERSION, m: 1, a: 0, t: 1 })); // no "o"
+    assert.equal(parseConsent(legacy, true), null);
+    const withGa = serializeConsent({ maps: false, analytics: true, at: 2 }, true);
+    assert.deepEqual(parseConsent(withGa, true), { maps: false, analytics: true, at: 2 });
+  });
+
   it("never reports analytics consent when GA is not configured", () => {
     // NEXT_PUBLIC_GA_MEASUREMENT_ID is not set in tests → analytics is disabled site-wide.
     const raw = encodeURIComponent(JSON.stringify({ v: CONSENT_VERSION, m: 0, a: 1, t: 1 }));

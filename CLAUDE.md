@@ -252,7 +252,8 @@ middleware.ts           /admin → Supabase session refresh + login gate (X-Robo
   `suppressHydrationWarning`.
 - Cookies: anything that sets non-essential cookies must wait for `useConsent()` (categories `maps`,
   `analytics`). GA4 loads only with `NEXT_PUBLIC_GA_MEASUREMENT_ID` + consent; withdrawing deletes `_ga*`
-  and reloads. Changing categories → bump `CONSENT_VERSION` and update the cookie table in
+  and reloads. The cookie remembers whether analytics was offered (`o`): enabling GA re-asks visitors who
+  chose before it existed. Changing categories → bump `CONSENT_VERSION` and update the cookie table in
   `content/legal/cookies.*`. "Necessary only" and "Accept all" must stay equally prominent.
 
 ## Booking (phase 5)
