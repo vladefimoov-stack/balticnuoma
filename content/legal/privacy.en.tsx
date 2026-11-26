@@ -45,6 +45,10 @@ const privacy: LegalDocument = (ctx) => [
           damage and fines.
         </li>
         <li>
+          <strong>GPS and dashcams:</strong> the rented car’s location, route, mileage, speed and time, and dashcam
+          recordings (see <a href="#gps-and-dashcams">“GPS tracking and dashcams”</a>).
+        </li>
+        <li>
           <strong>Communication:</strong> emails and other messages, call information.
         </li>
         <li>
@@ -72,7 +76,10 @@ const privacy: LegalDocument = (ctx) => [
           6(1)(c)).
         </li>
         <li>
-          <strong>Website security, abuse prevention, protection of property, establishing and defending claims</strong>{" "}
+          <strong>
+            Website security, abuse prevention, protection of the cars (GPS, dashcams), establishing and defending
+            claims
+          </strong>{" "}
           — legitimate interest (GDPR Art. 6(1)(f)).
         </li>
         <li>
@@ -80,6 +87,39 @@ const privacy: LegalDocument = (ctx) => [
           you can withdraw at any time.
         </li>
       </ul>
+    ),
+  },
+  {
+    id: "gps-and-dashcams",
+    title: "GPS tracking and dashcams",
+    body: (
+      <>
+        <p>
+          The rental cars are fitted with GPS trackers and may also be fitted with dashcams. We tell you about this in
+          the rental agreement.
+        </p>
+        <ul>
+          <li>
+            <strong>Data:</strong> the car’s location, route, mileage, speed and time; dashcam recordings.
+          </li>
+          <li>
+            <strong>Purposes:</strong> protecting the car and finding it if it is stolen or not returned on time;
+            checking compliance with the rental agreement (e.g. the return time, the ban on leaving Lithuania without
+            agreement); establishing the circumstances of accidents and damage; handling fines.
+          </li>
+          <li>
+            <strong>Legal basis:</strong> our legitimate interest in protecting our property and establishing and
+            defending claims (GDPR Art. 6(1)(f)) and performance of the rental agreement (GDPR Art. 6(1)(b)).
+          </li>
+          <li>
+            <strong>Access:</strong> only authorised staff view the data, and only when it is needed for these purposes.
+          </li>
+        </ul>
+        <p>
+          A dashcam may also record other road users — we use such recordings only to establish the circumstances of an
+          accident or damage and share them only with insurers, the police or courts.
+        </p>
+      </>
     ),
   },
   {
@@ -95,6 +135,7 @@ const privacy: LegalDocument = (ctx) => [
           We keep data longer only where the law requires it (e.g. accounting documents — for the period set by law) or
           where it is needed for an open dispute or claim — until it is resolved.
         </li>
+        <li>GPS data and dashcam recordings — no longer than 6 months after the rental ends.</li>
         <li>Request counters used for abuse prevention — no longer than 24 hours.</li>
         <li>Server logs — for the period set by the provider, usually up to 30 days.</li>
       </ul>
@@ -111,6 +152,7 @@ const privacy: LegalDocument = (ctx) => [
           <li>database and file storage — Supabase Inc.;</li>
           <li>email delivery — Resend;</li>
           <li>Google (the Google Maps map{ctx.analytics && " and Google Analytics"}) — only with your consent;</li>
+          <li>GPS tracking service provider;</li>
           <li>accounting and IT service providers.</li>
         </ul>
         <p>

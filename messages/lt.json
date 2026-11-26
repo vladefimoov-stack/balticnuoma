@@ -303,7 +303,7 @@
       },
       "accident": {
         "q": "Kas daryti įvykus eismo įvykiui?",
-        "a": "Nedelsdami paskambinkite mums ir, jei reikia, policijai. Užpildykite eismo įvykio deklaraciją ir nufotografuokite vietą. Atsakomybė nustatoma pagal nuomos sutartį ir draudimo sąlygas."
+        "a": "Nedelsdami iškvieskite policiją (112) ir paskambinkite mums. Nufotografuokite vietą ir, jei reikia, užpildykite eismo įvykio deklaraciją. Automobiliai apdrausti privalomuoju civilinės atsakomybės draudimu; atsakomybė už paties automobilio žalą nustatoma pagal nuomos sutartį."
       },
       "abroad": {
         "q": "Ar galima išvažiuoti už Lietuvos ribų?",
@@ -319,7 +319,7 @@
       },
       "payment": {
         "q": "Kaip atsiskaityti? Ar išrašote sąskaitas faktūras?",
-        "a": "Atsiskaityti galima kortele arba grynaisiais. Įmonėms išrašome sąskaitas faktūras."
+        "a": "Atsiskaityti galima kortele arba grynaisiais. Iki 2 mėnesių nuoma apmokama perduodant automobilį, ilgesnė — už 2 mėnesius iš anksto, vėliau kas mėnesį. Įmonėms išrašome sąskaitas faktūras."
       },
       "requirements": {
         "q": "Kokie reikalavimai vairuotojui?",

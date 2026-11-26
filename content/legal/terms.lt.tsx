@@ -1,4 +1,4 @@
-/* ЧЕРНОВИК: требует юридической проверки — nuomos sąlygų projektas (LT). */
+/* ЧЕРНОВИК: требует юридической проверки — nuomos sąlygų projektas (LT), suderintas su nuomos sutarties projektu. */
 import { Link } from "@/i18n/navigation";
 import type { LegalDocument } from "./types";
 import { Email, External, Phone, Req } from "./ui";
@@ -13,7 +13,8 @@ const terms: LegalDocument = (ctx) => [
           Šios sąlygos taikomos automobilių nuomai iš <strong>{ctx.company.name}</strong> (įmonės kodas{" "}
           <Req value={ctx.company.code} />
           {ctx.company.vat && <>, PVM mokėtojo kodas {ctx.company.vat}</>}, buveinės adresas{" "}
-          <Req value={ctx.company.address} />; toliau — Nuomotojas). Automobiliai išnuomojami asmeninėms reikmėms.
+          <Req value={ctx.company.address} />; toliau — Nuomotojas). Automobiliai išnuomojami fiziniams ir juridiniams
+          asmenims.
         </p>
         <p>
           {ctx.officeOpen
@@ -22,8 +23,8 @@ const terms: LegalDocument = (ctx) => [
           Kontaktai: tel. <Phone display={ctx.phone} e164={ctx.phoneE164} />, el. paštas <Email value={ctx.email} />.
         </p>
         <p>
-          Nuomos santykius galutinai nustato perduodant automobilį pasirašoma nuomos sutartis ir priėmimo–perdavimo
-          aktas. Jei sutartyje susitarta kitaip nei šiose sąlygose, taikoma sutartis.
+          Nuomos santykius galutinai nustato perduodant automobilį pasirašoma nuomos sutartis, priėmimo–perdavimo aktas
+          ir kainoraštis. Jei sutartyje susitarta kitaip nei šiose sąlygose, taikoma sutartis.
         </p>
         <p>
           <strong>Nuomininkas</strong> — fizinis ar juridinis asmuo, sudaręs nuomos sutartį.{" "}
@@ -50,10 +51,6 @@ const terms: LegalDocument = (ctx) => [
           Svetainėje rodoma kaina apskaičiuojama pagal užklausos metu galiojančius tarifus ir yra preliminari. Galutinė
           kaina nurodoma nuomos sutartyje.
         </p>
-        <p>
-          Užklausą ar patvirtintą rezervaciją galite atšaukti nemokamai, kol automobilis dar neperduotas, — tiesiog
-          praneškite mums kuo anksčiau.
-        </p>
       </>
     ),
   },
@@ -61,29 +58,26 @@ const terms: LegalDocument = (ctx) => [
     id: "reikalavimai",
     title: "Reikalavimai nuomininkui ir vairuotojams",
     body: (
-      <>
-        <ul>
-          <li>
-            Vairuotojui turi būti ne mažiau kaip <strong>{ctx.rules.min_age} metų</strong>, jis turi turėti galiojantį B
-            kategorijos vairuotojo pažymėjimą ne trumpiau kaip <strong>{ctx.rules.min_license_years} metus</strong>.
-            Atskiriems automobiliams (pvz., prabangos klasės) reikalavimai gali būti griežtesni — jie nurodyti prie
-            automobilio.
-          </li>
-          <li>
-            Perduodant automobilį pateikiamas asmens tapatybės dokumentas (asmens tapatybės kortelė arba pasas) ir
-            vairuotojo pažymėjimas. Juridiniai asmenys papildomai pateikia rekvizitus ir atstovavimą patvirtinantį
-            dokumentą.
-          </li>
-          <li>
-            Automobilį vairuoti gali tik sutartyje nurodyti vairuotojai. Papildomas vairuotojas turi atitikti tuos
-            pačius reikalavimus.
-          </li>
-          <li>
-            Nuomotojas gali atsisakyti išnuomoti automobilį, jei asmuo neatitinka reikalavimų, pateikia neteisingus
-            duomenis arba yra apsvaigęs.
-          </li>
-        </ul>
-      </>
+      <ul>
+        <li>
+          Vairuotojui turi būti ne mažiau kaip <strong>{ctx.rules.min_age} metų</strong>, jis turi turėti galiojantį B
+          kategorijos vairuotojo pažymėjimą ne trumpiau kaip <strong>{ctx.rules.min_license_years} metus</strong>.
+          Atskiriems automobiliams reikalavimai gali būti griežtesni — jie nurodyti prie automobilio.
+        </li>
+        <li>
+          Perduodant automobilį pateikiamas asmens tapatybės dokumentas (asmens tapatybės kortelė arba pasas) ir
+          vairuotojo pažymėjimas. Juridiniai asmenys papildomai pateikia rekvizitus ir atstovavimą patvirtinantį
+          dokumentą.
+        </li>
+        <li>
+          Automobilį vairuoti gali tik sutartyje nurodyti vairuotojai. Papildomas vairuotojas turi atitikti tuos pačius
+          reikalavimus; už jo veiksmus nuomininkas atsako kaip už savo.
+        </li>
+        <li>
+          Nuomotojas gali atsisakyti išnuomoti automobilį, jei asmuo neatitinka reikalavimų, pateikia neteisingus
+          duomenis arba yra apsvaigęs.
+        </li>
+      </ul>
     ),
   },
   {
@@ -96,17 +90,21 @@ const terms: LegalDocument = (ctx) => [
           Kai nuomos trukmei tinka keli tarifai, taikomas palankiausias.
         </p>
         <p>
-          Į kainą įskaičiuotas privalomasis transporto priemonių valdytojų civilinės atsakomybės draudimas ir techninė
-          priežiūra. Degalus (elektromobiliams — įkrovimą) apmoka nuomininkas. Automobilis grąžinamas su tokiu pat
-          degalų kiekiu, kokiu buvo perduotas; trūkstami degalai apmokami sutartyje nustatyta tvarka.
+          Į kainą įskaičiuotas privalomasis transporto priemonių valdytojų civilinės atsakomybės draudimas ir planinė
+          techninė priežiūra. Ridos limitas netaikomas, nebent jis nurodytas prie automobilio. Degalus apmoka
+          nuomininkas.
         </p>
+        <ul>
+          <li>Kai nuomos laikotarpis 2 mėnesiai ar trumpesnis, visa kaina sumokama perduodant automobilį.</li>
+          <li>
+            Kai nuomos laikotarpis ilgesnis nei 2 mėnesiai, perduodant automobilį sumokama už pirmuosius 2 mėnesius, o
+            automobilis rezervuojamas visam laikotarpiui; vėliau mokama kas mėnesį iš anksto.
+          </li>
+          <li>Pavėlavus sumokėti, skaičiuojami 0,1 % dydžio delspinigiai už kiekvieną pavėluotą dieną.</li>
+        </ul>
         <p>
-          Jei prie automobilio nurodytas paros ridos limitas, už jį viršijusius kilometrus mokama pagal sutartyje
-          nurodytą įkainį.
-        </p>
-        <p>
-          Atsiskaityti galima mokėjimo kortele arba grynaisiais pinigais; mokėjimo terminai nurodomi sutartyje. Įmonėms
-          išrašome sąskaitas faktūras.
+          Atsiskaityti galima mokėjimo kortele arba grynaisiais pinigais; įmonės gali mokėti pavedimu pagal sąskaitą
+          faktūrą.
         </p>
       </>
     ),
@@ -118,23 +116,28 @@ const terms: LegalDocument = (ctx) => [
       <>
         <p>Perduodant automobilį sumokamas užstatas. Jo dydis nurodytas prie kiekvieno automobilio.</p>
         <p>
-          Grąžinimo metu automobilį apžiūrime kartu su jumis. Jei naujų pažeidimų, baudų ar kitų įsiskolinimų nėra,
-          užstatą grąžiname per 1–3 dienas tuo pačiu būdu, kuriuo jis buvo sumokėtas.
+          Grąžinimo metu automobilį apžiūrime kartu su jumis. Jei sutartis nepažeista ir įsiskolinimų nėra, užstatą
+          grąžiname per 1–3 dienas tuo pačiu būdu, kuriuo jis buvo sumokėtas.
         </p>
         <p>Iš užstato išskaičiuojama:</p>
         <ul>
-          <li>bauda už pavėluotą automobilio grąžinimą;</li>
+          <li>bauda už pavėluotą grąžinimą: iki 1 paros — 50 €, daugiau kaip 1 parą — 100 €;</li>
+          <li>trūkstami degalai — degalinės kaina už litrą ir 30 € paslaugos mokestis;</li>
           <li>
-            naudojimosi taisyklių pažeidimų pašalinimo kaina — pagal faktines cheminio valymo, serviso, remonto ar kitų
-            reikalingų darbų išlaidas (pvz., rūkymas ar gyvūnai salone, užterštas automobilis, trūkstami degalai);
+            nešvarus automobilis — 50 € ir plovimo kaina; cheminis valymas (rūkymas, gyvūnai, išteptas salonas) — 100 €
+            ir valymo kaina;
           </li>
           <li>
-            automobilio sugadinimai (sutartyje nustatytose ribose), baudos ir kitos pagal sutartį mokėtinos sumos.
+            salono, kėbulo, padangų, ratlankių, stiklų ar kitų dalių sugadinimų pašalinimo kaina, taip pat sugadinimų,
+            kurių kaltininko nustatyti nepavyksta (pvz., automobilis apgadintas stovėjimo aikštelėje);
           </li>
+          <li>pamestas ar sugadintas raktas — jo kaina, bet ne mažiau kaip 200 €, ir 70 € už darbą;</li>
+          <li>nuomos laikotarpiu gautos baudos ir 30 € administravimo mokestis už kiekvieną baudą.</li>
         </ul>
         <p>
-          Išvykus už Lietuvos ribų be išankstinio raštiško Nuomotojo sutikimo, užstatas negrąžinamas. Jei užstato
-          nepakanka nuostoliams padengti, nuomininkas sumoka trūkstamą sumą.
+          Užstatas negrąžinamas, jei automobilis išvežamas už Lietuvos ribų be atskiro rašytinio susitarimo su Nuomotoju
+          arba negrąžinamas ilgiau kaip 3 dienas po sutarto termino. Jei užstato nepakanka, nuomininkas trūkstamą sumą
+          sumoka per 5 darbo dienas nuo Nuomotojo pareikalavimo.
         </p>
       </>
     ),
@@ -147,17 +150,26 @@ const terms: LegalDocument = (ctx) => [
         <li>
           {ctx.officeOpen
             ? `Automobilis perduodamas ir grąžinamas adresu ${ctx.office} darbo laiku, jei nesusitarta kitaip.`
-            : "Automobilio perdavimo ir grąžinimo laikas bei vieta suderinami patvirtinant rezervaciją."}
+            : "Automobilio perdavimo ir grąžinimo laikas bei vieta suderinami patvirtinant rezervaciją."}{" "}
+          Automobilį galima pristatyti į kitą vietą susitarus; kaina priklauso nuo atstumo.
         </li>
         <li>
-          Perduodant ir grąžinant automobilio būklė, rida ir degalų kiekis fiksuojami priėmimo–perdavimo akte, gali būti
-          daromos nuotraukos.
+          Perduodant ir grąžinant automobilio būklė, rida ir degalų kiekis fiksuojami priėmimo–perdavimo akte, daromos
+          nuotraukos. Pastebėję akte nepažymėtų sugadinimų, praneškite prieš pradėdami važiuoti.
         </li>
         <li>
-          Automobilis grąžinamas sutartu laiku, tvarkingas ir be asmeninių daiktų. Už pavėluotą grąžinimą taikoma bauda,
-          kuri išskaičiuojama iš užstato. Jei vėluojate, praneškite mums iš anksto.
+          Automobilis grąžinamas sutartu laiku, su tokiu pačiu degalų kiekiu, švarus, su visa komplektacija, raktais ir
+          registracijos liudijimu.
         </li>
-        <li>Nuomą galima pratęsti iš anksto susitarus, jei automobilis tuo metu laisvas.</li>
+        <li>
+          Pavėlavus grąžinti, be baudos už faktinį naudojimosi laiką mokama pagal tarifus; apie vėlavimą praneškite iš
+          anksto. Jei automobilis negrąžinamas ilgiau kaip 3 dienas, kreipiamės į teisėsaugos institucijas.
+        </li>
+        <li>
+          Nuomą pratęsti galima tik iš anksto susitarus ir tik jei automobilis tuo laikotarpiu nerezervuotas; priešingu
+          atveju automobilis grąžinamas sutartu laiku.
+        </li>
+        <li>Grąžinus automobilį anksčiau, kaina už nepanaudotą laiką negrąžinama, nebent susitarta kitaip.</li>
         <li>Nuomotojas neatsako už automobilyje paliktus daiktus.</li>
       </ul>
     ),
@@ -168,22 +180,50 @@ const terms: LegalDocument = (ctx) => [
     body: (
       <>
         <p>
-          Nuomininkas ir vairuotojai naudoja automobilį rūpestingai, laikosi Kelių eismo taisyklių ir automobilio
-          nenaudoja:
+          Nuomininkas ir vairuotojai naudoja automobilį rūpestingai, laikosi Kelių eismo taisyklių, palieka automobilį
+          užrakintą ir nepalieka jame raktų bei dokumentų. Draudžiama:
         </p>
         <ul>
-          <li>vairuodami apsvaigę nuo alkoholio, narkotinių, psichotropinių ar kitų psichiką veikiančių medžiagų;</li>
-          <li>lenktynėms, treniruotėms, mokymui vairuoti ar važiavimui bekelėje;</li>
-          <li>kitų transporto priemonių ar priekabų vilkimui be Nuomotojo sutikimo;</li>
-          <li>komercinei veiklai be raštiško Nuomotojo sutikimo;</li>
-          <li>perduodami vairuoti sutartyje nenurodytiems asmenims ar subnuomodami;</li>
+          <li>vairuoti apsvaigus nuo alkoholio, narkotinių, psichotropinių ar kitų psichiką veikiančių medžiagų;</li>
+          <li>rūkyti automobilyje (taip pat elektronines cigaretes) ir be Nuomotojo sutikimo vežti gyvūnus;</li>
           <li>
-            išvykdami už Lietuvos ribų be išankstinio raštiško Nuomotojo sutikimo (tokiu atveju užstatas negrąžinamas).
+            dalyvauti lenktynėse, treniruotėse, mokyti vairuoti, važiuoti bekele, vilkti kitas transporto priemones ar
+            priekabas;
           </li>
+          <li>subnuomoti automobilį ar leisti jį vairuoti sutartyje nenurodytiems asmenims;</li>
+          <li>naudoti automobilį kurjerių paslaugoms ar kitai komercinei veiklai be raštiško Nuomotojo sutikimo;</li>
+          <li>išvykti už Lietuvos ribų be atskiro rašytinio susitarimo su Nuomotoju.</li>
         </ul>
         <p>
-          Automobilyje draudžiama rūkyti (taip pat elektronines cigaretes) ir be Nuomotojo sutikimo vežti gyvūnus.
-          Pažeidus šias taisykles, iš užstato išskaičiuojama cheminio valymo ar kitų reikalingų darbų kaina.
+          Užsidegus įspėjamajai lemputei ar pastebėjus gedimą, nedelsdami praneškite mums ir nevažiuokite toliau, jei
+          tai gali pakenkti automobiliui. Remontuoti automobilį be Nuomotojo sutikimo draudžiama. Ilgalaikės nuomos
+          atveju nuomininkas pristato automobilį techninei priežiūrai mūsų nurodytu laiku; planinės priežiūros išlaidas
+          apmokame mes.
+        </p>
+        <p>
+          Automobiliuose įrengti GPS sekimo įrenginiai, gali būti įrengti vaizdo registratoriai — jų išjungti ar
+          pašalinti negalima. Kaip tvarkome šiuos duomenis, rasite{" "}
+          <Link href="/privatumo-politika">privatumo politikoje</Link>.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "draudimas-ir-atsakomybe",
+    title: "Draudimas ir atsakomybė",
+    body: (
+      <>
+        <p>
+          Automobiliai apdrausti tik privalomuoju transporto priemonių valdytojų civilinės atsakomybės draudimu, kuris
+          atlygina tretiesiems asmenims padarytą žalą. Paties automobilio sugadinimai (KASKO) neapdrausti.
+        </p>
+        <p>
+          Todėl nuomininkas atsako už automobilio praradimą ar sugadinimą nuomos laikotarpiu ir atlygina Nuomotojo
+          nuostolius, išskyrus atvejus, kai žala atsirado dėl automobilio gedimo, už kurį nuomininkas neatsako. Už
+          pamestus dokumentus ar valstybinius numerius sumokama jų atkūrimo kaina ir 70 €.
+        </p>
+        <p>
+          Nuomotojas atsako, kad perduodamas automobilis būtų techniškai tvarkingas ir apdraustas privalomuoju draudimu.
         </p>
       </>
     ),
@@ -194,40 +234,34 @@ const terms: LegalDocument = (ctx) => [
     body: (
       <ul>
         <li>
-          Įvykus eismo įvykiui, nedelsdami praneškite Nuomotojui, prireikus kvieskite policiją (tel. 112), užpildykite
-          eismo įvykio deklaraciją ir nufotografuokite vietą.
+          Įvykus bet kokiam eismo įvykiui, nedelsdami iškvieskite policiją (tel. 112), kuo greičiau praneškite
+          Nuomotojui, nufotografuokite vietą ir, jei taikoma, užpildykite eismo įvykio deklaraciją.
         </li>
         <li>
-          Užsidegus įspėjamajam signalui ar sugedus automobiliui, nevažiuokite toliau, jei tai gali pakenkti
-          automobiliui, ir susisiekite su mumis. Remontuoti automobilį ar keisti jo dalis be Nuomotojo sutikimo
-          draudžiama.
+          Jei automobilis sugenda ne dėl nuomininko kaltės, suteikiame visą įmanomą pagalbą: esant laisvam automobiliui
+          — jį pakeičiame, o nesant — grąžiname sumą už nepanaudotą laiką ir savo sąskaita evakuojame automobilį. Jei
+          gedimas ar įvykis atsirado dėl nuomininko kaltės, evakavimo ir remonto išlaidas apmoka nuomininkas.
         </li>
         <li>
-          Nuomos laikotarpiu gautas baudas, stovėjimo ir kelių naudotojo mokesčius apmoka nuomininkas. Jei apie baudą
-          sužinome vėliau, turime teisę pateikti nuomininko duomenis ją skyrusiai institucijai arba reikalauti sumokėti
-          baudos sumą.
+          Nuomos laikotarpiu gautas baudas ir rinkliavas apmoka nuomininkas. Turime teisę pateikti nuomininko duomenis
+          baudą skyrusiai institucijai; už kiekvienos baudos administravimą taikomas 30 € mokestis.
         </li>
       </ul>
     ),
   },
   {
-    id: "atsakomybe",
-    title: "Atsakomybė",
+    id: "atsaukimas-ir-nutraukimas",
+    title: "Atšaukimas ir sutarties nutraukimas",
     body: (
       <>
         <p>
-          Nuomininkas atsako už automobilio praradimą ar sugadinimą nuomos laikotarpiu, išskyrus atvejus, kai žala
-          atsirado dėl gedimo, už kurį nuomininkas neatsako. Atsakomybės ribos ir draudimo išskaitos (franšizės)
-          nustatomos nuomos sutartyje.
+          Užklausą ar patvirtintą rezervaciją galite atšaukti iki automobilio perdavimo — sumokėtas išankstinis
+          mokėjimas grąžinamas. Praneškite mums kuo anksčiau.
         </p>
         <p>
-          Visa atsakomybė taikoma, jei žala padaryta tyčia, vairuojant apsvaigus, pažeidus naudojimosi taisykles ar
-          vairuojant sutartyje nenurodytam asmeniui.
-        </p>
-        <p>
-          Nuomotojas atsako, kad perduodamas automobilis būtų techniškai tvarkingas ir apdraustas privalomuoju draudimu.
-          Jei automobilis sugenda ne dėl nuomininko kaltės, stengiamės pasiūlyti kitą automobilį arba grąžiname sumą už
-          nepanaudotą nuomos laiką.
+          Nuomotojas gali nedelsdamas nutraukti sutartį ir susigrąžinti automobilį, jei nuomininkas laiku nesumoka,
+          pažeidžia naudojimosi taisykles, leidžia vairuoti sutartyje nenurodytiems asmenims ar kitaip iš esmės
+          pažeidžia sutartį. Tokiu atveju užstatas grąžinamas tik tiek, kiek jo nereikia nuostoliams padengti.
         </p>
       </>
     ),
@@ -237,8 +271,9 @@ const terms: LegalDocument = (ctx) => [
     title: "Asmens duomenys",
     body: (
       <p>
-        Asmens duomenis tvarkome pagal <Link href="/privatumo-politika">privatumo politiką</Link>, o svetainės slapukus
-        — pagal <Link href="/slapukai">slapukų politiką</Link>.
+        Asmens duomenis, įskaitant GPS ir vaizdo registratorių duomenis, tvarkome pagal{" "}
+        <Link href="/privatumo-politika">privatumo politiką</Link>, o svetainės slapukus — pagal{" "}
+        <Link href="/slapukai">slapukų politiką</Link>.
       </p>
     ),
   },
@@ -249,11 +284,12 @@ const terms: LegalDocument = (ctx) => [
       <>
         <p>
           Šioms sąlygoms ir nuomos sutarčiai taikoma Lietuvos Respublikos teisė. Ginčus pirmiausia stengiamės spręsti
-          derybomis — parašykite mums <Email value={ctx.email} />.
+          derybomis — parašykite mums <Email value={ctx.email} />. Nepavykus susitarti, ginčai sprendžiami Lietuvos
+          Respublikos teismuose Klaipėdoje, išskyrus atvejus, kai įstatymai vartotojams nustato kitą teismingumą.
         </p>
         <p>
           Vartotojas taip pat gali kreiptis į Valstybinę vartotojų teisių apsaugos tarnybą (
-          <External href="https://www.vvtat.lt">www.vvtat.lt</External>) arba į teismą.
+          <External href="https://www.vvtat.lt">www.vvtat.lt</External>).
         </p>
       </>
     ),

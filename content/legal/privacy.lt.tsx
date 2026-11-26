@@ -45,6 +45,11 @@ const privacy: LegalDocument = (ctx) => [
           nuotraukos), eismo įvykių, žalos ir baudų duomenys.
         </li>
         <li>
+          <strong>GPS ir vaizdo registratoriai:</strong> nuomojamo automobilio buvimo vieta, maršrutas, rida, greitis ir
+          laikas, vaizdo registratoriaus įrašai (žr. skyrių{" "}
+          <a href="#gps-ir-vaizdo-registratoriai">„GPS sekimas ir vaizdo registratoriai“</a>).
+        </li>
+        <li>
           <strong>Bendravimas:</strong> susirašinėjimas el. paštu ir kitomis žinutėmis, skambučių informacija.
         </li>
         <li>
@@ -73,7 +78,8 @@ const privacy: LegalDocument = (ctx) => [
         </li>
         <li>
           <strong>
-            Svetainės saugumas, piktnaudžiavimo prevencija, turto apsauga, reikalavimų pareiškimas ir gynimas
+            Svetainės saugumas, piktnaudžiavimo prevencija, automobilių apsauga (GPS, vaizdo registratoriai),
+            reikalavimų pareiškimas ir gynimas
           </strong>{" "}
           — teisėtas interesas (BDAR 6 str. 1 d. f p.).
         </li>
@@ -82,6 +88,41 @@ const privacy: LegalDocument = (ctx) => [
           p.), kurį galite bet kada atšaukti.
         </li>
       </ul>
+    ),
+  },
+  {
+    id: "gps-ir-vaizdo-registratoriai",
+    title: "GPS sekimas ir vaizdo registratoriai",
+    body: (
+      <>
+        <p>
+          Nuomojamuose automobiliuose įrengti GPS sekimo įrenginiai, juose taip pat gali būti įrengti vaizdo
+          registratoriai. Apie tai informuojame nuomos sutartyje.
+        </p>
+        <ul>
+          <li>
+            <strong>Duomenys:</strong> automobilio buvimo vieta, maršrutas, rida, greitis ir laikas; vaizdo
+            registratoriaus įrašai.
+          </li>
+          <li>
+            <strong>Tikslai:</strong> automobilio apsauga ir suradimas, jei jis pavogtas ar negrąžintas laiku; nuomos
+            sutarties sąlygų (pvz., grąžinimo laiko, draudimo be susitarimo išvykti už Lietuvos ribų) laikymosi
+            kontrolė; eismo įvykių ir žalos aplinkybių nustatymas; baudų administravimas.
+          </li>
+          <li>
+            <strong>Teisinis pagrindas:</strong> mūsų teisėtas interesas apsaugoti turtą ir pareikšti bei apginti
+            reikalavimus (BDAR 6 str. 1 d. f p.) ir nuomos sutarties vykdymas (BDAR 6 str. 1 d. b p.).
+          </li>
+          <li>
+            <strong>Prieiga:</strong> duomenis peržiūri tik įgalioti darbuotojai ir tik tada, kai to reikia nurodytiems
+            tikslams.
+          </li>
+        </ul>
+        <p>
+          Vaizdo registratorius gali užfiksuoti ir kitus eismo dalyvius — tokius įrašus naudojame tik eismo įvykio ar
+          žalos aplinkybėms nustatyti ir teikiame tik draudimo bendrovėms, policijai ar teismams.
+        </p>
+      </>
     ),
   },
   {
@@ -97,6 +138,7 @@ const privacy: LegalDocument = (ctx) => [
           Ilgiau saugome tik tai, ką privaloma saugoti pagal teisės aktus (pvz., apskaitos dokumentus — teisės aktų
           nustatytą laiką), arba tai, ko reikia neišspręstam ginčui ar reikalavimui, — iki jo išsprendimo.
         </li>
+        <li>GPS duomenys ir vaizdo registratorių įrašai — ne ilgiau kaip 6 mėnesius nuo nuomos pabaigos.</li>
         <li>Užklausų skaičiavimo įrašai (piktnaudžiavimo prevencija) — ne ilgiau kaip 24 valandas.</li>
         <li>Serverių žurnalai — paslaugų teikėjo nustatytą laiką, paprastai iki 30 dienų.</li>
       </ul>
@@ -113,6 +155,7 @@ const privacy: LegalDocument = (ctx) => [
           <li>duomenų bazė ir failų saugykla — Supabase Inc.;</li>
           <li>el. laiškų siuntimas — Resend;</li>
           <li>Google (Google Maps žemėlapis{ctx.analytics && " ir Google Analytics"}) — tik jums sutikus;</li>
+          <li>GPS sekimo paslaugų teikėjas;</li>
           <li>apskaitos ir IT paslaugų teikėjai.</li>
         </ul>
         <p>

@@ -1,4 +1,4 @@
-/* ЧЕРНОВИК: требует юридической проверки — draft rental terms (EN). The LT version prevails. */
+/* ЧЕРНОВИК: требует юридической проверки — draft rental terms (EN), aligned with the draft rental agreement. The LT version prevails. */
 import { Link } from "@/i18n/navigation";
 import type { LegalDocument } from "./types";
 import { Email, External, Phone, Req } from "./ui";
@@ -13,7 +13,7 @@ const terms: LegalDocument = (ctx) => [
           These terms apply to car rental from <strong>{ctx.company.name}</strong> (company code{" "}
           <Req value={ctx.company.code} />
           {ctx.company.vat && <>, VAT code {ctx.company.vat}</>}, registered address <Req value={ctx.company.address} />
-          ; the “Lessor”). Cars are rented for personal use.
+          ; the “Lessor”). Cars are rented to individuals and companies.
         </p>
         <p>
           {ctx.officeOpen
@@ -22,9 +22,9 @@ const terms: LegalDocument = (ctx) => [
           Contacts: phone <Phone display={ctx.phone} e164={ctx.phoneE164} />, email <Email value={ctx.email} />.
         </p>
         <p>
-          The rental is finally governed by the rental agreement and the handover report signed when you collect the
-          car. Where the agreement differs from these terms, the agreement prevails. If the Lithuanian and English
-          versions of these terms differ, the Lithuanian version prevails.
+          The rental is finally governed by the rental agreement, the handover report and the price list signed when you
+          collect the car. Where the agreement differs from these terms, the agreement prevails. If the Lithuanian and
+          English versions of these terms differ, the Lithuanian version prevails.
         </p>
         <p>
           The <strong>renter</strong> is the person or company that signs the rental agreement. A{" "}
@@ -50,10 +50,6 @@ const terms: LegalDocument = (ctx) => [
           The price shown on the website is calculated from the tariffs valid at the time of the request and is
           preliminary. The final price is stated in the rental agreement.
         </p>
-        <p>
-          You can cancel a request or a confirmed booking free of charge until the car is handed over — just let us know
-          as early as possible.
-        </p>
       </>
     ),
   },
@@ -64,15 +60,16 @@ const terms: LegalDocument = (ctx) => [
       <ul>
         <li>
           A driver must be at least <strong>{ctx.rules.min_age} years old</strong> and have held a valid category B
-          driving licence for at least <strong>{ctx.rules.min_license_years} years</strong>. Some cars (e.g. luxury
-          class) may have stricter requirements — they are shown on the car’s page.
+          driving licence for at least <strong>{ctx.rules.min_license_years} years</strong>. Some cars may have stricter
+          requirements — they are shown on the car’s page.
         </li>
         <li>
           At handover you present an identity document (ID card or passport) and your driving licence. Companies also
           provide their details and a document proving the right to represent the company.
         </li>
         <li>
-          Only drivers named in the agreement may drive the car. An additional driver must meet the same requirements.
+          Only drivers named in the agreement may drive the car. An additional driver must meet the same requirements;
+          the renter is responsible for their actions as for their own.
         </li>
         <li>
           The Lessor may refuse to rent a car if a person does not meet the requirements, provides false information or
@@ -91,16 +88,18 @@ const terms: LegalDocument = (ctx) => [
           several tariffs fit the rental period, the most favourable one is applied.
         </p>
         <p>
-          The price includes compulsory motor third-party liability insurance and maintenance. Fuel (charging for
-          electric cars) is paid by the renter. The car is returned with the same amount of fuel as at handover; missing
-          fuel is charged as set out in the agreement.
+          The price includes compulsory motor third-party liability insurance and scheduled maintenance. There is no
+          mileage limit unless one is shown on the car’s page. Fuel is paid by the renter.
         </p>
-        <p>
-          If the car has a daily mileage limit, kilometres above it are charged at the rate stated in the agreement.
-        </p>
-        <p>
-          You can pay by card or in cash; payment terms are set in the agreement. We issue VAT invoices to companies.
-        </p>
+        <ul>
+          <li>If the rental is 2 months or shorter, the full price is paid at handover.</li>
+          <li>
+            If the rental is longer than 2 months, the first 2 months are paid at handover and the car is reserved for
+            the whole period; after that, payments are made monthly in advance.
+          </li>
+          <li>Late payments incur default interest of 0.1% for each day of delay.</li>
+        </ul>
+        <p>You can pay by card or in cash; companies may pay by bank transfer against an invoice.</p>
       </>
     ),
   },
@@ -111,23 +110,28 @@ const terms: LegalDocument = (ctx) => [
       <>
         <p>A deposit is paid at handover. Its amount is shown on each car’s page.</p>
         <p>
-          When you return the car, we inspect it together with you. If there is no new damage, fines or other debts, the
-          deposit is returned within 1–3 days by the same method it was paid.
+          When you return the car, we inspect it together with you. If the agreement has not been breached and there are
+          no debts, the deposit is returned within 1–3 days by the same method it was paid.
         </p>
         <p>The following are deducted from the deposit:</p>
         <ul>
-          <li>the fine for returning the car late;</li>
+          <li>the late-return fine: up to 1 day — €50, more than 1 day — €100;</li>
+          <li>missing fuel — the filling-station price per litre plus a €30 service fee;</li>
           <li>
-            the cost of putting right a breach of the rules of use — the actual cost of dry cleaning, servicing, repair
-            or other necessary work (e.g. smoking or pets in the car, a dirty car, missing fuel);
+            a dirty car — €50 plus the cost of washing; dry cleaning (smoking, animals, soiled interior) — €100 plus the
+            cost of cleaning;
           </li>
           <li>
-            damage to the car (within the limits set in the agreement), fines and other amounts due under the agreement.
+            the cost of repairing damage to the interior, body, tyres, wheels, glass or other parts, including damage
+            whose cause cannot be identified (e.g. the car was damaged while parked);
           </li>
+          <li>a lost or damaged key — its cost, but no less than €200, plus €70 for the work;</li>
+          <li>fines incurred during the rental plus a €30 handling fee per fine.</li>
         </ul>
         <p>
-          If the car is taken outside Lithuania without the Lessor’s prior written consent, the deposit is not returned.
-          If the deposit does not cover the loss, the renter pays the difference.
+          The deposit is not returned if the car is taken outside Lithuania without a separate written agreement with
+          the Lessor or is not returned for more than 3 days after the agreed time. If the deposit is not enough, the
+          renter pays the difference within 5 business days of the Lessor’s demand.
         </p>
       </>
     ),
@@ -140,17 +144,27 @@ const terms: LegalDocument = (ctx) => [
         <li>
           {ctx.officeOpen
             ? `The car is handed over and returned at ${ctx.office} during opening hours unless agreed otherwise.`
-            : "The time and place of handover and return are agreed when the booking is confirmed."}
+            : "The time and place of handover and return are agreed when the booking is confirmed."}{" "}
+          Delivery to another place is possible by agreement; the price depends on the distance.
         </li>
         <li>
-          At handover and return, the car’s condition, mileage and fuel level are recorded in a handover report; photos
-          may be taken.
+          At handover and return, the car’s condition, mileage and fuel level are recorded in a handover report and
+          photos are taken. If you notice damage not recorded in the report, tell us before you start driving.
         </li>
         <li>
-          The car is returned on time, clean and without personal belongings. Late return incurs a fine that is deducted
-          from the deposit. If you are running late, let us know in advance.
+          The car is returned on time, with the same amount of fuel, clean, with all its equipment, keys and the
+          registration certificate.
         </li>
-        <li>The rental can be extended by prior agreement if the car is available.</li>
+        <li>
+          If you return the car late, the actual extra time is charged according to the tariffs in addition to the fine;
+          let us know about any delay in advance. If the car is not returned for more than 3 days, we contact the law
+          enforcement authorities.
+        </li>
+        <li>
+          The rental can be extended only by prior agreement and only if the car is not booked for that period;
+          otherwise the car is returned at the agreed time.
+        </li>
+        <li>If the car is returned early, the unused time is not refunded unless agreed otherwise.</li>
         <li>The Lessor is not responsible for items left in the car.</li>
       </ul>
     ),
@@ -160,22 +174,47 @@ const terms: LegalDocument = (ctx) => [
     title: "Rules of use",
     body: (
       <>
-        <p>The renter and drivers use the car with care, follow the traffic rules and do not use the car:</p>
+        <p>
+          The renter and drivers use the car with care, follow the traffic rules, keep the car locked and do not leave
+          the keys or documents in it. It is prohibited to:
+        </p>
         <ul>
-          <li>under the influence of alcohol, drugs, psychotropic or other psychoactive substances;</li>
-          <li>for racing, training, driving lessons or off-road driving;</li>
-          <li>to tow other vehicles or trailers without the Lessor’s consent;</li>
-          <li>for commercial activities without the Lessor’s written consent;</li>
-          <li>by letting persons not named in the agreement drive it, or by subletting it;</li>
+          <li>drive under the influence of alcohol, drugs, psychotropic or other psychoactive substances;</li>
+          <li>smoke in the car (including e-cigarettes) or carry animals without the Lessor’s consent;</li>
           <li>
-            outside Lithuania without the Lessor’s prior written consent (in that case the deposit is not returned).
+            take part in races or training, give driving lessons, drive off-road or tow other vehicles or trailers;
           </li>
+          <li>sublet the car or let persons not named in the agreement drive it;</li>
+          <li>use the car for courier services or other commercial activities without the Lessor’s written consent;</li>
+          <li>take the car outside Lithuania without a separate written agreement with the Lessor.</li>
         </ul>
         <p>
-          Smoking (including e-cigarettes) is not allowed in the car, and pets may only be carried with the Lessor’s
-          consent. If these rules are broken, the cost of dry cleaning or other necessary work is deducted from the
-          deposit.
+          If a warning light comes on or a fault appears, tell us immediately and stop driving if continuing could
+          damage the car. Repairing the car without the Lessor’s consent is prohibited. For long-term rentals, the
+          renter brings the car for maintenance at the time we set; we pay for scheduled maintenance.
         </p>
+        <p>
+          The cars are fitted with GPS trackers and may be fitted with dashcams — they must not be switched off or
+          removed. How we process this data is described in our <Link href="/privatumo-politika">privacy policy</Link>.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "insurance-and-liability",
+    title: "Insurance and liability",
+    body: (
+      <>
+        <p>
+          The cars are covered only by compulsory motor third-party liability insurance, which compensates damage caused
+          to third parties. Damage to the car itself is not insured (no comprehensive cover).
+        </p>
+        <p>
+          The renter is therefore liable for loss of or damage to the car during the rental and compensates the Lessor’s
+          losses, except where the damage is caused by a defect the renter is not responsible for. Lost documents or
+          number plates are charged at their replacement cost plus €70.
+        </p>
+        <p>The Lessor is responsible for handing over a roadworthy car covered by compulsory insurance.</p>
       </>
     ),
   },
@@ -185,37 +224,34 @@ const terms: LegalDocument = (ctx) => [
     body: (
       <ul>
         <li>
-          After a traffic accident, notify the Lessor immediately, call the police if needed (112), fill in the accident
-          report form and take photos of the scene.
+          After any traffic accident, call the police immediately (112), notify the Lessor as soon as possible, take
+          photos of the scene and, where applicable, fill in the accident report form.
         </li>
         <li>
-          If a warning light comes on or the car breaks down, do not continue driving if this could damage the car, and
-          contact us. Repairing the car or replacing parts without the Lessor’s consent is not allowed.
+          If the car breaks down through no fault of the renter, we provide all possible assistance: we replace it if
+          another car is available or, if not, refund the unused time and tow the car at our expense. If the breakdown
+          or accident is the renter’s fault, the renter pays for towing and repairs.
         </li>
         <li>
-          Fines, parking and road charges incurred during the rental are paid by the renter. If we learn about a fine
-          later, we may provide the renter’s details to the issuing authority or ask the renter to pay it.
+          Fines and charges incurred during the rental are paid by the renter. We may provide the renter’s details to
+          the authority that issued the fine; a €30 handling fee applies per fine.
         </li>
       </ul>
     ),
   },
   {
-    id: "liability",
-    title: "Liability",
+    id: "cancellation-and-termination",
+    title: "Cancellation and termination",
     body: (
       <>
         <p>
-          The renter is liable for loss of or damage to the car during the rental, except where the damage is caused by
-          a defect the renter is not responsible for. Liability limits and insurance excess are set in the rental
-          agreement.
+          You can cancel a request or a confirmed booking before the car is handed over — any prepayment is refunded.
+          Please let us know as early as possible.
         </p>
         <p>
-          Full liability applies if damage is caused intentionally, while under the influence, by breaking the rules of
-          use or by a driver not named in the agreement.
-        </p>
-        <p>
-          The Lessor is responsible for handing over a roadworthy car covered by compulsory insurance. If the car breaks
-          down through no fault of the renter, we try to offer another car or refund the unused rental time.
+          The Lessor may terminate the agreement immediately and take back the car if the renter fails to pay on time,
+          breaks the rules of use, lets persons not named in the agreement drive or otherwise materially breaches it. In
+          that case the deposit is returned only to the extent it is not needed to cover the losses.
         </p>
       </>
     ),
@@ -225,8 +261,9 @@ const terms: LegalDocument = (ctx) => [
     title: "Personal data",
     body: (
       <p>
-        We process personal data under our <Link href="/privatumo-politika">privacy policy</Link> and use cookies as
-        described in our <Link href="/slapukai">cookie policy</Link>.
+        We process personal data, including GPS and dashcam data, under our{" "}
+        <Link href="/privatumo-politika">privacy policy</Link> and use cookies as described in our{" "}
+        <Link href="/slapukai">cookie policy</Link>.
       </p>
     ),
   },
@@ -237,11 +274,13 @@ const terms: LegalDocument = (ctx) => [
       <>
         <p>
           These terms and the rental agreement are governed by the law of the Republic of Lithuania. We first try to
-          resolve any dispute by negotiation — write to us at <Email value={ctx.email} />.
+          resolve any dispute by negotiation — write to us at <Email value={ctx.email} />. Failing that, disputes are
+          settled by the courts of the Republic of Lithuania in Klaipėda, unless the law provides consumers with a
+          different jurisdiction.
         </p>
         <p>
           Consumers may also contact the State Consumer Rights Protection Authority (
-          <External href="https://www.vvtat.lt">www.vvtat.lt</External>) or the courts.
+          <External href="https://www.vvtat.lt">www.vvtat.lt</External>).
         </p>
       </>
     ),

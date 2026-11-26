@@ -303,7 +303,7 @@
       },
       "accident": {
         "q": "What if I have an accident?",
-        "a": "Call us immediately and, if needed, the police. Fill in the accident report and take photos of the scene. Liability is determined by the rental agreement and insurance terms."
+        "a": "Call the police (112) immediately and then call us. Take photos of the scene and, if needed, fill in the accident report. The cars have compulsory third-party liability insurance; liability for damage to the car itself is set by the rental agreement."
       },
       "abroad": {
         "q": "Can I drive outside Lithuania?",
@@ -318,8 +318,8 @@
         "a": "Yes, economy cars can be rented for a few hours. The minimum duration and price are shown on each car's page."
       },
       "payment": {
-        "q": "How can I pay? Do you issue VAT invoices?",
-        "a": "You can pay by card or in cash. We issue invoices to companies."
+        "q": "How can I pay? Do you issue invoices?",
+        "a": "You can pay by card or in cash. Rentals of up to 2 months are paid at handover; longer ones — 2 months in advance, then monthly. We issue invoices to companies."
       },
       "requirements": {
         "q": "What are the driver requirements?",
