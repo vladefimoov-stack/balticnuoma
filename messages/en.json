@@ -29,16 +29,16 @@
   },
   "contact": {
     "label": "Contact us",
-    "whatsapp": "Message us on WhatsApp",
     "telegram": "Message us on Telegram",
     "call": "Call {phone}",
     "callShort": "Call",
-    "directions": "Directions"
+    "directions": "Directions",
+    "officeClosed": "Office temporarily closed"
   },
   "home": {
     "eyebrow": "Car rental in Klaipėda",
-    "title": "Your road. Your class.",
-    "subtitle": "From economical to luxury class — cars for everyday driving, trips and special occasions. Insurance and maintenance are already included.",
+    "title": "Your road. Your savings.",
+    "subtitle": "Fuel-efficient economy cars for everyday driving, work and trips. Insurance and maintenance are already included.",
     "cta": "Book a car",
     "ctaSecondary": "Contact us"
   },
@@ -68,7 +68,7 @@
     },
     "contacts": {
       "title": "Contacts",
-      "description": "Baltic Nuoma office in Klaipėda, Birutės g. 21. Call, message us on WhatsApp or drop by.",
+      "description": "Car rental in Klaipėda. Call or message us — we reply quickly.",
       "eyebrow": "Contacts",
       "company": "Company",
       "registeredAddress": "Registered address",
@@ -214,9 +214,9 @@
     "highlight": "road",
     "description": "Choose the car you need — we take care of insurance, maintenance and paperwork.",
     "items": {
-      "classes": {
-        "title": "Every class",
-        "text": "From economical cars to premium and luxury — for everyday driving, trips or special occasions."
+      "mileage": {
+        "title": "Unlimited mileage",
+        "text": "Drive as far as you need — there's no kilometre limit."
       },
       "insurance": {
         "title": "Insurance included",
@@ -242,16 +242,16 @@
     "highlight": "wheel",
     "steps": {
       "choose": {
-        "title": "Choose a car",
-        "text": "Browse the fleet, prices and terms."
-      },
-      "book": {
-        "title": "Book your dates",
-        "text": "Pick available dates and fill in a short form."
+        "title": "Choose a car and send a request",
+        "text": "Pick a car and free dates — you'll see the price right away."
       },
       "confirm": {
         "title": "A manager confirms",
-        "text": "We'll get in touch, confirm the booking and arrange the car handover."
+        "text": "We'll get in touch, confirm the booking and agree on when and where to meet."
+      },
+      "handover": {
+        "title": "Meeting and car handover",
+        "text": "When we meet, we sign the rental agreement and hand over the car — it takes about 15 minutes."
       }
     }
   },
@@ -285,7 +285,7 @@
     "help": {
       "title": "Have questions?",
       "text": "We'll help you choose a car and answer any questions about terms, documents or the deposit.",
-      "cta": "Ask on WhatsApp"
+      "cta": "Call {phone}"
     }
   },
   "faq": {
@@ -327,22 +327,23 @@
       },
       "documents": {
         "q": "What should I bring when picking up the car?",
-        "a": "Your ID card or passport, driving licence and the deposit. We sign the agreement on the spot — it takes about 15 minutes."
+        "a": "Your ID card or passport, driving licence and the deposit. We sign the agreement when we meet — it takes about 15 minutes."
       }
     }
   },
   "contactSection": {
     "eyebrow": "Contacts",
-    "title": "Drop by or message us",
+    "title": "Call or message us",
     "highlight": "message",
-    "description": "You'll find us in Klaipėda. We answer by phone, WhatsApp and email.",
+    "description": "We're in Klaipėda. We answer by phone and email.",
     "address": "Address",
     "phone": "Phone",
-    "whatsappValue": "Message us",
     "telegramValue": "Message us",
     "email": "Email",
     "hours": "Opening hours",
-    "mapTitle": "Baltic Nuoma office on the map"
+    "mapTitle": "Baltic Nuoma office on the map",
+    "office": "Office",
+    "officeClosed": "Temporarily closed"
   },
   "catalog": {
     "filters": "Car filters",
@@ -483,7 +484,7 @@
       "emailCopy": "We have sent a copy of your request to {email}.",
       "close": "OK"
     },
-    "contactAlt": "In a hurry? Message or call us:"
+    "contactAlt": "In a hurry? Give us a call:"
   },
   "emails": {
     "brandTagline": "Car rental in Klaipėda",

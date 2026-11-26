@@ -3,8 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { KNOWN_FEATURES, type Feature, type KnownFeature } from "@/lib/db/json";
 import { FEATURE_ICONS as ICONS } from "./feature-icons";
 
-
-
 const isKnown = (key: string): key is KnownFeature => key in KNOWN_FEATURES;
 
 /** Equipment list with icons. Known keys are translated; custom ones carry their own labels. */

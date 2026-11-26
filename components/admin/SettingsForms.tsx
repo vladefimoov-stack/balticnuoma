@@ -10,7 +10,14 @@ import { cn } from "@/lib/utils/cn";
 import { PricingFields, RulesFields } from "./TermsFields";
 import { adminInput, adminLabel, Card, CardTitle, Notice } from "./ui";
 
-type Contacts = { phone: string; whatsapp_url: string; telegram_username: string; email: string; address: string };
+type Contacts = {
+  phone: string;
+  whatsapp_url: string;
+  telegram_username: string;
+  email: string;
+  address: string;
+  office_open: boolean;
+};
 type Hours = Array<{ days: number[]; opens: string; closes: string }>;
 type Company = {
   legal_name: string;
@@ -94,7 +101,11 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
     </label>
   );
 
-  const contactField = (key: keyof Contacts, label: string, props: InputHTMLAttributes<HTMLInputElement> = {}) => (
+  const contactField = (
+    key: Exclude<keyof Contacts, "office_open">,
+    label: string,
+    props: InputHTMLAttributes<HTMLInputElement> = {},
+  ) => (
     <label className="flex flex-col gap-1.5">
       <span className={adminLabel}>{label}</span>
       <input
@@ -134,12 +145,26 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {contactField("phone", "Telefonas", { required: true, inputMode: "tel", placeholder: "+370 600 00000" })}
-          {contactField("whatsapp_url", "WhatsApp nuoroda", { placeholder: "https://wa.me/370…" })}
           {contactField("telegram_username", "Telegram vardas (be @)", { placeholder: "balticnuoma" })}
           {contactField("email", "El. paštas klientams", { type: "email", placeholder: "info@balticnuoma.lt" })}
           <div className="sm:col-span-2">
             {contactField("address", "Adresas", { placeholder: "Birutės g. 21, Klaipėda" })}
           </div>
+          <label className="flex items-start gap-3 sm:col-span-2">
+            <input
+              type="checkbox"
+              checked={contacts.office_open}
+              onChange={(e) => setContacts({ ...contacts, office_open: e.target.checked })}
+              className="mt-1 size-4 accent-amber"
+            />
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">Biuras atidarytas lankytojams</span>
+              <span className="text-xs text-muted">
+                Pažymėjus — svetainėje rodomas adresas, maršrutas ir sąlygose nurodoma perdavimo vieta. Nepažymėjus —
+                rašoma „Biuras laikinai uždarytas“, o automobilis perduodamas suderintoje vietoje.
+              </span>
+            </span>
+          </label>
         </div>
       </Section>
 

@@ -157,7 +157,7 @@ export default async function CarPage({ params }: Params) {
           <BookingWidget
             locale={locale}
             car={{ id: car.id, pricing: car.pricing, rules: car.rules, deposit: car.deposit }}
-            contacts={{ phone: contacts.phone, phoneE164: contacts.phoneE164, whatsappUrl: contacts.whatsappUrl }}
+            contacts={{ phone: contacts.phone, phoneE164: contacts.phoneE164 }}
           />
         </aside>
 

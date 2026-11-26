@@ -24,19 +24,20 @@ export const DEFAULT_RENTAL_RULES: RentalRules = {
 export type Contacts = {
   phone: string;
   phoneE164: string;
-  whatsappUrl: string;
   telegramUrl: string | null;
   email: string | null;
   address: string;
+  /** false → the site shows "office temporarily closed" instead of the address (admin → Kontaktai). */
+  officeOpen: boolean;
 };
 
 export const DEFAULT_CONTACTS: Contacts = {
   phone: site.phone.display,
   phoneE164: site.phone.e164,
-  whatsappUrl: site.whatsappUrl,
   telegramUrl: site.telegramUsername ? `https://t.me/${site.telegramUsername}` : null,
   email: null,
   address: `${site.address.street}, ${site.address.city}`,
+  officeOpen: false,
 };
 
 export type OpeningHours = Array<{ days: number[]; opens: string; closes: string }>;

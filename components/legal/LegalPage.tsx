@@ -64,7 +64,7 @@ export function createLegalPage(key: PageKey, href: StaticPathname, docs: Record
             </div>
           </nav>
 
-          <article className="legal-prose min-w-0 max-w-3xl">
+          <article className="legal-prose max-w-3xl min-w-0">
             {/* ЧЕРНОВИК: требует юридической проверки (also emitted into the HTML below). */}
             <div hidden dangerouslySetInnerHTML={{ __html: "<!-- ЧЕРНОВИК: требует юридической проверки -->" }} />
             <p className="text-sm text-muted">{tl("updated", { date: updated })}</p>

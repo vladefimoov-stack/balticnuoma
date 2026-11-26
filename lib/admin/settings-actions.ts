@@ -15,7 +15,7 @@ type EditableKey = (typeof EDITABLE)[number];
 const MESSAGES: Record<EditableKey, string> = {
   pricing: "Patikrinkite tarifus (teigiami skaičiai, valandų 1–24, savaičių 2–104).",
   rental_rules: "Patikrinkite reikalavimus (amžius 18–99, stažas 0–60).",
-  contacts: "Patikrinkite kontaktus: telefonas, WhatsApp nuoroda (https://…), el. paštas.",
+  contacts: "Patikrinkite kontaktus: telefonas ir el. paštas.",
   opening_hours: "Patikrinkite darbo laiką (formatas 09:00, bent viena diena).",
   notifications: "Neteisingas el. pašto adresas.",
   company: "Patikrinkite rekvizitus (kodai iki 20 simbolių, teisingas el. paštas).",

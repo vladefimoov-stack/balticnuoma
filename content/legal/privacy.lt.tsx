@@ -15,7 +15,8 @@ const privacy: LegalDocument = (ctx) => [
         </p>
         <p>
           Duomenų apsaugos klausimais rašykite <Email value={ctx.privacyEmail} />, skambinkite{" "}
-          <Phone display={ctx.phone} e164={ctx.phoneE164} /> arba užsukite adresu {ctx.office}.
+          <Phone display={ctx.phone} e164={ctx.phoneE164} />
+          {ctx.officeOpen ? <> arba užsukite adresu {ctx.office}</> : null}.
         </p>
         <p>
           Asmens duomenis tvarkome pagal Bendrąjį duomenų apsaugos reglamentą (BDAR, (ES) 2016/679) ir Lietuvos
@@ -44,7 +45,7 @@ const privacy: LegalDocument = (ctx) => [
           nuotraukos), eismo įvykių, žalos ir baudų duomenys.
         </li>
         <li>
-          <strong>Bendravimas:</strong> susirašinėjimas el. paštu, WhatsApp, Telegram ir skambučių informacija.
+          <strong>Bendravimas:</strong> susirašinėjimas el. paštu ir kitomis žinutėmis, skambučių informacija.
         </li>
         <li>
           <strong>Techniniai duomenys:</strong> siekdami apsisaugoti nuo piktnaudžiavimo užklausų forma, saugome tik

@@ -29,16 +29,16 @@
   },
   "contact": {
     "label": "Susisiekite su mumis",
-    "whatsapp": "Rašyti per WhatsApp",
     "telegram": "Rašyti per Telegram",
     "call": "Skambinti {phone}",
     "callShort": "Skambinti",
-    "directions": "Maršrutas"
+    "directions": "Maršrutas",
+    "officeClosed": "Biuras laikinai uždarytas"
   },
   "home": {
     "eyebrow": "Automobilių nuoma Klaipėdoje",
-    "title": "Jūsų kelias. Jūsų klasė.",
-    "subtitle": "Nuo taupios ekonominės iki prabangos klasės — automobiliai kasdienai, kelionėms ir ypatingoms progoms. Draudimas ir techninė priežiūra jau įskaičiuoti.",
+    "title": "Jūsų kelias. Jūsų ekonomija.",
+    "subtitle": "Taupios ekonominės klasės automobiliai kasdienai, darbui ir kelionėms. Draudimas ir techninė priežiūra jau įskaičiuoti.",
     "cta": "Rezervuoti automobilį",
     "ctaSecondary": "Susisiekti"
   },
@@ -68,7 +68,7 @@
     },
     "contacts": {
       "title": "Kontaktai",
-      "description": "Baltic Nuoma biuras Klaipėdoje, Birutės g. 21. Skambinkite, rašykite WhatsApp ar užsukite.",
+      "description": "Automobilių nuoma Klaipėdoje. Paskambinkite arba parašykite — atsakome greitai.",
       "eyebrow": "Kontaktai",
       "company": "Įmonė",
       "registeredAddress": "Juridinis adresas",
@@ -214,9 +214,9 @@
     "highlight": "kelionei",
     "description": "Pasirinkite automobilį pagal poreikį, o draudimu, priežiūra ir dokumentais pasirūpinsime mes.",
     "items": {
-      "classes": {
-        "title": "Įvairios klasės",
-        "text": "Nuo taupių ekonominės klasės automobilių iki premium ir prabangos — kasdienai, kelionėms ar ypatingoms progoms."
+      "mileage": {
+        "title": "Neribota rida",
+        "text": "Važiuokite tiek, kiek reikia — kilometrų limito nėra."
       },
       "insurance": {
         "title": "Draudimas įskaičiuotas",
@@ -242,16 +242,16 @@
     "highlight": "vairo",
     "steps": {
       "choose": {
-        "title": "Pasirinkite automobilį",
-        "text": "Peržiūrėkite automobilių parką, kainas ir sąlygas."
-      },
-      "book": {
-        "title": "Rezervuokite datas",
-        "text": "Pasirinkite laisvas datas ir užpildykite trumpą formą."
+        "title": "Pasirinkite automobilį ir išsiųskite užklausą",
+        "text": "Pasirinkite automobilį ir laisvas datas — kainą matysite iš karto."
       },
       "confirm": {
-        "title": "Vadybininkas patvirtins",
-        "text": "Susisieksime, patvirtinsime rezervaciją ir susitarsime dėl automobilio perdavimo."
+        "title": "Vadybininkas patvirtina",
+        "text": "Susisieksime, patvirtinsime rezervaciją ir suderinsime susitikimo laiką bei vietą."
+      },
+      "handover": {
+        "title": "Susitikimas ir automobilio perdavimas",
+        "text": "Susitikę pasirašome nuomos sutartį ir perduodame automobilį — tai užtrunka apie 15 minučių."
       }
     }
   },
@@ -285,7 +285,7 @@
     "help": {
       "title": "Turite klausimų?",
       "text": "Padėsime išsirinkti automobilį ir atsakysime į klausimus apie sąlygas, dokumentus ar užstatą.",
-      "cta": "Klausti per WhatsApp"
+      "cta": "Skambinti {phone}"
     }
   },
   "faq": {
@@ -327,22 +327,23 @@
       },
       "documents": {
         "q": "Ką atsinešti atsiimant automobilį?",
-        "a": "Asmens tapatybės kortelę arba pasą, vairuotojo pažymėjimą ir užstatą. Sutartį pasirašome vietoje — tai užtrunka apie 15 minučių."
+        "a": "Asmens tapatybės kortelę arba pasą, vairuotojo pažymėjimą ir užstatą. Sutartį pasirašome susitikimo metu — tai užtrunka apie 15 minučių."
       }
     }
   },
   "contactSection": {
     "eyebrow": "Kontaktai",
-    "title": "Užsukite arba parašykite",
+    "title": "Paskambinkite arba parašykite",
     "highlight": "parašykite",
-    "description": "Mus rasite Klaipėdoje. Atsakome telefonu, WhatsApp ir el. paštu.",
+    "description": "Esame Klaipėdoje. Atsakome telefonu ir el. paštu.",
     "address": "Adresas",
     "phone": "Telefonas",
-    "whatsappValue": "Parašykite mums",
     "telegramValue": "Parašykite mums",
     "email": "El. paštas",
     "hours": "Darbo laikas",
-    "mapTitle": "Baltic Nuoma biuras žemėlapyje"
+    "mapTitle": "Baltic Nuoma biuras žemėlapyje",
+    "office": "Biuras",
+    "officeClosed": "Laikinai uždarytas"
   },
   "catalog": {
     "filters": "Automobilių filtrai",
@@ -483,7 +484,7 @@
       "emailCopy": "Užklausos kopiją išsiuntėme adresu {email}.",
       "close": "Gerai"
     },
-    "contactAlt": "Norite greičiau? Parašykite arba paskambinkite:"
+    "contactAlt": "Norite greičiau? Paskambinkite:"
   },
   "emails": {
     "brandTagline": "Automobilių nuoma Klaipėdoje",

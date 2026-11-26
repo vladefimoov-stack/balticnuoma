@@ -16,8 +16,10 @@ const terms: LegalDocument = (ctx) => [
           ; the “Lessor”). Cars are rented for personal use.
         </p>
         <p>
-          Cars are handed over and returned at {ctx.office}. Contacts: phone{" "}
-          <Phone display={ctx.phone} e164={ctx.phoneE164} />, email <Email value={ctx.email} />.
+          {ctx.officeOpen
+            ? `Cars are handed over and returned at ${ctx.office}.`
+            : "Cars are handed over and returned at a place in Klaipėda agreed in advance."}{" "}
+          Contacts: phone <Phone display={ctx.phone} e164={ctx.phoneE164} />, email <Email value={ctx.email} />.
         </p>
         <p>
           The rental is finally governed by the rental agreement and the handover report signed when you collect the
@@ -126,7 +128,11 @@ const terms: LegalDocument = (ctx) => [
     title: "Handover and return",
     body: (
       <ul>
-        <li>The car is handed over and returned at {ctx.office} during opening hours unless agreed otherwise.</li>
+        <li>
+          {ctx.officeOpen
+            ? `The car is handed over and returned at ${ctx.office} during opening hours unless agreed otherwise.`
+            : "The time and place of handover and return are agreed when the booking is confirmed."}
+        </li>
         <li>
           At handover and return, the car’s condition, mileage and fuel level are recorded in a handover report; photos
           may be taken.

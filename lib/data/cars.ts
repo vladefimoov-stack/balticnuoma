@@ -115,7 +115,6 @@ function sortImages(rows: ImageRow[]) {
   return [...rows].sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort - b.sort);
 }
 
-
 type ListRow = {
   id: string;
   slug: string;

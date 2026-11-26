@@ -16,8 +16,10 @@ const terms: LegalDocument = (ctx) => [
           <Req value={ctx.company.address} />; toliau — Nuomotojas). Automobiliai išnuomojami asmeninėms reikmėms.
         </p>
         <p>
-          Automobiliai perduodami ir grąžinami adresu {ctx.office}. Kontaktai: tel.{" "}
-          <Phone display={ctx.phone} e164={ctx.phoneE164} />, el. paštas <Email value={ctx.email} />.
+          {ctx.officeOpen
+            ? `Automobiliai perduodami ir grąžinami adresu ${ctx.office}.`
+            : "Automobiliai perduodami ir grąžinami iš anksto suderintoje vietoje Klaipėdoje."}{" "}
+          Kontaktai: tel. <Phone display={ctx.phone} e164={ctx.phoneE164} />, el. paštas <Email value={ctx.email} />.
         </p>
         <p>
           Nuomos santykius galutinai nustato perduodant automobilį pasirašoma nuomos sutartis ir priėmimo–perdavimo
@@ -132,7 +134,11 @@ const terms: LegalDocument = (ctx) => [
     title: "Automobilio perdavimas ir grąžinimas",
     body: (
       <ul>
-        <li>Automobilis perduodamas ir grąžinamas adresu {ctx.office} darbo laiku, jei nesusitarta kitaip.</li>
+        <li>
+          {ctx.officeOpen
+            ? `Automobilis perduodamas ir grąžinamas adresu ${ctx.office} darbo laiku, jei nesusitarta kitaip.`
+            : "Automobilio perdavimo ir grąžinimo laikas bei vieta suderinami patvirtinant rezervaciją."}
+        </li>
         <li>
           Perduodant ir grąžinant automobilio būklė, rida ir degalų kiekis fiksuojami priėmimo–perdavimo akte, gali būti
           daromos nuotraukos.

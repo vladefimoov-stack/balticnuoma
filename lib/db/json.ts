@@ -204,6 +204,8 @@ export const contactsSchema = z.object({
   telegram_username: z.string().max(64),
   email: z.email().or(z.literal("")),
   address: z.string().max(200),
+  /** Missing = closed: the office is temporarily closed (owner, 2026-11); ticked in admin when it reopens. */
+  office_open: z.boolean().default(false),
 });
 
 export const openingHoursSchema = z.array(

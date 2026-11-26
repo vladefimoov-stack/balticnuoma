@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-const STEPS = ["choose", "book", "confirm"] as const;
+const STEPS = ["choose", "confirm", "handover"] as const;
 
 export async function HowItWorks() {
   const t = await getTranslations("howItWorks");

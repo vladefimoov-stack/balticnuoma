@@ -167,7 +167,7 @@ export async function renderSiteOgImage(locale: Locale) {
         }}
       >
         <span>
-          {contacts.address} · {contacts.phone}
+          {contacts.officeOpen ? contacts.address : site.address.city} · {contacts.phone}
         </span>
         <span style={{ color: COLORS.amber, fontWeight: 700 }}>{host}</span>
       </div>

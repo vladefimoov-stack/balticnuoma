@@ -13,7 +13,6 @@ import {
   type ReactNode,
 } from "react";
 import { useForm, type Resolver } from "react-hook-form";
-import { WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import { submitBooking } from "@/lib/booking/actions";
@@ -38,7 +37,7 @@ import { SuccessDialog, type BookingSuccess } from "./SuccessDialog";
 type Props = {
   locale: "lt" | "en";
   car: { id: string; pricing: Pricing; rules: RentalRules; deposit: number };
-  contacts: { phone: string; phoneE164: string; whatsappUrl: string };
+  contacts: { phone: string; phoneE164: string };
 };
 
 type Mode = "days" | "hourly";
@@ -623,15 +622,6 @@ export function BookingWidget({ locale, car, contacts }: Props) {
       <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5">
         <p className="text-xs text-muted">{t("contactAlt")}</p>
         <div className="flex flex-wrap gap-2">
-          <a
-            href={contacts.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-9 items-center gap-2 rounded-pill border border-line px-4 text-xs font-semibold transition-colors hover:border-amber/60 hover:text-amber"
-          >
-            <WhatsAppIcon size={14} />
-            WhatsApp
-          </a>
           <a
             href={`tel:${contacts.phoneE164}`}
             className="inline-flex h-9 items-center gap-2 rounded-pill border border-line px-4 text-xs font-semibold transition-colors hover:border-amber/60 hover:text-amber"

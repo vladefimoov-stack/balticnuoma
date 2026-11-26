@@ -1,6 +1,5 @@
-import { CalendarCheck, IdCard, UserCheck, Wallet, type LucideIcon } from "lucide-react";
+import { CalendarCheck, IdCard, Phone, UserCheck, Wallet, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { WhatsAppIcon } from "@/components/ui/BrandIcons";
 import { ButtonAnchor } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -31,15 +30,9 @@ export async function Requirements({ rules, deposit, contacts }: Props) {
           <Reveal delay={2} className="flex flex-col gap-5 rounded-card border border-amber/25 bg-amber/5 p-6">
             <p className="font-display text-lg font-semibold">{t("help.title")}</p>
             <p className="leading-relaxed text-muted">{t("help.text")}</p>
-            <ButtonAnchor
-              href={contacts.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="secondary"
-              className="self-start"
-            >
-              <WhatsAppIcon size={18} />
-              {t("help.cta")}
+            <ButtonAnchor href={`tel:${contacts.phoneE164}`} variant="secondary" className="self-start">
+              <Phone className="size-4" aria-hidden />
+              {t("help.cta", { phone: contacts.phone })}
             </ButtonAnchor>
           </Reveal>
         </div>

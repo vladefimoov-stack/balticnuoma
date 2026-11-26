@@ -1,7 +1,7 @@
 import { ArrowUpRight, Clock, Mail, MapPin, Phone, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { TelegramIcon, WhatsAppIcon } from "@/components/ui/BrandIcons";
+import { TelegramIcon } from "@/components/ui/BrandIcons";
 import { mapsDirectionsUrl } from "@/lib/config/site";
 import type { Contacts, OpeningHours } from "@/lib/data/defaults";
 import { formatOpeningHours } from "@/lib/format/hours";
@@ -17,37 +17,31 @@ type Item = {
   external?: boolean;
 };
 
-/** Address, phone, messengers, email and opening hours as a list of large rows. */
+/** Address (or "office temporarily closed"), phone, Telegram, email and opening hours as large rows. */
 export async function ContactList({ contacts, hours, locale }: Props) {
   const t = await getTranslations("contactSection");
   const tc = await getTranslations("contact");
 
   const items: Item[] = [
-    {
-      key: "address",
-      icon: MapPin,
-      label: t("address"),
-      value: (
-        <>
-          {contacts.address}
-          <span className="mt-1 flex items-center gap-1 text-sm text-amber">
-            {tc("directions")}
-            <ArrowUpRight className="size-3.5" aria-hidden />
-          </span>
-        </>
-      ),
-      href: mapsDirectionsUrl,
-      external: true,
-    },
+    contacts.officeOpen
+      ? {
+          key: "address",
+          icon: MapPin,
+          label: t("address"),
+          value: (
+            <>
+              {contacts.address}
+              <span className="mt-1 flex items-center gap-1 text-sm text-amber">
+                {tc("directions")}
+                <ArrowUpRight className="size-3.5" aria-hidden />
+              </span>
+            </>
+          ),
+          href: mapsDirectionsUrl,
+          external: true,
+        }
+      : { key: "address", icon: MapPin, label: t("office"), value: t("officeClosed") },
     { key: "phone", icon: Phone, label: t("phone"), value: contacts.phone, href: `tel:${contacts.phoneE164}` },
-    {
-      key: "whatsapp",
-      icon: () => <WhatsAppIcon size={20} />,
-      label: "WhatsApp",
-      value: t("whatsappValue"),
-      href: contacts.whatsappUrl,
-      external: true,
-    },
     ...(contacts.telegramUrl
       ? [
           {

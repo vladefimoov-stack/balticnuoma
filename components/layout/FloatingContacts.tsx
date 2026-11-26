@@ -1,7 +1,7 @@
 import { Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { TelegramIcon, WhatsAppIcon } from "@/components/ui/BrandIcons";
+import { TelegramIcon } from "@/components/ui/BrandIcons";
 import { getPublicSettings } from "@/lib/data/settings";
 import { cn } from "@/lib/utils/cn";
 
@@ -17,7 +17,6 @@ export async function FloatingContacts() {
   const { contacts } = await getPublicSettings();
 
   const items: Item[] = [
-    { href: contacts.whatsappUrl, label: t("whatsapp"), icon: <WhatsAppIcon size={20} />, external: true },
     ...(contacts.telegramUrl
       ? [{ href: contacts.telegramUrl, label: t("telegram"), icon: <TelegramIcon size={19} />, external: true }]
       : []),

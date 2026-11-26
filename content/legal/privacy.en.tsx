@@ -15,7 +15,8 @@ const privacy: LegalDocument = (ctx) => [
         </p>
         <p>
           For data protection questions, write to <Email value={ctx.privacyEmail} />, call{" "}
-          <Phone display={ctx.phone} e164={ctx.phoneE164} /> or visit us at {ctx.office}.
+          <Phone display={ctx.phone} e164={ctx.phoneE164} />
+          {ctx.officeOpen ? <> or visit us at {ctx.office}</> : null}.
         </p>
         <p>
           We process personal data under the General Data Protection Regulation (GDPR, (EU) 2016/679) and the Law on
@@ -44,7 +45,7 @@ const privacy: LegalDocument = (ctx) => [
           damage and fines.
         </li>
         <li>
-          <strong>Communication:</strong> emails, WhatsApp and Telegram messages and call information.
+          <strong>Communication:</strong> emails and other messages, call information.
         </li>
         <li>
           <strong>Technical data:</strong> to protect the booking form from abuse we store only an irreversible hash of

@@ -2,8 +2,14 @@
 
 Car rental website for **Baltic Nuoma** (Birutės g. 21, Klaipėda, Lithuania).
 **Positioning (owner's decision, overrides the original brief): rentals of cars of every class
-for personal use** — economy today (5 × Toyota Prius), premium & luxury next. Every data model,
-filter and UI must support all classes.
+for personal use** — economy today (5 × Toyota Prius). Premium & luxury are not planned in the near
+future (owner, 2026-11), so the public copy talks about economy cars ("Jūsų ekonomija", unlimited
+mileage); every data model, filter and UI must still support all classes.
+
+**Contacts (owner, 2026-11):** no WhatsApp as a company contact anywhere on the site (phone, email,
+optional Telegram only). The office is temporarily closed: `settings.contacts.office_open` (missing =
+closed, admin → Nustatymai → Kontaktai) switches the address / directions to "Biuras laikinai
+uždarytas" and the terms to "handover at an agreed place"; the map stays.
 
 **No ride-hailing / taxi content anywhere for now** — no Bolt, "pavežėjimas", passenger-transport
 permits, earnings, platform questions in forms. The taxi offering will be revisited as a separate

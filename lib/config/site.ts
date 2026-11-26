@@ -10,7 +10,6 @@ export const site = {
     display: "+370 654 37549",
     e164: "+37065437549",
   },
-  whatsappUrl: "https://wa.me/37065437549",
   /** Telegram username without `@`. Empty → the Telegram button is hidden. */
   telegramUsername: (process.env.NEXT_PUBLIC_TELEGRAM_USERNAME ?? "").replace(/^@/, ""),
   address: {

@@ -51,7 +51,7 @@ export function businessSchema(settings: PublicSettings, locale: Locale, fromPer
     ...(fromPerDay !== null && {
       priceRange: locale === "en" ? `from €${fromPerDay}/day` : `nuo ${fromPerDay} €/parą`,
     }),
-    sameAs: [contacts.whatsappUrl, contacts.telegramUrl].filter(Boolean),
+    ...(contacts.telegramUrl && { sameAs: [contacts.telegramUrl] }),
   };
 }
 

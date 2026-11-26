@@ -94,11 +94,11 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
         ? {
             phone: c.phone || DEFAULT_CONTACTS.phone,
             phoneE164: c.phone ? toE164(c.phone) : DEFAULT_CONTACTS.phoneE164,
-            whatsappUrl: c.whatsapp_url || DEFAULT_CONTACTS.whatsappUrl,
             // Telegram set in admin wins; otherwise the env fallback.
             telegramUrl: telegram ? `https://t.me/${telegram}` : DEFAULT_CONTACTS.telegramUrl,
             email: c.email || null,
             address: c.address || DEFAULT_CONTACTS.address,
+            officeOpen: c.office_open,
           }
         : DEFAULT_CONTACTS,
     };

@@ -12,11 +12,13 @@ test("visitor sends a booking request for two days", async ({ page, context, bas
   await links.first().click();
 
   const widget = page.locator("#rezervacija");
-  const free = widget.locator('[role="grid"] button[data-date]:not([aria-disabled="true"])');
-  await expect(free.first()).toBeVisible();
-  // Two days a little ahead (both free in a fresh local database).
-  await free.nth(4).click();
-  await free.nth(5).click();
+  await expect(widget.locator('[role="grid"] button[data-date]').first()).toBeVisible();
+  // The 10th and 11th of next month: always inside the booking horizon, whatever today is, and free
+  // in a local database (test requests stay pending and don't occupy dates).
+  await widget.getByRole("button", { name: "Kitas mėnuo" }).click();
+  const day = (n: string) => widget.locator(`[role="grid"] button[data-date$="-${n}"]:not([aria-disabled="true"])`);
+  await day("10").click();
+  await day("11").click();
   await widget.getByRole("button", { name: "Tęsti" }).click();
 
   // Empty submit → client validation (zod loads lazily) marks the fields.

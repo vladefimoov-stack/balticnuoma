@@ -81,7 +81,7 @@ async function shared(t: T, input: BookingEmailInput, locale: Locale) {
       ? t("emails.contactsWithEmail", { phone: contacts.phone, email: contacts.email })
       : t("emails.contacts", { phone: contacts.phone }),
     footerLines: [
-      `Baltic Nuoma · ${contacts.address}`,
+      `Baltic Nuoma · ${contacts.officeOpen ? contacts.address : site.address.city}`,
       input.source === "admin" ? t("emails.footerNoteDirect") : t("emails.footerNote", { site: host }),
     ],
     replyTo: contacts.email,

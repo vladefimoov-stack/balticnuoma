@@ -24,10 +24,11 @@ export default async function SettingsPage() {
     rental_rules: read("rental_rules", DEFAULT_RENTAL_RULES),
     contacts: read("contacts", {
       phone: DEFAULT_CONTACTS.phone,
-      whatsapp_url: DEFAULT_CONTACTS.whatsappUrl,
+      whatsapp_url: "",
       telegram_username: site.telegramUsername,
       email: "",
       address: DEFAULT_CONTACTS.address,
+      office_open: false,
     }),
     opening_hours: read("opening_hours", DEFAULT_OPENING_HOURS),
     notifications: read("notifications", { booking_email: null }),

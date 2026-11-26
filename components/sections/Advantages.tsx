@@ -1,12 +1,12 @@
-import { BadgeCheck, CalendarRange, Layers, ShieldCheck, Zap, type LucideIcon } from "lucide-react";
+import { BadgeCheck, CalendarRange, Gauge, ShieldCheck, Zap, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { cn } from "@/lib/utils/cn";
 
-const ITEMS: Array<{ key: "classes" | "insurance" | "maintained" | "flexible" | "fast"; icon: LucideIcon }> = [
-  { key: "classes", icon: Layers },
+const ITEMS: Array<{ key: "mileage" | "insurance" | "maintained" | "flexible" | "fast"; icon: LucideIcon }> = [
+  { key: "mileage", icon: Gauge },
   { key: "insurance", icon: ShieldCheck },
   { key: "maintained", icon: BadgeCheck },
   { key: "flexible", icon: CalendarRange },
