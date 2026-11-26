@@ -1066,11 +1066,11 @@ insert into public.settings (key, value, is_public, description) values
      "booking_email": null
    }', false, 'Kur siunčiamos naujų rezervacijų užklausos.'),
   ('company', '{
-     "legal_name": "",
+     "legal_name": "MB Baltic Nuoma",
      "company_code": "",
      "vat_code": "",
      "registered_address": "",
-     "privacy_email": ""
+     "privacy_email": "balticnuoma@gmail.com"
    }', true, 'Įmonės rekvizitai: poraštė ir teisiniai puslapiai.'),
   ('three_d', '{
      "provider": "meshy",

@@ -39,11 +39,11 @@ export type PublicSettings = {
 };
 
 const DEFAULT_COMPANY: CompanyInfo = {
-  legalName: "Baltic Nuoma",
+  legalName: "MB Baltic Nuoma",
   companyCode: null,
   vatCode: null,
   registeredAddress: null,
-  privacyEmail: null,
+  privacyEmail: "balticnuoma@gmail.com",
 };
 
 const FALLBACK: PublicSettings = {
@@ -88,7 +88,7 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
         companyCode: co?.company_code || null,
         vatCode: co?.vat_code || null,
         registeredAddress: co?.registered_address || null,
-        privacyEmail: co?.privacy_email || null,
+        privacyEmail: co?.privacy_email || DEFAULT_COMPANY.privacyEmail,
       },
       contacts: c
         ? {

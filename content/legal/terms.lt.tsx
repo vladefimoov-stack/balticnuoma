@@ -105,7 +105,7 @@ const terms: LegalDocument = (ctx) => [
           nurodytą įkainį.
         </p>
         <p>
-          Atsiskaityti galima banko pavedimu arba mokėjimo kortele; mokėjimo terminai nurodomi sutartyje. Įmonėms
+          Atsiskaityti galima mokėjimo kortele arba grynaisiais pinigais; mokėjimo terminai nurodomi sutartyje. Įmonėms
           išrašome sąskaitas faktūras.
         </p>
       </>
@@ -119,12 +119,22 @@ const terms: LegalDocument = (ctx) => [
         <p>Perduodant automobilį sumokamas užstatas. Jo dydis nurodytas prie kiekvieno automobilio.</p>
         <p>
           Grąžinimo metu automobilį apžiūrime kartu su jumis. Jei naujų pažeidimų, baudų ar kitų įsiskolinimų nėra,
-          užstatą grąžiname tą pačią dieną arba per 3 darbo dienas pavedimu.
+          užstatą grąžiname per 1–3 dienas tuo pačiu būdu, kuriuo jis buvo sumokėtas.
         </p>
+        <p>Iš užstato išskaičiuojama:</p>
+        <ul>
+          <li>bauda už pavėluotą automobilio grąžinimą;</li>
+          <li>
+            naudojimosi taisyklių pažeidimų pašalinimo kaina — pagal faktines cheminio valymo, serviso, remonto ar kitų
+            reikalingų darbų išlaidas (pvz., rūkymas ar gyvūnai salone, užterštas automobilis, trūkstami degalai);
+          </li>
+          <li>
+            automobilio sugadinimai (sutartyje nustatytose ribose), baudos ir kitos pagal sutartį mokėtinos sumos.
+          </li>
+        </ul>
         <p>
-          Iš užstato gali būti padengti automobilio sugadinimai (sutartyje nustatytose ribose), trūkstami degalai,
-          papildomas valymas, baudos ir kitos pagal sutartį mokėtinos sumos. Jei užstato nepakanka, nuomininkas sumoka
-          trūkstamą sumą.
+          Išvykus už Lietuvos ribų be išankstinio raštiško Nuomotojo sutikimo, užstatas negrąžinamas. Jei užstato
+          nepakanka nuostoliams padengti, nuomininkas sumoka trūkstamą sumą.
         </p>
       </>
     ),
@@ -144,8 +154,8 @@ const terms: LegalDocument = (ctx) => [
           daromos nuotraukos.
         </li>
         <li>
-          Automobilis grąžinamas sutartu laiku, tvarkingas ir be asmeninių daiktų. Už pavėluotą laiką mokama pagal
-          tarifus. Jei vėluojate, praneškite mums iš anksto.
+          Automobilis grąžinamas sutartu laiku, tvarkingas ir be asmeninių daiktų. Už pavėluotą grąžinimą taikoma bauda,
+          kuri išskaičiuojama iš užstato. Jei vėluojate, praneškite mums iš anksto.
         </li>
         <li>Nuomą galima pratęsti iš anksto susitarus, jei automobilis tuo metu laisvas.</li>
         <li>Nuomotojas neatsako už automobilyje paliktus daiktus.</li>
@@ -167,11 +177,13 @@ const terms: LegalDocument = (ctx) => [
           <li>kitų transporto priemonių ar priekabų vilkimui be Nuomotojo sutikimo;</li>
           <li>komercinei veiklai be raštiško Nuomotojo sutikimo;</li>
           <li>perduodami vairuoti sutartyje nenurodytiems asmenims ar subnuomodami;</li>
-          <li>išvykdami už Lietuvos ribų be išankstinio raštiško Nuomotojo sutikimo.</li>
+          <li>
+            išvykdami už Lietuvos ribų be išankstinio raštiško Nuomotojo sutikimo (tokiu atveju užstatas negrąžinamas).
+          </li>
         </ul>
         <p>
           Automobilyje draudžiama rūkyti (taip pat elektronines cigaretes) ir be Nuomotojo sutikimo vežti gyvūnus.
-          Pažeidus šias taisykles gali būti taikomas sutartyje numatytas papildomo valymo mokestis.
+          Pažeidus šias taisykles, iš užstato išskaičiuojama cheminio valymo ar kitų reikalingų darbų kaina.
         </p>
       </>
     ),

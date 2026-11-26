@@ -175,7 +175,7 @@ export function SettingsForms({ initial }: { initial: SettingsValues }) {
         value={() => company}
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          {companyField("legal_name", "Juridinis pavadinimas", { placeholder: "UAB „Baltic Nuoma“", maxLength: 120 })}
+          {companyField("legal_name", "Juridinis pavadinimas", { placeholder: "MB Baltic Nuoma", maxLength: 120 })}
           {companyField("company_code", "Įmonės kodas", { placeholder: "300000000", maxLength: 20 })}
           {companyField("vat_code", "PVM mokėtojo kodas", { placeholder: "LT100000000000", maxLength: 20 })}
           {companyField("privacy_email", "El. paštas asmens duomenų klausimams", {

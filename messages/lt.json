@@ -299,7 +299,7 @@
       },
       "deposit": {
         "q": "Kaip grąžinamas užstatas?",
-        "a": "{deposit} € užstatas grąžinamas grąžinus automobilį. Apžiūrime jį kartu su jumis ir, jei naujų pažeidimų ar baudų nėra, užstatą grąžiname tą pačią dieną arba per 3 darbo dienas pavedimu."
+        "a": "{deposit} € užstatas grąžinamas grąžinus automobilį. Apžiūrime jį kartu su jumis ir, jei naujų pažeidimų ar baudų nėra, užstatą grąžiname per 1–3 dienas. Baudos už vėlavimą ir, pavyzdžiui, cheminio valymo ar serviso išlaidos išskaičiuojamos iš užstato."
       },
       "accident": {
         "q": "Kas daryti įvykus eismo įvykiui?",
@@ -307,7 +307,7 @@
       },
       "abroad": {
         "q": "Ar galima išvažiuoti už Lietuvos ribų?",
-        "a": "Tik iš anksto suderinus su mumis raštu. Parašykite, į kurią šalį ir kuriam laikui planuojate vykti."
+        "a": "Tik iš anksto suderinus su mumis raštu. Išvykus be sutikimo, užstatas negrąžinamas. Parašykite, į kurią šalį ir kuriam laikui planuojate vykti."
       },
       "extend": {
         "q": "Kaip pratęsti nuomą?",
@@ -319,7 +319,7 @@
       },
       "payment": {
         "q": "Kaip atsiskaityti? Ar išrašote sąskaitas faktūras?",
-        "a": "Atsiskaityti galima banko pavedimu arba kortele. Įmonėms išrašome sąskaitas faktūras."
+        "a": "Atsiskaityti galima kortele arba grynaisiais. Įmonėms išrašome sąskaitas faktūras."
       },
       "requirements": {
         "q": "Kokie reikalavimai vairuotojui?",

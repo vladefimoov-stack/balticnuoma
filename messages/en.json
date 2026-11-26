@@ -299,7 +299,7 @@
       },
       "deposit": {
         "q": "How is the deposit returned?",
-        "a": "The €{deposit} deposit is refunded when you return the car. We inspect it together and, if there is no new damage or fines, refund the deposit the same day or within 3 working days by bank transfer."
+        "a": "The €{deposit} deposit is refunded when you return the car. We inspect it together and, if there is no new damage or fines, refund the deposit within 1–3 days. Late-return fines and costs such as dry cleaning or servicing are deducted from the deposit."
       },
       "accident": {
         "q": "What if I have an accident?",
@@ -307,7 +307,7 @@
       },
       "abroad": {
         "q": "Can I drive outside Lithuania?",
-        "a": "Only with our prior written consent. Tell us which country you plan to visit and for how long."
+        "a": "Only with our prior written consent. If you leave without it, the deposit is not returned. Tell us which country you plan to visit and for how long."
       },
       "extend": {
         "q": "How do I extend the rental?",
@@ -319,7 +319,7 @@
       },
       "payment": {
         "q": "How can I pay? Do you issue VAT invoices?",
-        "a": "You can pay by bank transfer or card. We issue invoices to companies."
+        "a": "You can pay by card or in cash. We issue invoices to companies."
       },
       "requirements": {
         "q": "What are the driver requirements?",

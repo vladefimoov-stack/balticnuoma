@@ -99,8 +99,7 @@ const terms: LegalDocument = (ctx) => [
           If the car has a daily mileage limit, kilometres above it are charged at the rate stated in the agreement.
         </p>
         <p>
-          You can pay by bank transfer or card; payment terms are set in the agreement. We issue VAT invoices to
-          companies.
+          You can pay by card or in cash; payment terms are set in the agreement. We issue VAT invoices to companies.
         </p>
       </>
     ),
@@ -113,12 +112,22 @@ const terms: LegalDocument = (ctx) => [
         <p>A deposit is paid at handover. Its amount is shown on each car’s page.</p>
         <p>
           When you return the car, we inspect it together with you. If there is no new damage, fines or other debts, the
-          deposit is returned the same day or within 3 business days by bank transfer.
+          deposit is returned within 1–3 days by the same method it was paid.
         </p>
+        <p>The following are deducted from the deposit:</p>
+        <ul>
+          <li>the fine for returning the car late;</li>
+          <li>
+            the cost of putting right a breach of the rules of use — the actual cost of dry cleaning, servicing, repair
+            or other necessary work (e.g. smoking or pets in the car, a dirty car, missing fuel);
+          </li>
+          <li>
+            damage to the car (within the limits set in the agreement), fines and other amounts due under the agreement.
+          </li>
+        </ul>
         <p>
-          The deposit may be used to cover damage to the car (within the limits set in the agreement), missing fuel,
-          extra cleaning, fines and other amounts payable under the agreement. If the deposit is not enough, the renter
-          pays the difference.
+          If the car is taken outside Lithuania without the Lessor’s prior written consent, the deposit is not returned.
+          If the deposit does not cover the loss, the renter pays the difference.
         </p>
       </>
     ),
@@ -138,8 +147,8 @@ const terms: LegalDocument = (ctx) => [
           may be taken.
         </li>
         <li>
-          The car is returned on time, clean and without personal belongings. Late return is charged according to the
-          tariffs. If you are running late, let us know in advance.
+          The car is returned on time, clean and without personal belongings. Late return incurs a fine that is deducted
+          from the deposit. If you are running late, let us know in advance.
         </li>
         <li>The rental can be extended by prior agreement if the car is available.</li>
         <li>The Lessor is not responsible for items left in the car.</li>
@@ -158,11 +167,14 @@ const terms: LegalDocument = (ctx) => [
           <li>to tow other vehicles or trailers without the Lessor’s consent;</li>
           <li>for commercial activities without the Lessor’s written consent;</li>
           <li>by letting persons not named in the agreement drive it, or by subletting it;</li>
-          <li>outside Lithuania without the Lessor’s prior written consent.</li>
+          <li>
+            outside Lithuania without the Lessor’s prior written consent (in that case the deposit is not returned).
+          </li>
         </ul>
         <p>
           Smoking (including e-cigarettes) is not allowed in the car, and pets may only be carried with the Lessor’s
-          consent. Breaking these rules may incur the extra cleaning fee set in the agreement.
+          consent. If these rules are broken, the cost of dry cleaning or other necessary work is deducted from the
+          deposit.
         </p>
       </>
     ),

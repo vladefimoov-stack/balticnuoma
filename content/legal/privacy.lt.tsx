@@ -89,12 +89,14 @@ const privacy: LegalDocument = (ctx) => [
     title: "Kiek laiko saugome duomenis",
     body: (
       <ul>
-        <li>Užklausos, pagal kurias nuomos sutartis nesudaryta, — 12 mėnesių nuo užklausos.</li>
         <li>
-          Nuomos sutartys, apskaitos dokumentai ir su jais susiję duomenys — 10 metų po sutarties pabaigos (apskaitos
-          dokumentų saugojimo ir ieškinio senaties terminai).
+          Užklausų, nuomos ir susirašinėjimo duomenys — 6 mėnesius nuo nuomos pabaigos, o jei sutartis nesudaryta, — 6
+          mėnesius nuo užklausos.
         </li>
-        <li>Susirašinėjimas — iki 2 metų po paskutinio kontakto.</li>
+        <li>
+          Ilgiau saugome tik tai, ką privaloma saugoti pagal teisės aktus (pvz., apskaitos dokumentus — teisės aktų
+          nustatytą laiką), arba tai, ko reikia neišspręstam ginčui ar reikalavimui, — iki jo išsprendimo.
+        </li>
         <li>Užklausų skaičiavimo įrašai (piktnaudžiavimo prevencija) — ne ilgiau kaip 24 valandas.</li>
         <li>Serverių žurnalai — paslaugų teikėjo nustatytą laiką, paprastai iki 30 dienų.</li>
       </ul>

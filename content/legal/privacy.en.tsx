@@ -87,12 +87,14 @@ const privacy: LegalDocument = (ctx) => [
     title: "How long we keep data",
     body: (
       <ul>
-        <li>Requests that did not lead to a rental agreement — 12 months from the request.</li>
         <li>
-          Rental agreements, accounting documents and related data — 10 years after the agreement ends (accounting
-          record-keeping and limitation periods).
+          Request, rental and correspondence data — 6 months after the rental ends or, if no agreement was concluded, 6
+          months after the request.
         </li>
-        <li>Correspondence — up to 2 years after the last contact.</li>
+        <li>
+          We keep data longer only where the law requires it (e.g. accounting documents — for the period set by law) or
+          where it is needed for an open dispute or claim — until it is resolved.
+        </li>
         <li>Request counters used for abuse prevention — no longer than 24 hours.</li>
         <li>Server logs — for the period set by the provider, usually up to 30 days.</li>
       </ul>
