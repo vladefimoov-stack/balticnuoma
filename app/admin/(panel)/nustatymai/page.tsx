@@ -34,7 +34,7 @@ export default async function SettingsPage() {
     notifications: read("notifications", { booking_email: null }),
     company: read("company", {
       legal_name: "MB Baltic Nuoma",
-      company_code: "",
+      company_code: "308190608",
       vat_code: "",
       registered_address: "",
       privacy_email: "balticnuoma@gmail.com",

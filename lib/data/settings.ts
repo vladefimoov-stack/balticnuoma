@@ -40,7 +40,7 @@ export type PublicSettings = {
 
 const DEFAULT_COMPANY: CompanyInfo = {
   legalName: "MB Baltic Nuoma",
-  companyCode: null,
+  companyCode: "308190608",
   vatCode: null,
   registeredAddress: null,
   privacyEmail: "balticnuoma@gmail.com",
@@ -85,7 +85,7 @@ async function fetchPublicSettings(): Promise<PublicSettings> {
       openingHours: hours.success && hours.data.length > 0 ? hours.data : DEFAULT_OPENING_HOURS,
       company: {
         legalName: co?.legal_name || DEFAULT_COMPANY.legalName,
-        companyCode: co?.company_code || null,
+        companyCode: co?.company_code || DEFAULT_COMPANY.companyCode,
         vatCode: co?.vat_code || null,
         registeredAddress: co?.registered_address || null,
         privacyEmail: co?.privacy_email || DEFAULT_COMPANY.privacyEmail,

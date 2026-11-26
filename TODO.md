@@ -12,9 +12,9 @@
       `20261125140000_admin_bookings.sql` (ручные брони), `20261125160000_car_archive.sql` (удаление авто).
 - [ ] **Своя роль — admin** (иначе не видно удаления авто, настроек и пользователей): SQL из
       `docs/ADMIN_SETUP.md`. Менеджеру — отдельный вход: **Nustatymai → Naudotojai → Naujas naudotojas**.
-- [ ] **Реквизиты компании** — юр. название (MB Baltic Nuoma) и email по данным (balticnuoma@gmail.com) уже
-      стоят по умолчанию. Осталось: **įmonės kodas**, **юр. адрес** (buveinė), PVM kodas (если есть) →
-      **Nustatymai → Įmonės rekvizitai**. Пока их нет, в юридических текстах оранжевые заглушки.
+- [ ] **Реквизиты компании** — юр. название (MB Baltic Nuoma), įmonės kodas (308190608) и email по данным
+      (balticnuoma@gmail.com) уже стоят по умолчанию. Осталось: **юр. адрес** (buveinė) и PVM kodas (если есть) →
+      **Nustatymai → Įmonės rekvizitai**. Пока адреса нет, в юридических текстах оранжевая заглушка.
 - [ ] **Контакты** — email для клиентов, Telegram (пока кнопка скрыта) → **Nustatymai → Kontaktai**.
       WhatsApp с сайта убран. Офис сейчас «временно закрыт»; когда откроется — отметить
       «Biuras atidarytas lankytojams» там же (вернутся адрес, маршрут и место передачи в условиях).

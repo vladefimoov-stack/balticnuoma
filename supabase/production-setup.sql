@@ -1067,7 +1067,7 @@ insert into public.settings (key, value, is_public, description) values
    }', false, 'Kur siunčiamos naujų rezervacijų užklausos.'),
   ('company', '{
      "legal_name": "MB Baltic Nuoma",
-     "company_code": "",
+     "company_code": "308190608",
      "vat_code": "",
      "registered_address": "",
      "privacy_email": "balticnuoma@gmail.com"
